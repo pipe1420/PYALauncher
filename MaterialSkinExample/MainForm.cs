@@ -99,7 +99,7 @@ namespace MaterialSkinExample
                
 
                 #region Agrega elementos de card
-                Boolean estaInstalado = VerificaInstalacion(pathInstall);
+                
 
                 //Console.WriteLine($"Descripción: {descripcion}");
                 //Console.WriteLine($"Imagen: {imagen}");
@@ -188,7 +188,6 @@ namespace MaterialSkinExample
 
                 #endregion
 
-                int resultadoVersion = CompararVersionApp(pathInstall, version);
                 /*
                  * resultadoVersion estados:
                                                 0 = Versiones iguales
@@ -196,22 +195,23 @@ namespace MaterialSkinExample
                                                 -1 = Version nueva disponibles en la web
                                                 10 = error al comparar version local con web 
                  */
-                
+                Boolean estaInstalado = VerificaInstalacion(pathInstall);
+
                 if (estaInstalado)
                 {
-                    if(resultadoVersion == -1)
+                    if (CompararVersionApp(pathInstall, version) == -1)
                     {
                         button.Text = "Actualización";
                         button.Enabled = true;
 
                         //DescargaEInstala(urlMsi, pathFile, forceInstall, software, version, GUID);
-                        button.Click += (sender, e) => InstalaApp(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp);
+                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall);
                     }
                     else
                     {
                         button.Text = "Instalado";
                         button.Enabled = false;
-                        button.Click += (sender, e) => InstalaApp(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp);
+                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall);
                     }
                 }
                 else
@@ -219,7 +219,7 @@ namespace MaterialSkinExample
                     //Aplicacion no detectada
                     button.Text = "Instalar";
                     button.Enabled = true;
-                    button.Click += (sender, e) => InstalaApp(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp);
+                    button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall);
                 }
                 button.UseAccentColor = false;
                 button.UseVisualStyleBackColor = true;
@@ -231,10 +231,15 @@ namespace MaterialSkinExample
                 card.Controls.Add(button);
                 flowLayoutPanel1.Controls.Add(card);
                 
-                if (forceInstall == "true")
+                if (automaticInstall == "true")
                 {
-                    Console.WriteLine("\n[NOTIFICACION] Software: " + software + " viene con actualizacion forzada.\n");
+                    Console.WriteLine("\n[NOTIFICACION] Software: " + software + " viene con actualizacion automatica.\n");
 
+                    if(!estaInstalado)
+                    {
+                        DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall);
+                    }
+                    
                     /*
                         Verificar instalacion y autodescarga app
 
@@ -245,10 +250,10 @@ namespace MaterialSkinExample
                                         - Si es inferior a la version web
                                             - Descargar
                                                 - Si descarga existe 
-                                                      - Goto VerificaAppActiva
+                                                      - Goto VerificaProcesoActivo
                                                 - Si no existe descarga app
                                                         - Genera descarga
-                                                        - GoTo VerificaAppActiva
+                                                        - GoTo VerificaProcesoActivo
                                                             - Si esta activa, avisar a usuario para que la cierre
                                                             - Si no esta activa
                                                                 - Goto Instalar
@@ -256,10 +261,10 @@ namespace MaterialSkinExample
                                 - No existe instalacion
                                     - Descargar
                                         - Si descarga existe 
-                                                - Goto VerificaAppActiva
+                                                - Goto VerificaProcesoActivo
                                         - Si no existe descarga app
                                                 - Genera descarga
-                                                - GoTo VerificaAppActiva
+                                                - GoTo VerificaProcesoActivo
                                                     - Si esta activa, avisar a usuario para que la cierre
                                                     - Si no esta activa
                                                         - Goto Instalar
@@ -276,11 +281,15 @@ namespace MaterialSkinExample
 
         }
 
-        public void InstalaApp(object sender, EventArgs e, string urlMsi, string version, string pathFile, string forceInstall, string verificaApp)
+        public void ValidaDescarga(object sender, EventArgs e, string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall)
         {
-            
+            DescargaApp( urlMsi,  version,  pathFile,  forceInstall,  verificaApp,  automaticInstall);
+        }
+
+        private void DescargaApp(string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall)
+        {
             string rutaDescarga = Path.Combine("C:\\temp\\repository", pathFile);
-            
+
             //verifica si existe descarga
             if (File.Exists(rutaDescarga))
             {
@@ -322,18 +331,18 @@ namespace MaterialSkinExample
                 goto INSTALACION;
             }
 
-            INSTALACION:
-            if (forceInstall == "true")
+        INSTALACION:
+            if (automaticInstall == "true")
             {
-                VerificaProcesoActivo(verificaApp, rutaDescarga);
+                VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall);
             }
-               
-            
+
+
             //Reaload datos dinamicos de la nube
             //loadCardAsync();
         }
 
-        private void VerificaProcesoActivo(string verificaApp, string rutaDescarga)
+        private void VerificaProcesoActivo(string verificaApp, string rutaDescarga, string automaticInstall, string forceInstall)
         {
             Process[] procesos = Process.GetProcessesByName(verificaApp);
 
@@ -342,13 +351,25 @@ namespace MaterialSkinExample
                 Console.WriteLine("El proceso de AutoCAD está activo.");
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso " + verificaApp.ToUpper() + " está activo. Favor cierre la aplicacion antes de continuar.", "OK", true);
                 SnackBarMessage.Show(this);
+
+                if (forceInstall == "true")
+                {
+                    //Matar proceso
+                    
+                    //EjecutaInstalacion(rutaDescarga);
+                }
             }
             else
             {
                 Console.WriteLine("El proceso de AutoCAD no está activo.");
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a comenzado.", "OK", true);
                 SnackBarMessage.Show(this);
-                EjecutaInstalacion(rutaDescarga);
+
+                if (automaticInstall == "true")
+                {
+                    EjecutaInstalacion(rutaDescarga);
+                }
+
                 
             }
         }
@@ -731,7 +752,7 @@ namespace MaterialSkinExample
             }
             else
             {
-                Console.WriteLine("El archivo no existe." + pathInstall);
+                //Console.WriteLine("El archivo no existe." + pathInstall);
                 return false;
             }
 
