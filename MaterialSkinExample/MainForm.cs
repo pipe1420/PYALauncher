@@ -239,8 +239,10 @@ namespace MaterialSkinExample
                     {
                         DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall);
                     }
-                    
-                    /*
+
+                    /* ROAD MAP VALIDATION
+                     * 
+                     * 
                         Verificar instalacion y autodescarga app
 
                             - Verificar si esta instalada alguna version
@@ -331,12 +333,13 @@ namespace MaterialSkinExample
                 goto INSTALACION;
             }
 
-        INSTALACION:
-            if (automaticInstall == "true")
-            {
-                VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall);
-            }
-
+            INSTALACION:
+            VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall);
+            //if (automaticInstall == "true")
+            //{
+                
+            //}
+            
 
             //Reaload datos dinamicos de la nube
             //loadCardAsync();
@@ -398,14 +401,22 @@ namespace MaterialSkinExample
 
             try
             {
-                Process.Start(startInfo);
-                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a finalizado correctamente.", "OK", true);
+                Process process = new Process();
+                process.StartInfo = startInfo;
+                process.Start();
+                process.WaitForExit();
+
+                //MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a finalizado correctamente.", "OK", true);
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a finalizado correctamente.", 10000, "OK");
                 SnackBarMessage.Show(this);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error al iniciar la aplicación: " + ex.Message);
             }
+
+            //Reaload datos dinamicos de la nube
+            loadCardAsync();
         }
 
         ////Metodo Original
@@ -602,7 +613,7 @@ namespace MaterialSkinExample
         //        Version v1 = Version.Parse(versionLocal);
         //        Version v2 = Version.Parse(versionWeb);
         //        Console.WriteLine("Compara versiones: " + v1.CompareTo((Object)v2));
-                
+
         //        //si version local vs web son iguales va al proceso de instalacion
         //        if (v1 != null && v1.CompareTo(v2) == 0)
         //        {
@@ -632,7 +643,7 @@ namespace MaterialSkinExample
         //        Console.WriteLine("Descarga ruta archivo: " + rutaDescarga);
         //    }
 
-            
+
 
         //    FORCE_INSTALL:
         //    if(forceInstall == "true")
@@ -655,16 +666,16 @@ namespace MaterialSkinExample
         //        }
 
         //        Console.WriteLine("Software " + software + ", GUI = " + GUID + ", desinstalado correctamente.");
-                
+
         //        Process procesoBatch = new Process();
         //        procesoBatch.StartInfo.FileName = fileUnninstall;
-                
+
         //        procesoBatch.Start();
         //        procesoBatch.WaitForExit();
 
 
 
-                
+
         //        //Process process = new Process();
         //        //process.StartInfo.FileName = "cmd.exe";
         //        ////process.StartInfo.WorkingDirectory = rutaDescarga;
