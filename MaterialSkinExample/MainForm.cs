@@ -20,16 +20,6 @@ namespace MaterialSkinExample
         private readonly MaterialSkinManager materialSkinManager;
         private int colorSchemeIndex;
 
-        //public MaterialCard card = new MaterialCard();
-        //public MaterialLabel labelTitulo = new MaterialLabel();
-        //public MaterialLabel labelVersion = new MaterialLabel();
-        //public MaterialLabel labelVersionWeb = new MaterialLabel();
-        //public MaterialButton button = new MaterialButton();
-        //public MaterialButton buttonUpdate = new MaterialButton();
-        //public MaterialLabel body = new MaterialLabel();
-
-        
-
         public MainForm()
         {
             InitializeComponent();
@@ -223,13 +213,16 @@ namespace MaterialSkinExample
 
                 if (estaInstalado)
                 {
-                    if (CompararVersionApp(pathInstall, version) == -1)
+                    
+                    int comparacion = CompararVersionApp(pathInstall, version);
+                    
+                    if (comparacion == -1)
                     {
                         button.Text = "Actualización";
                         button.Enabled = true;
 
                         //DescargaEInstala(urlMsi, pathFile, forceInstall, software, version, GUID);
-                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall);
+                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, true);
 
                         labelVersionWeb.AutoSize = true;
                         labelVersionWeb.Depth = 0;
@@ -244,19 +237,35 @@ namespace MaterialSkinExample
                         labelVersionWeb.TabIndex = 82;
                         labelVersionWeb.Text = $"Nueva: {version}";
                     }
-                    else
+                    
+                    if(comparacion == 0)
                     {
                         button.Text = "Instalado";
                         button.Enabled = false;
-                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall);
+                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false);
                     }
+
+                    if(comparacion == 1)
+                    {
+                        button.Text = "Local mas nueva";
+                        button.Enabled = false;
+                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false);
+                    }
+
+                    if (comparacion == 10)
+                    {
+                        button.Text = "Error";
+                        button.Enabled = false;
+                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false);
+                    }
+
                 }
                 else
                 {
                     //Aplicacion no detectada
                     button.Text = "Instalar";
                     button.Enabled = true;
-                    button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall);
+                    button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, true);
                 }
                 button.UseAccentColor = false;
                 button.UseVisualStyleBackColor = true;
@@ -275,7 +284,11 @@ namespace MaterialSkinExample
 
                     if(!estaInstalado)
                     {
-                        DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall);
+                        DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false);
+                    }
+                    else
+                    {
+                        DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false);
                     }
 
                     /* ROAD MAP VALIDATION
@@ -329,12 +342,13 @@ namespace MaterialSkinExample
             }
         }
 
-        public void ValidaDescarga(object sender, EventArgs e, string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall)
+        public void ValidaDescarga(object sender, EventArgs e, string urlMsi, string version, string pathFile, string forceInstall, 
+            string verificaApp, string automaticInstall, string pathInstall, bool instalaManual)
         {
-            DescargaApp( urlMsi,  version,  pathFile,  forceInstall,  verificaApp,  automaticInstall);
+            DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, instalaManual);
         }
 
-        private void DescargaApp(string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall)
+        private void DescargaApp(string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall, string pathInstall, bool instalaManual)
         {
             string rutaDescarga = Path.Combine("C:\\temp\\repository", pathFile);
 
@@ -380,7 +394,7 @@ namespace MaterialSkinExample
             }
 
             INSTALACION:
-            VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall);
+            VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual);
             //if (automaticInstall == "true")
             //{
                 
@@ -391,7 +405,7 @@ namespace MaterialSkinExample
             //loadCardAsync();
         }
 
-        private void VerificaProcesoActivo(string verificaApp, string rutaDescarga, string automaticInstall, string forceInstall)
+        private void VerificaProcesoActivo(string verificaApp, string rutaDescarga, string automaticInstall, string forceInstall, string pathInstall, bool instalaManual)
         {
             Process[] procesos = Process.GetProcessesByName(verificaApp);
 
@@ -410,345 +424,157 @@ namespace MaterialSkinExample
             }
             else
             {
-                Console.WriteLine("El proceso " + verificaApp.ToUpper() + " no está activo." + rutaDescarga);
-                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a comenzado.", "OK", true);
-                SnackBarMessage.Show(this);
+                if(automaticInstall == "true")
+                {
+                    Console.WriteLine("El proceso " + verificaApp.ToUpper() + " no está activo." + rutaDescarga);
+                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a comenzado.", "OK", true);
+                    SnackBarMessage.Show(this);
+
+                    //Si esta instalada una version previa, desinstalar
+                    if (VerificaInstalacion(pathInstall))
+                    {
+                        EjectutaDesinstalacion(rutaDescarga);
+                        //goto INSTALACION;
+                    }
+                    else
+                    {
+                        //S
+                        goto INSTALACION;
+                    }
+                    
+                }
+
+                if(instalaManual == true)
+                {
+                    //Si esta instalada una version previa, desinstalar
+                    if (VerificaInstalacion(pathInstall))
+                    {
+                        EjectutaDesinstalacion(rutaDescarga);
+                        //goto INSTALACION;
+                    }
+                    else
+                    {
+                        //S
+                        goto INSTALACION;
+                    }
+                }
+
+                INSTALACION:
                 EjecutaInstalacion(rutaDescarga);
                 //if (automaticInstall == "true")
                 //{
-                    
+
                 //}
 
-                
+
             }
         }
 
         private void EjecutaInstalacion(string rutaDescarga)
         {
-            string userName = "administrador";
-            string password = "InsodEp&a8094";
-            string command = $"msiexec.exe /i \"{rutaDescarga}\" /quiet /norestart";
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            //startInfo.FileName = appPath + "\\" + appName;
-            startInfo.FileName = "cmd.exe";
-            startInfo.Verb = "runas"; // Solicitar elevación de permisos
-            startInfo.UseShellExecute = false;
-            startInfo.UserName = userName;
-            startInfo.Arguments = $"/c {command}";
-            
-
-            Console.WriteLine("Arguments command: " + startInfo.Arguments);
-
-            // Convertir la contraseña en un objeto SecureString
-            var securePassword = new System.Security.SecureString();
-            foreach (char c in password)
-            {
-                securePassword.AppendChar(c);
-            }
-            startInfo.Password = securePassword;
-
             try
             {
-                //Process process = new Process();
-                //process.StartInfo = startInfo;
-                //process.Start();
-                //process.WaitForExit();
+                string userName = "administrador";
+                string password = "InsodEp&a8094";
+                string command = $"msiexec.exe /i \"{rutaDescarga}\" /quiet /norestart";
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                //startInfo.FileName = appPath + "\\" + appName;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Verb = "runas"; // Solicitar elevación de permisos
+                startInfo.UseShellExecute = false;
+                startInfo.UserName = userName;
+                startInfo.Arguments = $"/c {command}";
 
-                Process.Start(startInfo);
 
-                //MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a finalizado correctamente.", "OK", true);
-                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación a finalizado correctamente.", 10000, "OK");
-                SnackBarMessage.Show(this);
+                Console.WriteLine("Arguments command: " + startInfo.Arguments);
+
+                // Convertir la contraseña en un objeto SecureString
+                var securePassword = new System.Security.SecureString();
+                foreach (char c in password)
+                {
+                    securePassword.AppendChar(c);
+                }
+                startInfo.Password = securePassword;
+
+                try
+                {
+                    //Process process = new Process();
+                    //process.StartInfo = startInfo;
+                    //process.Start();
+                    //process.WaitForExit();
+
+                    Process.Start(startInfo);
+
+                    //MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a finalizado correctamente.", "OK", true);
+                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación a finalizado correctamente.", 5000, "OK");
+                    SnackBarMessage.Show(this);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error al iniciar la aplicación: " + ex.Message);
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine("Error al iniciar la aplicación: " + ex.Message);
+
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al ejecutar la instalación.", 5000, "OK");
+                SnackBarMessage.Show(this);
             }
 
             //Reaload datos dinamicos de la nube
             //loadCardAsync();
         }
 
-        ////Metodo Original
-        //public void InstalaAppOriginal(object sender, EventArgs e, string urlMsi, string version, string pathFile)
-        //{
-        //    string rutaDescarga = Path.Combine("C:\\temp\\repository", pathFile);
-        //    Console.WriteLine("Descarga config: " + rutaDescarga);
-
-        //    using (WebClient client = new WebClient())
-        //    {
-        //        Console.WriteLine("Descarga iniciando...");
-        //        client.DownloadFile(urlMsi, rutaDescarga);
-        //        Console.WriteLine("Descarga completada... " + rutaDescarga);
-        //    }
-        //    string ruta = @"C:\temp\repository\TimeBimCAD_1.4.2.0.msi";
-        //    string msiPath = "C:\\temp\\repository\\TimeBimCAD_1.4.2.0.msi";
-        //    string accountName = "administrador";
-
-        //    // Construir el comando para instalar el MSI con la cuenta local especificada
-        //    string command = $"msiexec.exe /i \"{msiPath}\" /quiet /norestart";
-
-        //    // Ejecutar el comando en un proceso
-        //    using (Process process = new Process())
-        //    {
-        //        process.StartInfo.FileName = "cmd.exe";
-        //        process.StartInfo.Arguments = $"/c {command}";
-        //        process.StartInfo.UseShellExecute = false;
-        //        process.StartInfo.RedirectStandardOutput = true;
-        //        process.Start();
-
-        //        // Leer la salida del proceso
-        //        string output = process.StandardOutput.ReadToEnd();
-
-        //        process.WaitForExit();
-
-        //        // Verificar si la instalación fue exitosa
-        //        if (process.ExitCode == 0)
-        //        {
-        //            Console.WriteLine("Instalación exitosa");
-        //        }
-        //        else
-        //        {
-        //            Console.WriteLine($"Error en la instalación. Código de salida: {process.ExitCode}");
-        //        }
-
-        //        Console.WriteLine(output);
-
-        //        #region
-        //        //verifica si existe descarga
-        //        if (File.Exists(rutaDescarga))
-        //        {
-        //            Console.WriteLine("rutaDescarga" + rutaDescarga);
-
-        //            string s = "You win some. You lose some.";
-
-        //            string[] versionLocalSucia = pathFile.Split('_');
-        //            string versionLocal = versionLocalSucia[1].Substring(0, 7);
-
-        //            Console.WriteLine("verifica si existe descarga..." + versionLocal + ", " + version);
-        //            Version v1 = Version.Parse(versionLocal);
-        //            Version v2 = Version.Parse(version);
-        //            Console.WriteLine("Compara versiones: " + v1.CompareTo((Object)v2));
-
-        //            //si version local vs web son iguales va al proceso de instalacion
-        //            if (v1 != null && v1.CompareTo(v2) == 0)
-        //            {
-        //                Console.WriteLine("Archivo ya descargado...");
-
-        //                Console.WriteLine("Iniciando instalacion veriricada...");
-        //                string fileInstall = Path.Combine(Path.GetTempPath(), "instala.bat");
-
-        //                if (File.Exists(fileInstall))
-        //                {
-        //                    File.Delete(fileInstall);
-        //                }
-
-        //                using (FileStream fs = File.Create(fileInstall))
-        //                {
-        //                    //Byte[] title = new UTF8Encoding(true).GetBytes($"@echo off\r\nmsiexec.exe /i {GUID} /quiet /norestart\r\ndel \"%~f0\"");
-        //                    Byte[] title = new UTF8Encoding(true).GetBytes($"@echo off\r\nmsiexec.exe /i \"{@rutaDescarga}\" /quiet /norestart");
-        //                    fs.Write(title, 0, title.Length);
-        //                }
+        private void EjectutaDesinstalacion(string rutaDescarga)
+        {
+            try
+            {
+                string userName = "administrador";
+                string password = "InsodEp&a8094";
+                string command = $"msiexec.exe /x \"{rutaDescarga}\" /quiet /norestart";
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                //startInfo.FileName = appPath + "\\" + appName;
+                startInfo.FileName = "cmd.exe";
+                startInfo.Verb = "runas"; // Solicitar elevación de permisos
+                startInfo.UseShellExecute = false;
+                startInfo.UserName = userName;
+                startInfo.Arguments = $"/c {command}";
 
 
+                Console.WriteLine("Arguments command: " + startInfo.Arguments);
 
-        //                Process procesoBatch = new Process();
-        //                procesoBatch.StartInfo.FileName = fileInstall;
-        //                procesoBatch.StartInfo.CreateNoWindow = true;
-        //                procesoBatch.Start();
-        //                procesoBatch.WaitForExit();
+                // Convertir la contraseña en un objeto SecureString
+                var securePassword = new System.Security.SecureString();
+                foreach (char c in password)
+                {
+                    securePassword.AppendChar(c);
+                }
+                startInfo.Password = securePassword;
 
-        //                Console.WriteLine("instalacion completada...");
-        //            }
-        //            else
-        //            {
-        //                using (WebClient client = new WebClient())
-        //                {
-        //                    Console.WriteLine("Descarga iniciando...");
-        //                    client.DownloadFile(urlMsi, rutaDescarga);
-        //                    Console.WriteLine("Descarga completada...");
-        //                }
-        //                Console.WriteLine("Descarga ruta archivo2: " + rutaDescarga);
-        //                Console.WriteLine("Iniciando instalacion nueva2...");
+                try
+                {
+                    //Process process = new Process();
+                    //process.StartInfo = startInfo;
+                    //process.Start();
+                    //process.WaitForExit();
 
+                    Process.Start(startInfo);
 
+                    //MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a finalizado correctamente.", "OK", true);
+                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación a finalizado correctamente.", 5000, "OK");
+                    SnackBarMessage.Show(this);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error al iniciar la aplicación: " + ex.Message);
+                }
+            }
+            catch (Exception)
+            {
 
-        //                ProcessStartInfo procStartInfo = new ProcessStartInfo("cmd", $"msiexec /i " + @rutaDescarga + " / quiet /norestart");
-
-
-        //                //Process process = new Process();
-        //                //process.StartInfo.FileName = "cmd.exe";
-        //                //process.StartInfo.Arguments = $"msiexec /i \"{@rutaDescarga}\" /quiet /norestart";
-
-
-        //                ////Console.WriteLine("CMD : " + process.StartInfo.Arguments.ToString());
-        //                //process.StartInfo.CreateNoWindow = true;
-        //                //process.Start();
-        //                //process.WaitForExit();
-        //                Console.WriteLine("instalacion completada..." + procStartInfo);
-
-
-        //                //Console.WriteLine("Iniciando instalacion...");
-        //                //string fileInstall = Path.Combine(Path.GetTempPath(), "instala.bat");
-
-        //                //if (File.Exists(fileInstall))
-        //                //{
-        //                //    File.Delete(fileInstall);
-        //                //}
-
-        //                //using (FileStream fs = File.Create(fileInstall))
-        //                //{
-        //                //    //Byte[] title = new UTF8Encoding(true).GetBytes($"@echo off\r\nmsiexec.exe /i {GUID} /quiet /norestart\r\ndel \"%~f0\"");
-        //                //    Byte[] title = new UTF8Encoding(true).GetBytes($"@echo off\r\nmsiexec.exe /i \"{@rutaDescarga}\" /quiet /norestart\r\ndel \"%~f0\"");
-        //                //    fs.Write(title, 0, title.Length);
-        //                //    Console.WriteLine("CMD : " + title);
-        //                //}
-
-        //                //Process procesoBatch = new Process();
-        //                //procesoBatch.StartInfo.FileName = fileInstall;
-        //                //procesoBatch.StartInfo.CreateNoWindow = true;
-        //                //procesoBatch.Start();
-        //                //procesoBatch.WaitForExit();
-
-        //                //Console.WriteLine("instalacion completada...");
-
-        //            }
-
-        //        }
-        //        else
-        //        {
-        //            using (WebClient client = new WebClient())
-        //            {
-        //                Console.WriteLine("Descarga iniciando...");
-        //                client.DownloadFile(urlMsi, rutaDescarga);
-        //                Console.WriteLine("Descarga completada...");
-        //            }
-        //            Console.WriteLine("Descarga ruta archivo: " + rutaDescarga);
-
-        //            Process.Start(@"cmd", @"/c " + $"msiexec /i \"{@rutaDescarga}\" /quiet /norestart");
-
-        //            //Process process = new Process();
-        //            //process.StartInfo.FileName = "cmd.exe";
-        //            //process.StartInfo.Arguments = $"msiexec /i \"{@rutaDescarga}\" /quiet /norestart";
-
-
-        //            ////Console.WriteLine("CMD : " + process.StartInfo.Arguments.ToString());
-        //            //process.StartInfo.CreateNoWindow = true;
-        //            //process.Start();
-        //            ////process.WaitForExit();
-        //            Console.WriteLine("instalacion completada...");
-        //        }
-
-        //        #endregion
-        //    }
-        //}
-
-
-        //public void DescargaEInstala(string urlMsi, string pathFile, string forceInstall, string software, string versionWeb, string GUID)
-        //{
-        //    string rutaDescarga = Path.Combine(Path.GetTempPath(), pathFile);
-        //    Console.WriteLine("Descarga config: " + rutaDescarga);
-
-        //    //verifica si existe descarga
-        //    if (File.Exists(rutaDescarga))
-        //    {
-        //        Console.WriteLine("rutaDescarga: " + rutaDescarga );
-
-        //        string s = "You win some. You lose some.";
-
-        //        string[] versionLocalSucia = pathFile.Split('_');
-        //        string versionLocal = versionLocalSucia[1].Substring(0, 7);
-
-        //        Console.WriteLine("verifica si existe descarga..." + versionLocal + ", " + versionWeb);
-        //        Version v1 = Version.Parse(versionLocal);
-        //        Version v2 = Version.Parse(versionWeb);
-        //        Console.WriteLine("Compara versiones: " + v1.CompareTo((Object)v2));
-
-        //        //si version local vs web son iguales va al proceso de instalacion
-        //        if (v1 != null && v1.CompareTo(v2) == 0)
-        //        {
-        //            Console.WriteLine("Archivo ya descargado... redirigiendo a verificacion de instalacion");
-        //            goto FORCE_INSTALL;
-        //        }
-        //        else
-        //        {
-        //            using (WebClient client = new WebClient())
-        //            {
-        //                Console.WriteLine("Descarga iniciando...");
-        //                client.DownloadFile(urlMsi, rutaDescarga);
-        //                Console.WriteLine("Descarga completada...");
-        //            }
-        //            Console.WriteLine("Descarga ruta archivo: " + rutaDescarga);
-        //        }
-
-        //    }
-        //    else
-        //    {
-        //        using (WebClient client = new WebClient())
-        //        {
-        //            Console.WriteLine("Descarga iniciando...");
-        //            client.DownloadFile(urlMsi, rutaDescarga);
-        //            Console.WriteLine("Descarga completada...");
-        //        }
-        //        Console.WriteLine("Descarga ruta archivo: " + rutaDescarga);
-        //    }
-
-
-
-        //    FORCE_INSTALL:
-        //    if(forceInstall == "true")
-        //    {
-        //        Console.WriteLine("Iniciando desinstalacion...");
-        //        string fileUnninstall = Path.Combine(Path.GetTempPath(), "desinstala.bat");
-
-        //        if (File.Exists(fileUnninstall))
-        //        {
-        //            File.Delete(fileUnninstall);
-        //        }
-        //        // Create a new file     
-        //        using (FileStream fs = File.Create(fileUnninstall))
-        //        {
-        //            // Add some text to file    wmic product where name="RevitActivityTrackerApplication" call uninstall /nointeractive
-
-        //            //Byte[] title = new UTF8Encoding(true).GetBytes("wmic product where name=\"RevitActivityTrackerApplication\" call uninstall /nointeractive");
-        //            Byte[] title = new UTF8Encoding(true).GetBytes($"@echo off\r\nmsiexec.exe /x {GUID} /quiet /norestart\r\ndel \"%~f0\"");
-        //            fs.Write(title, 0, title.Length);
-        //        }
-
-        //        Console.WriteLine("Software " + software + ", GUI = " + GUID + ", desinstalado correctamente.");
-
-        //        Process procesoBatch = new Process();
-        //        procesoBatch.StartInfo.FileName = fileUnninstall;
-
-        //        procesoBatch.Start();
-        //        procesoBatch.WaitForExit();
-
-
-
-
-        //        //Process process = new Process();
-        //        //process.StartInfo.FileName = "cmd.exe";
-        //        ////process.StartInfo.WorkingDirectory = rutaDescarga;
-        //        //process.StartInfo.Arguments = $"wmic product where name='{software}' call uninstall /nointeractive";
-        //        //process.Start();
-        //        //process.WaitForExit();
-        //        Console.WriteLine("Desinstalacion completada...");
-
-        //        //Console.WriteLine("Iniciando update...");
-        //        //Process process = new Process();
-        //        //process.StartInfo.FileName = "cmd.exe";
-        //        ////process.StartInfo.WorkingDirectory = rutaDescarga;
-        //        //process.StartInfo.Arguments = $"msiexec /x {rutaDescarga} /q";
-        //        //process.Start();
-        //        //process.WaitForExit();
-        //        //Console.WriteLine("Update completado...");
-
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("forceInstall = " + forceInstall);
-        //    }
-        //}
+                throw;
+            }
+        }
 
         private string LocalVersionApp(string pathInstall, string version)
         {
@@ -783,15 +609,11 @@ namespace MaterialSkinExample
                     FileVersionInfo infoArchivo = FileVersionInfo.GetVersionInfo(pathInstall);
                     versionLocal = infoArchivo.FileVersion;
 
-                    //Console.WriteLine("\n\nFile: " + infoArchivo.FileDescription + '\n' + "Version number: " + infoArchivo.FileVersion + "\n\n");
-                    //Console.WriteLine("Versión local = " + versionLocal + ", Version web es = " + versionWeb + "\n\n");
-
                     Version v1 = new Version(versionLocal);
                     Version v2 = new Version(versionWeb);
-                    //Console.WriteLine("Compara versiones: " + v1.CompareTo((Object)v2));
+                    //Console.WriteLine("Versión local = " + versionLocal + ", Version web es = " + versionWeb + "\n\n");
 
                     return v1.CompareTo(v2);
-
                 }
                 
             }
@@ -799,7 +621,7 @@ namespace MaterialSkinExample
             {
                 Console.WriteLine("Error al verificar version: " + versionWeb + " en ruta: " + pathInstall);
             }
-            
+            //return 10 para error
             return 10;
         }
 
@@ -947,9 +769,9 @@ namespace MaterialSkinExample
             {
                 Hide();
                 notifyIcon1.Visible = true;
+                notifyIcon1.ShowBalloonTip(1000);
             }
         }
-
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
