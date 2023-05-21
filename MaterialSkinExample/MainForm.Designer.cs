@@ -65,6 +65,7 @@ namespace MaterialSkinExample
             this.materialLabel62 = new MaterialSkin.Controls.MaterialLabel();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.materialCheckbox1 = new MaterialSkin.Controls.MaterialCheckbox();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.tabPageConfig.SuspendLayout();
             this.tabPageApps.SuspendLayout();
             this.tabPageInicio.SuspendLayout();
@@ -570,6 +571,12 @@ namespace MaterialSkinExample
             this.materialCheckbox1.Text = "materialCheckbox1";
             this.materialCheckbox1.UseVisualStyleBackColor = true;
             // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "PYALauncherApps";
+            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -588,6 +595,7 @@ namespace MaterialSkinExample
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "PYA Launcher Apps";
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.tabPageConfig.ResumeLayout(false);
             this.tabPageConfig.PerformLayout();
             this.tabPageApps.ResumeLayout(false);
@@ -637,5 +645,6 @@ namespace MaterialSkinExample
         private MaterialButton materialButton1;
         private MaterialCard materialCard1;
         private MaterialLabel materialLabel1;
+        private NotifyIcon notifyIcon1;
     }
 }
