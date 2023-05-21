@@ -195,10 +195,8 @@ namespace MaterialSkinExample
                 button.TabIndex = 1;
 
                 //Agrega tags a filtro
-                //materialCheckedListBox1.Items.Add(tag.ToUpper(), false);
-                
-                listaFiltro.Items.Add(tag.ToUpper(), false);
-                listaFiltro.TabIndexChanged += (sender, e) => ActualizaListaApps(sender, e);
+                //listaFiltro.Items.Add(tag.ToUpper(), false);
+                //listaFiltro.TabIndexChanged += (sender, e) => ActualizaListaApps(sender, e);
 
                 #endregion
 
@@ -477,37 +475,31 @@ namespace MaterialSkinExample
                 string userName = "administrador";
                 string password = "InsodEp&a8094";
                 string command = $"msiexec.exe /i \"{rutaDescarga}\" /quiet /norestart";
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                //startInfo.FileName = appPath + "\\" + appName;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Verb = "runas"; // Solicitar elevación de permisos
-                startInfo.UseShellExecute = false;
-                startInfo.UserName = userName;
-                startInfo.Arguments = $"/c {command}";
-
-
-                Console.WriteLine("Arguments command: " + startInfo.Arguments);
-
+                
                 // Convertir la contraseña en un objeto SecureString
                 var securePassword = new System.Security.SecureString();
                 foreach (char c in password)
                 {
                     securePassword.AppendChar(c);
                 }
-                startInfo.Password = securePassword;
-
+                
                 try
                 {
-                    //Process process = new Process();
-                    //process.StartInfo = startInfo;
-                    //process.Start();
-                    //process.WaitForExit();
-
-                    Process.Start(startInfo);
-
-                    //MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a finalizado correctamente.", "OK", true);
-                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación a finalizado correctamente.", 5000, "OK");
+                    Process process = new Process();
+                    process.StartInfo.FileName = "msiexec.exe";
+                    process.StartInfo.Arguments = string.Format(" /q /i \"{0}\" ALLUSERS=1", rutaDescarga);
+                    process.StartInfo.UserName = userName;
+                    process.StartInfo.Password = securePassword;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    process.Start();
+                    process.WaitForExit();
+                    
+                    //Process.Start(startInfo);
+                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación a finalizado correctamente.", 3000, "OK");
                     SnackBarMessage.Show(this);
+                    //Reaload datos dinamicos de la nube
+                    loadCardAsync();
                 }
                 catch (Exception ex)
                 {
@@ -517,12 +509,9 @@ namespace MaterialSkinExample
             catch (Exception)
             {
 
-                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al ejecutar la instalación.", 5000, "OK");
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al ejecutar la instalación.", 3000, "OK");
                 SnackBarMessage.Show(this);
             }
-
-            //Reaload datos dinamicos de la nube
-            //loadCardAsync();
         }
 
         private void EjectutaDesinstalacion(string rutaDescarga)
@@ -532,37 +521,31 @@ namespace MaterialSkinExample
                 string userName = "administrador";
                 string password = "InsodEp&a8094";
                 string command = $"msiexec.exe /x \"{rutaDescarga}\" /quiet /norestart";
-                ProcessStartInfo startInfo = new ProcessStartInfo();
-                //startInfo.FileName = appPath + "\\" + appName;
-                startInfo.FileName = "cmd.exe";
-                startInfo.Verb = "runas"; // Solicitar elevación de permisos
-                startInfo.UseShellExecute = false;
-                startInfo.UserName = userName;
-                startInfo.Arguments = $"/c {command}";
-
-
-                Console.WriteLine("Arguments command: " + startInfo.Arguments);
-
+                
                 // Convertir la contraseña en un objeto SecureString
                 var securePassword = new System.Security.SecureString();
                 foreach (char c in password)
                 {
                     securePassword.AppendChar(c);
                 }
-                startInfo.Password = securePassword;
-
+                
                 try
                 {
-                    //Process process = new Process();
-                    //process.StartInfo = startInfo;
-                    //process.Start();
-                    //process.WaitForExit();
+                    Process process = new Process();
+                    process.StartInfo.FileName = "msiexec.exe";
+                    process.StartInfo.Arguments = string.Format(" /q /x \"{0}\" ALLUSERS=1", rutaDescarga);
+                    process.StartInfo.UserName = userName;
+                    process.StartInfo.Password = securePassword;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                    process.Start();
+                    process.WaitForExit();
+                    //Process.Start(startInfo);
 
-                    Process.Start(startInfo);
-
-                    //MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a finalizado correctamente.", "OK", true);
                     MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación a finalizado correctamente.", 5000, "OK");
                     SnackBarMessage.Show(this);
+                    //Reaload datos dinamicos de la nube
+                    loadCardAsync();
                 }
                 catch (Exception ex)
                 {
@@ -707,25 +690,6 @@ namespace MaterialSkinExample
             Properties.Settings.Default.Save();
             Invalidate();
         }
-
-        //private Boolean VerificaApp(object sender, EventArgs e, string verificaApp, string pathInstall, string version)
-        //{
-        //    Process[] procesos = Process.GetProcessesByName(verificaApp);
-
-        //    if (procesos.Length > 0)
-        //    {
-        //        Console.WriteLine("El proceso de AutoCAD está activo.");
-        //        MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso "+ verificaApp.ToUpper() + " está activo. Favor cierre la aplicacion antes de continuar.", "OK", true);
-        //        SnackBarMessage.Show(this);
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine("El proceso " + verificaApp.ToUpper()+" no está activo.");
-        //        return false;
-        //    }
-            
-        //}
 
         private void materialButton32_Click(object sender, EventArgs e)
         {
