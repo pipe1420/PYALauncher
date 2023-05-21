@@ -20,6 +20,16 @@ namespace MaterialSkinExample
         private readonly MaterialSkinManager materialSkinManager;
         private int colorSchemeIndex;
 
+        //public MaterialCard card = new MaterialCard();
+        //public MaterialLabel labelTitulo = new MaterialLabel();
+        //public MaterialLabel labelVersion = new MaterialLabel();
+        //public MaterialLabel labelVersionWeb = new MaterialLabel();
+        //public MaterialButton button = new MaterialButton();
+        //public MaterialButton buttonUpdate = new MaterialButton();
+        //public MaterialLabel body = new MaterialLabel();
+
+        
+
         public MainForm()
         {
             InitializeComponent();
@@ -56,7 +66,10 @@ namespace MaterialSkinExample
         private async Task loadCardAsync()
         {
             flowLayoutPanel1.Controls.Clear();
-            
+            listaFiltro.Items.Clear();
+
+    
+
             MaterialLabel reload = new MaterialLabel();
             reload.AutoSize = true;
             reload.Depth = 0;
@@ -81,6 +94,8 @@ namespace MaterialSkinExample
 
             flowLayoutPanel1.Controls.Clear();
 
+
+
             foreach (JObject record in latestRecords)
             {
                 string descripcion = (string)record["descripcion"];
@@ -96,10 +111,10 @@ namespace MaterialSkinExample
                 string GUID = (string)record["GUID"];
                 string automaticInstall = (string)record["automatic_install"];
 
-               
+
 
                 #region Agrega elementos de card
-                
+
 
                 //Console.WriteLine($"Descripción: {descripcion}");
                 //Console.WriteLine($"Imagen: {imagen}");
@@ -114,9 +129,12 @@ namespace MaterialSkinExample
                 MaterialCard card = new MaterialCard();
                 MaterialLabel labelTitulo = new MaterialLabel();
                 MaterialLabel labelVersion = new MaterialLabel();
+                MaterialLabel labelVersionWeb = new MaterialLabel();
                 MaterialButton button = new MaterialButton();
                 MaterialButton buttonUpdate = new MaterialButton();
                 MaterialLabel body = new MaterialLabel();
+                
+
 
 
                 card.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -169,7 +187,7 @@ namespace MaterialSkinExample
                 labelVersion.TabIndex = 82;
                 
 
-                if(localVersion != "null") labelVersion.Text = $"Version: {version}";
+                if(localVersion != "null") labelVersion.Text = $"Version: {localVersion}";
 
                
                 button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -185,6 +203,12 @@ namespace MaterialSkinExample
                 button.NoAccentTextColor = System.Drawing.Color.Empty;
                 button.Size = new System.Drawing.Size(76, 36);
                 button.TabIndex = 1;
+
+                //Agrega tags a filtro
+                //materialCheckedListBox1.Items.Add(tag.ToUpper(), false);
+                
+                listaFiltro.Items.Add(tag.ToUpper(), false);
+                listaFiltro.TabIndexChanged += (sender, e) => ActualizaListaApps(sender, e);
 
                 #endregion
 
@@ -206,6 +230,19 @@ namespace MaterialSkinExample
 
                         //DescargaEInstala(urlMsi, pathFile, forceInstall, software, version, GUID);
                         button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall);
+
+                        labelVersionWeb.AutoSize = true;
+                        labelVersionWeb.Depth = 0;
+                        labelVersionWeb.Enabled = false;
+                        labelVersionWeb.Font = new System.Drawing.Font("Roboto Medium", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+                        labelVersionWeb.FontType = MaterialSkin.MaterialSkinManager.fontType.Subtitle2;
+                        labelVersionWeb.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+                        labelVersionWeb.Location = new System.Drawing.Point(390, 70);
+                        labelVersionWeb.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+                        labelVersionWeb.MouseState = MaterialSkin.MouseState.HOVER;
+                        labelVersionWeb.Size = new System.Drawing.Size(269, 17);
+                        labelVersionWeb.TabIndex = 82;
+                        labelVersionWeb.Text = $"Nueva: {version}";
                     }
                     else
                     {
@@ -223,10 +260,11 @@ namespace MaterialSkinExample
                 }
                 button.UseAccentColor = false;
                 button.UseVisualStyleBackColor = true;
-                
 
+                
                 card.Controls.Add(labelTitulo);
                 card.Controls.Add(labelVersion);
+                card.Controls.Add(labelVersionWeb);
                 card.Controls.Add(body);
                 card.Controls.Add(button);
                 flowLayoutPanel1.Controls.Add(card);
@@ -280,7 +318,15 @@ namespace MaterialSkinExample
                 }
 
             }
+            Console.WriteLine("Filtro limpio3: " + listaFiltro.Items.Count);
+        }
 
+        private void ActualizaListaApps(object sender, EventArgs e)
+        {
+            foreach (var item in listaFiltro.Items)
+            {
+                Console.WriteLine("Item Checked: " + item.Text);
+            }
         }
 
         public void ValidaDescarga(object sender, EventArgs e, string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall)
@@ -351,7 +397,7 @@ namespace MaterialSkinExample
 
             if (procesos.Length > 0)
             {
-                Console.WriteLine("El proceso de AutoCAD está activo.");
+                Console.WriteLine("El proceso " + verificaApp.ToUpper() + " está activo.");
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso " + verificaApp.ToUpper() + " está activo. Favor cierre la aplicacion antes de continuar.", "OK", true);
                 SnackBarMessage.Show(this);
 
@@ -364,14 +410,14 @@ namespace MaterialSkinExample
             }
             else
             {
-                Console.WriteLine("El proceso de AutoCAD no está activo.");
+                Console.WriteLine("El proceso " + verificaApp.ToUpper() + " no está activo." + rutaDescarga);
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a comenzado.", "OK", true);
                 SnackBarMessage.Show(this);
-
-                if (automaticInstall == "true")
-                {
-                    EjecutaInstalacion(rutaDescarga);
-                }
+                EjecutaInstalacion(rutaDescarga);
+                //if (automaticInstall == "true")
+                //{
+                    
+                //}
 
                 
             }
@@ -389,7 +435,9 @@ namespace MaterialSkinExample
             startInfo.UseShellExecute = false;
             startInfo.UserName = userName;
             startInfo.Arguments = $"/c {command}";
+            
 
+            Console.WriteLine("Arguments command: " + startInfo.Arguments);
 
             // Convertir la contraseña en un objeto SecureString
             var securePassword = new System.Security.SecureString();
@@ -401,13 +449,15 @@ namespace MaterialSkinExample
 
             try
             {
-                Process process = new Process();
-                process.StartInfo = startInfo;
-                process.Start();
-                process.WaitForExit();
+                //Process process = new Process();
+                //process.StartInfo = startInfo;
+                //process.Start();
+                //process.WaitForExit();
+
+                Process.Start(startInfo);
 
                 //MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a finalizado correctamente.", "OK", true);
-                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a finalizado correctamente.", 10000, "OK");
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación a finalizado correctamente.", 10000, "OK");
                 SnackBarMessage.Show(this);
             }
             catch (Exception ex)
@@ -416,7 +466,7 @@ namespace MaterialSkinExample
             }
 
             //Reaload datos dinamicos de la nube
-            loadCardAsync();
+            //loadCardAsync();
         }
 
         ////Metodo Original
@@ -836,24 +886,24 @@ namespace MaterialSkinExample
             Invalidate();
         }
 
-        private Boolean VerificaApp(object sender, EventArgs e, string verificaApp, string pathInstall, string version)
-        {
-            Process[] procesos = Process.GetProcessesByName(verificaApp);
+        //private Boolean VerificaApp(object sender, EventArgs e, string verificaApp, string pathInstall, string version)
+        //{
+        //    Process[] procesos = Process.GetProcessesByName(verificaApp);
 
-            if (procesos.Length > 0)
-            {
-                Console.WriteLine("El proceso de AutoCAD está activo.");
-                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso "+ verificaApp.ToUpper() + " está activo. Favor cierre la aplicacion antes de continuar.", "OK", true);
-                SnackBarMessage.Show(this);
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("El proceso de AutoCAD no está activo.");
-                return false;
-            }
+        //    if (procesos.Length > 0)
+        //    {
+        //        Console.WriteLine("El proceso de AutoCAD está activo.");
+        //        MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso "+ verificaApp.ToUpper() + " está activo. Favor cierre la aplicacion antes de continuar.", "OK", true);
+        //        SnackBarMessage.Show(this);
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine("El proceso " + verificaApp.ToUpper()+" no está activo.");
+        //        return false;
+        //    }
             
-        }
+        //}
 
         private void materialButton32_Click(object sender, EventArgs e)
         {
@@ -878,5 +928,16 @@ namespace MaterialSkinExample
                 colorSchemeIndex = 0;
             updateColor();
         }
+
+        private void materialButton1_Click_1(object sender, EventArgs e)
+        {
+            
+            listaFiltro.Items.Clear();
+            listaFiltro.Items.Sort();
+            listaFiltro.Refresh();
+            Console.WriteLine("Filtro limpio" + listaFiltro.Items.Count);
+        }
+
+      
     }
 }
