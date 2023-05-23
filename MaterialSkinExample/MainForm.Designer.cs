@@ -203,7 +203,7 @@ namespace MaterialSkinExample
             this.materialButton1.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.materialButton1.Depth = 0;
             this.materialButton1.HighEmphasis = true;
-            this.materialButton1.Icon = global::MaterialSkinExample.Properties.Resources.outline_sync_white_24dp;
+            this.materialButton1.Icon = global::PYALauncherApps.Properties.Resources.outline_sync_white_24dp;
             this.materialButton1.Location = new System.Drawing.Point(796, 197);
             this.materialButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
@@ -224,7 +224,7 @@ namespace MaterialSkinExample
             this.listaFiltro.BackColor = System.Drawing.Color.White;
             this.listaFiltro.Depth = 0;
             this.listaFiltro.Location = new System.Drawing.Point(688, 236);
-            this.listaFiltro.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.listaFiltro.Margin = new System.Windows.Forms.Padding(2);
             this.listaFiltro.MouseState = MaterialSkin.MouseState.HOVER;
             this.listaFiltro.Name = "listaFiltro";
             this.listaFiltro.Size = new System.Drawing.Size(213, 290);
@@ -240,7 +240,7 @@ namespace MaterialSkinExample
             this.materialButtonReload.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
             this.materialButtonReload.Depth = 0;
             this.materialButtonReload.HighEmphasis = true;
-            this.materialButtonReload.Icon = global::MaterialSkinExample.Properties.Resources.outline_sync_white_24dp;
+            this.materialButtonReload.Icon = global::PYALauncherApps.Properties.Resources.outline_sync_white_24dp;
             this.materialButtonReload.Location = new System.Drawing.Point(661, 138);
             this.materialButtonReload.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialButtonReload.MouseState = MaterialSkin.MouseState.HOVER;
@@ -318,9 +318,9 @@ namespace MaterialSkinExample
             this.tabPageInicio.Controls.Add(this.materialLabel62);
             this.tabPageInicio.ImageKey = "round_assessment_white_24dp.png";
             this.tabPageInicio.Location = new System.Drawing.Point(4, 31);
-            this.tabPageInicio.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageInicio.Margin = new System.Windows.Forms.Padding(2);
             this.tabPageInicio.Name = "tabPageInicio";
-            this.tabPageInicio.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPageInicio.Padding = new System.Windows.Forms.Padding(2);
             this.tabPageInicio.Size = new System.Drawing.Size(999, 620);
             this.tabPageInicio.TabIndex = 10;
             this.tabPageInicio.Text = "Inicio";
@@ -332,10 +332,10 @@ namespace MaterialSkinExample
             this.materialCard1.Depth = 0;
             this.materialCard1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialCard1.Location = new System.Drawing.Point(19, 197);
-            this.materialCard1.Margin = new System.Windows.Forms.Padding(7, 7, 7, 7);
+            this.materialCard1.Margin = new System.Windows.Forms.Padding(7);
             this.materialCard1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard1.Name = "materialCard1";
-            this.materialCard1.Padding = new System.Windows.Forms.Padding(14, 14, 14, 14);
+            this.materialCard1.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard1.Size = new System.Drawing.Size(819, 187);
             this.materialCard1.TabIndex = 71;
             this.materialCard1.Visible = false;
@@ -357,10 +357,10 @@ namespace MaterialSkinExample
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::MaterialSkinExample.Properties.Resources.Logo_horizontal_Definitivo_2__removebg_preview;
+            this.pictureBox1.Image = global::PYALauncherApps.Properties.Resources.Logo_horizontal_Definitivo_2__removebg_preview;
             this.pictureBox1.InitialImage = null;
             this.pictureBox1.Location = new System.Drawing.Point(443, 22);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(394, 104);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -376,10 +376,10 @@ namespace MaterialSkinExample
             this.materialCard7.Depth = 0;
             this.materialCard7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialCard7.Location = new System.Drawing.Point(443, 412);
-            this.materialCard7.Margin = new System.Windows.Forms.Padding(7, 7, 7, 7);
+            this.materialCard7.Margin = new System.Windows.Forms.Padding(7);
             this.materialCard7.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard7.Name = "materialCard7";
-            this.materialCard7.Padding = new System.Windows.Forms.Padding(14, 14, 14, 14);
+            this.materialCard7.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard7.Size = new System.Drawing.Size(394, 187);
             this.materialCard7.TabIndex = 70;
             // 
@@ -442,10 +442,10 @@ namespace MaterialSkinExample
             this.materialCard5.Depth = 0;
             this.materialCard5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialCard5.Location = new System.Drawing.Point(19, 412);
-            this.materialCard5.Margin = new System.Windows.Forms.Padding(7, 7, 7, 7);
+            this.materialCard5.Margin = new System.Windows.Forms.Padding(7);
             this.materialCard5.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard5.Name = "materialCard5";
-            this.materialCard5.Padding = new System.Windows.Forms.Padding(14, 14, 14, 14);
+            this.materialCard5.Padding = new System.Windows.Forms.Padding(14);
             this.materialCard5.Size = new System.Drawing.Size(394, 187);
             this.materialCard5.TabIndex = 70;
             // 
@@ -529,8 +529,8 @@ namespace MaterialSkinExample
             // 
             // materialTabControl1
             // 
-            this.materialTabControl1.Controls.Add(this.tabPageApps);
             this.materialTabControl1.Controls.Add(this.tabPageInicio);
+            this.materialTabControl1.Controls.Add(this.tabPageApps);
             this.materialTabControl1.Controls.Add(this.tabPageConfig);
             this.materialTabControl1.Depth = 0;
             this.materialTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;

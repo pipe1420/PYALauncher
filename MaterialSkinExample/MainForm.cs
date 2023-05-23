@@ -36,9 +36,9 @@ namespace MaterialSkinExample
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             materialSkinManager.ColorScheme = new ColorScheme(Primary.Red700,Primary.Red900, Primary.Red100, Accent.Red200, TextShade.WHITE);
 
-            colorSchemeIndex = Properties.Settings.Default.codigoTema;
+            colorSchemeIndex = PYALauncherApps.Properties.Settings.Default.codigoTema;
 
-            bool tst = Properties.Settings.Default.estiloTema;
+            bool tst = PYALauncherApps.Properties.Settings.Default.estiloTema;
             updateColor();
             if(tst == true)
             {
@@ -163,7 +163,7 @@ namespace MaterialSkinExample
                 body.Text = $"{descripcion}";
 
 
-                string localVersion = LocalVersionApp(pathInstall, version);
+                string localVersion = LocalVersionApp(pathInstall);
                 labelVersion.AutoSize = true;
                 labelVersion.Depth = 0;
                 labelVersion.Enabled = false;
@@ -220,7 +220,7 @@ namespace MaterialSkinExample
                         button.Enabled = true;
 
                         //DescargaEInstala(urlMsi, pathFile, forceInstall, software, version, GUID);
-                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, true);
+                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, true, software);
 
                         labelVersionWeb.AutoSize = true;
                         labelVersionWeb.Depth = 0;
@@ -240,21 +240,21 @@ namespace MaterialSkinExample
                     {
                         button.Text = "Instalado";
                         button.Enabled = false;
-                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false);
+                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false, software);
                     }
 
                     if(comparacion == 1)
                     {
                         button.Text = "Local mas nueva";
                         button.Enabled = false;
-                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false);
+                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false, software);
                     }
 
                     if (comparacion == 10)
                     {
                         button.Text = "Error";
                         button.Enabled = false;
-                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false);
+                        button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false, software);
                     }
 
                 }
@@ -263,7 +263,7 @@ namespace MaterialSkinExample
                     //Aplicacion no detectada
                     button.Text = "Instalar";
                     button.Enabled = true;
-                    button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, true);
+                    button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, true, software);
                 }
                 button.UseAccentColor = false;
                 button.UseVisualStyleBackColor = true;
@@ -279,16 +279,8 @@ namespace MaterialSkinExample
                 if (automaticInstall == "true")
                 {
                     Console.WriteLine("\n[NOTIFICACION] Software: " + software + " viene con actualizacion automatica.\n");
-
-                    if(!estaInstalado)
-                    {
-                        DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false);
-                    }
-                    else
-                    {
-                        DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false);
-                    }
-
+                    DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false, software);
+                    
                     /* ROAD MAP VALIDATION
                      * 
                      * 
@@ -328,6 +320,12 @@ namespace MaterialSkinExample
                     */
                 }
 
+                if (forceInstall == "true")
+                {
+                    Console.WriteLine("\n[NOTIFICACION] Software: " + software + " viene con actualizacion forzada.\n");
+                    DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false, software);
+                }
+
             }
             Console.WriteLine("Filtro limpio3: " + listaFiltro.Items.Count);
         }
@@ -340,13 +338,13 @@ namespace MaterialSkinExample
             }
         }
 
-        public void ValidaDescarga(object sender, EventArgs e, string urlMsi, string version, string pathFile, string forceInstall, 
-            string verificaApp, string automaticInstall, string pathInstall, bool instalaManual)
+        public async Task ValidaDescarga(object sender, EventArgs e, string urlMsi, string version, string pathFile, string forceInstall, 
+            string verificaApp, string automaticInstall, string pathInstall, bool instalaManual, string software)
         {
-            DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, instalaManual);
+            DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, instalaManual, software);
         }
 
-        private void DescargaApp(string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall, string pathInstall, bool instalaManual)
+        private void DescargaApp(string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall, string pathInstall, bool instalaManual, string software)
         {
             string rutaDescarga = Path.Combine("C:\\temp\\repository", pathFile);
 
@@ -392,7 +390,7 @@ namespace MaterialSkinExample
             }
 
             INSTALACION:
-            VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual);
+            VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
             //if (automaticInstall == "true")
             //{
                 
@@ -403,9 +401,10 @@ namespace MaterialSkinExample
             //loadCardAsync();
         }
 
-        private void VerificaProcesoActivo(string verificaApp, string rutaDescarga, string automaticInstall, string forceInstall, string pathInstall, bool instalaManual)
+        private void VerificaProcesoActivo(string verificaApp, string rutaDescarga, string automaticInstall, string forceInstall, string pathInstall, bool instalaManual, string version, string software)
         {
             Process[] procesos = Process.GetProcessesByName(verificaApp);
+            Console.WriteLine("VerificaProcesoActivo: " + verificaApp);
 
             if (procesos.Length > 0)
             {
@@ -415,9 +414,58 @@ namespace MaterialSkinExample
 
                 if (forceInstall == "true")
                 {
+                    Console.WriteLine("Instalacion forzada, proceso esta activo...");
                     //Matar proceso
-                    
-                    //EjecutaInstalacion(rutaDescarga);
+                    DetieneProceso(verificaApp);
+
+                    if (VerificaInstalacion(pathInstall))
+                    {
+                        //verifica version local vs nube
+                        string versionLocal = LocalVersionApp(pathInstall);
+
+                        /*
+                        * resultadoVersion estados:
+                           0 = Versiones iguales
+                           1 = Local mas actualizado
+                           -1 = Version nueva disponibles en la web
+                           10 = error al comparar version local con web 
+                        */
+                        int comparacion = CompararVersionApp(pathInstall, version);
+
+                        if (comparacion == 0)
+                        {
+                            //Version mas reciente instalada
+                            Console.WriteLine("Version mas reciente instalada de : " + software);
+                        }
+
+                        if (comparacion == 1)
+                        {
+                            //local mas actualizado, probable version beta testing
+                            Console.WriteLine("Version local mas actualizada: " + versionLocal);
+                        }
+
+
+                        if (comparacion == -1)
+                        {
+                            //Version nueva disponibles en la web, necesita update
+                            Console.WriteLine("Version nueva disponibles en la web: " + version);
+                            EjectutaDesinstalacion(rutaDescarga, software);
+                            System.Threading.Thread.Sleep(5000);
+                            EjecutaInstalacion(rutaDescarga, software);
+                        }
+
+                        if (comparacion == 10)
+                        {
+                            //Error al verificar version
+                            Console.WriteLine("Error al verificar version: " + version);
+                            MaterialSnackBar SnackBarMessage2 = new MaterialSnackBar("Error al verificar instalacion de  " + software, 3000, "OK");
+                            SnackBarMessage2.Show(this);
+                        }
+                    }
+                    else
+                    {
+                        EjecutaInstalacion(rutaDescarga, software);
+                    }
                 }
             }
             else
@@ -425,19 +473,58 @@ namespace MaterialSkinExample
                 if(automaticInstall == "true")
                 {
                     Console.WriteLine("El proceso " + verificaApp.ToUpper() + " no está activo." + rutaDescarga);
-                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a comenzado.", "OK", true);
-                    SnackBarMessage.Show(this);
+                    //MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a comenzado.", "OK", true);
+                    //SnackBarMessage.Show(this);
 
-                    //Si esta instalada una version previa, desinstalar
+                    //Si esta instalada una version previa
                     if (VerificaInstalacion(pathInstall))
                     {
-                        EjectutaDesinstalacion(rutaDescarga);
-                        //goto INSTALACION;
+                        //verifica version local vs nube
+                        string versionLocal = LocalVersionApp(pathInstall);
+
+                         /*
+                         * resultadoVersion estados:
+                            0 = Versiones iguales
+                            1 = Local mas actualizado
+                            -1 = Version nueva disponibles en la web
+                            10 = error al comparar version local con web 
+                         */
+                        int comparacion = CompararVersionApp(pathInstall, version);
+
+                        if (comparacion == 0)
+                        {
+                            //Version mas reciente instalada
+                            Console.WriteLine("Version mas reciente instalada de : " + software);
+                        }
+
+                        if (comparacion == 1)
+                        {
+                            //local mas actualizado, probable version beta testing
+                            Console.WriteLine("Version local mas actualizada: " + versionLocal);
+                        }
+
+                        
+                        if (comparacion == -1)
+                        {
+                            //Version nueva disponibles en la web, necesita update
+                            Console.WriteLine("Version nueva disponibles en la web: " + version);
+                            EjectutaDesinstalacion(rutaDescarga, software);
+                            System.Threading.Thread.Sleep(5000);
+                            EjecutaInstalacion(rutaDescarga, software);
+                        }
+
+                        if (comparacion == 10)
+                        {
+                            //Error al verificar version
+                            Console.WriteLine("Error al verificar version: " + version);
+                            MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al verificar instalacion de  " + software, "OK", true);
+                            SnackBarMessage.Show(this);
+                        }   
+                        
                     }
                     else
                     {
-                        //S
-                        goto INSTALACION;
+                        EjecutaInstalacion(rutaDescarga, software);
                     }
                     
                 }
@@ -447,28 +534,73 @@ namespace MaterialSkinExample
                     //Si esta instalada una version previa, desinstalar
                     if (VerificaInstalacion(pathInstall))
                     {
-                        EjectutaDesinstalacion(rutaDescarga);
-                        //goto INSTALACION;
+                        EjectutaDesinstalacion(rutaDescarga, software);
                     }
                     else
                     {
                         //S
-                        goto INSTALACION;
+                        EjecutaInstalacion(rutaDescarga, software);
                     }
                 }
 
-                INSTALACION:
-                EjecutaInstalacion(rutaDescarga);
-                //if (automaticInstall == "true")
-                //{
+                if (forceInstall == "true")
+                {
+                    Console.WriteLine("Instalacion forzada, proceso no esta activo...");
+                    
 
-                //}
+                    if (VerificaInstalacion(pathInstall))
+                    {
+                        //verifica version local vs nube
+                        string versionLocal = LocalVersionApp(pathInstall);
+
+                        /*
+                        * resultadoVersion estados:
+                           0 = Versiones iguales
+                           1 = Local mas actualizado
+                           -1 = Version nueva disponibles en la web
+                           10 = error al comparar version local con web 
+                        */
+                        int comparacion = CompararVersionApp(pathInstall, version);
+
+                        if (comparacion == 0)
+                        {
+                            //Version mas reciente instalada
+                            Console.WriteLine("Version mas reciente instalada de : " + software);
+                        }
+
+                        if (comparacion == 1)
+                        {
+                            //local mas actualizado, probable version beta testing
+                            Console.WriteLine("Version local mas actualizada: " + versionLocal);
+                        }
 
 
+                        if (comparacion == -1)
+                        {
+                            //Version nueva disponibles en la web, necesita update
+                            Console.WriteLine("Version nueva disponibles en la web: " + version);
+                            EjectutaDesinstalacion(rutaDescarga, software);
+                            System.Threading.Thread.Sleep(5000);
+                            EjecutaInstalacion(rutaDescarga, software);
+                        }
+
+                        if (comparacion == 10)
+                        {
+                            //Error al verificar version
+                            Console.WriteLine("Error al verificar version: " + version);
+                            MaterialSnackBar SnackBarMessage2 = new MaterialSnackBar("Error al verificar instalacion de  " + software, 3000, "OK");
+                            SnackBarMessage2.Show(this);
+                        }
+                    }
+                    else
+                    {
+                        EjecutaInstalacion(rutaDescarga, software);
+                    }
+                }
             }
         }
 
-        private void EjecutaInstalacion(string rutaDescarga)
+        private void EjecutaInstalacion(string rutaDescarga, string software)
         {
             try
             {
@@ -482,7 +614,7 @@ namespace MaterialSkinExample
                 {
                     securePassword.AppendChar(c);
                 }
-                
+
                 try
                 {
                     Process process = new Process();
@@ -494,27 +626,31 @@ namespace MaterialSkinExample
                     process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     process.Start();
                     process.WaitForExit();
-                    
+
                     //Process.Start(startInfo);
-                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación a finalizado correctamente.", 3000, "OK");
+                    Console.WriteLine("Proceso de instalación a finalizado correctamente");
+                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación de "+ software+" finalizado correctamente.", 3000, "OK");
                     SnackBarMessage.Show(this);
-                    //Reaload datos dinamicos de la nube
-                    loadCardAsync();
+                    
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error al iniciar la aplicación: " + ex.Message);
+                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al instalar aplicación " + software, 3000, "OK");
+                    SnackBarMessage.Show(this);
                 }
             }
             catch (Exception)
             {
-
-                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al ejecutar la instalación.", 3000, "OK");
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al ejecutar la instalación " + software, 3000, "OK");
                 SnackBarMessage.Show(this);
             }
+            //Reaload datos dinamicos de la nube
+            System.Threading.Thread.Sleep(5000);
+            loadCardAsync();
         }
 
-        private void EjectutaDesinstalacion(string rutaDescarga)
+        private void EjectutaDesinstalacion(string rutaDescarga, string software)
         {
             try
             {
@@ -541,25 +677,58 @@ namespace MaterialSkinExample
                     process.Start();
                     process.WaitForExit();
                     //Process.Start(startInfo);
-
-                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación a finalizado correctamente.", 5000, "OK");
+                    Console.WriteLine("El proceso de desinstalación a finalizado correctamente.");
+                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de desinstalación de "+ software+" finalizado correctamente.", 3000, "OK");
                     SnackBarMessage.Show(this);
-                    //Reaload datos dinamicos de la nube
-                    loadCardAsync();
+                    
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("Error al iniciar la aplicación: " + ex.Message);
+                    Console.WriteLine("Error al desinstalar aplicación: " + ex.Message);
+                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al desinstalar aplicación " + software, 3000, "OK");
+                    SnackBarMessage.Show(this);
                 }
             }
             catch (Exception)
             {
-
-                throw;
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al ejecutar desinstalación " + software, 3000, "OK");
+                SnackBarMessage.Show(this);
             }
+            
         }
 
-        private string LocalVersionApp(string pathInstall, string version)
+        private void DetieneProceso(string verificaApp)
+        {
+            string proceso = verificaApp + ".exe";
+            try
+            {
+                Process cmdProcess = new Process();
+                cmdProcess.StartInfo.FileName = "cmd.exe";
+                cmdProcess.StartInfo.RedirectStandardInput = true;
+                cmdProcess.StartInfo.UseShellExecute = false;
+                cmdProcess.StartInfo.CreateNoWindow = true;
+
+                cmdProcess.Start();
+
+                cmdProcess.StandardInput.WriteLine($"taskkill /F /IM {proceso}");
+                cmdProcess.StandardInput.Flush();
+                cmdProcess.StandardInput.Close();
+                cmdProcess.WaitForExit();
+
+                Console.WriteLine($"Proceso {proceso} ha sido finalizado.");
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso " + proceso + " a sido detenido.", 3000, "OK");
+                SnackBarMessage.Show(this);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine($"Error al detener proceso {proceso} ha sido finalizado.");
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al detener proceso " + proceso, 3000, "OK");
+                SnackBarMessage.Show(this);
+            }
+
+        }
+
+        private string LocalVersionApp(string pathInstall)
         {
             string versionLocal = "null";
             try
@@ -575,8 +744,7 @@ namespace MaterialSkinExample
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error al verificar version local en ruta: " + pathInstall + ex);
-                
+                Console.WriteLine("Error al verificar version local en ruta: " + pathInstall + ex);   
             }
             return versionLocal;
         }
@@ -633,14 +801,14 @@ namespace MaterialSkinExample
             if(materialSkinManager.Theme == MaterialSkinManager.Themes.LIGHT)
             {
                 materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
-                Properties.Settings.Default.estiloTema = false;
-                Properties.Settings.Default.Save();
+                PYALauncherApps.Properties.Settings.Default.estiloTema = false;
+                PYALauncherApps.Properties.Settings.Default.Save();
             }
             else
             {
                 materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-                Properties.Settings.Default.estiloTema = true;
-                Properties.Settings.Default.Save();
+                PYALauncherApps.Properties.Settings.Default.estiloTema = true;
+                PYALauncherApps.Properties.Settings.Default.Save();
             }
 
 
@@ -686,8 +854,8 @@ namespace MaterialSkinExample
                     break;
             }
 
-            Properties.Settings.Default.codigoTema = colorSchemeIndex;
-            Properties.Settings.Default.Save();
+            PYALauncherApps.Properties.Settings.Default.codigoTema = colorSchemeIndex;
+            PYALauncherApps.Properties.Settings.Default.Save();
             Invalidate();
         }
 
