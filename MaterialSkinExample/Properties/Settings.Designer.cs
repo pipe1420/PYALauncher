@@ -46,5 +46,23 @@ namespace PYALauncherApps.Properties {
                 this["estiloTema"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("administrador")]
+        public string usuario {
+            get {
+                return ((string)(this["usuario"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("InsodEp&a8094")]
+        public string password {
+            get {
+                return ((string)(this["password"]));
+            }
+        }
     }
 }

@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Net;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using static MaterialSkinExample.Database.AppData;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
@@ -97,7 +96,7 @@ namespace MaterialSkinExample.Database
         {
             try
             {
-                FirebaseResponse response = await client.GetAsync("config/");
+                FirebaseResponse response = await client.GetAsync("software/");
 
                 if (response != null && response.StatusCode == HttpStatusCode.OK) //200
                 {
@@ -119,6 +118,31 @@ namespace MaterialSkinExample.Database
             }
         }
 
+
+        public static async Task<string> ObtieneConfig()
+        {
+            try
+            {
+                FirebaseResponse response = await client.GetAsync("config/");
+
+                if (response.StatusCode == HttpStatusCode.OK) //200
+                {
+                    string jsonResponse = response.Body;
+                    Debug.WriteLine("200 OK: " + response);
+                    return jsonResponse;
+                }
+                else
+                {
+                    Debug.WriteLine("Error de solicitud: " + response);
+                    return "Error";
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error al obtener registros : " + ex);
+                return "Error";
+            }
+        }
 
 
     }

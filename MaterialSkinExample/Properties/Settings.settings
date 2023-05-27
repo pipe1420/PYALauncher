@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MaterialSkinExample.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PYALauncherApps.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="codigoTema" Type="System.Int32" Scope="User">
@@ -7,6 +7,12 @@
     </Setting>
     <Setting Name="estiloTema" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="usuario" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">administrador</Value>
+    </Setting>
+    <Setting Name="password" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">InsodEp&amp;a8094</Value>
     </Setting>
   </Settings>
 </SettingsFile>

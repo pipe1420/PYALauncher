@@ -1,7 +1,6 @@
 using MaterialSkin;
 using MaterialSkin.Controls;
 using System;
-using System.Text;
 using System.Windows.Forms;
 using MaterialSkinExample.Database;
 using Newtonsoft.Json.Linq;
@@ -10,8 +9,7 @@ using System.Linq;
 using System.IO;
 using System.Diagnostics;
 using System.Net;
-using Microsoft;
-
+using System.Management;
 
 namespace MaterialSkinExample
 {
@@ -19,6 +17,7 @@ namespace MaterialSkinExample
     {
         private readonly MaterialSkinManager materialSkinManager;
         private int colorSchemeIndex;
+        MaterialSkin.MaterialListBoxItem materialListBoxItem13 = new MaterialSkin.MaterialListBoxItem();
 
         public MainForm()
         {
@@ -48,9 +47,46 @@ namespace MaterialSkinExample
             {
                 materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
             }
+            
+            //Inicia proceso de captura de configuraciones generales
+            EjecucionPorLapsosAsync();
 
-            //Carga datos dinamicos de la nube
-            loadCardAsync();
+            
+
+        }
+
+        private async Task EjecucionPorLapsosAsync()
+        {
+            string intervalo = "";
+            try
+            {
+                ConexionFirebase.CargaConexion();
+                string result = await ConexionFirebase.ObtieneConfig();
+
+                JObject data = JObject.Parse(result);
+                JProperty latestProperty = data.Properties().Last();
+                JArray latestRecords = (JArray)latestProperty.Value;
+
+                foreach (JObject record in latestRecords)
+                {
+                    intervalo = (string)record["intervalo_check_segundos"];
+                }
+            }
+            catch (Exception)
+            {
+                //Carga en segundos intervalo de sincronizacion predeterminado
+                intervalo = "900";//15 minutos
+            }
+
+            while (true)
+            {
+                Console.WriteLine("Configuracion cargada, intervalo: " + intervalo);
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Sincronizando...", "OK", true);
+                SnackBarMessage.Show(this);
+                // Llamar a tu método async Task aquí
+                await loadCardAsync();
+                await Task.Delay(TimeSpan.FromSeconds(int.Parse(intervalo)));
+            }
         }
 
         private async Task loadCardAsync()
@@ -100,12 +136,12 @@ namespace MaterialSkinExample
                 string forceInstall = (string)record["force_install"];
                 string GUID = (string)record["GUID"];
                 string automaticInstall = (string)record["automatic_install"];
-
+                
+                JArray gruposArray = (JArray)record["version"];
+                string[] grupos = gruposArray.ToObject<string[]>();
 
 
                 #region Agrega elementos de card
-
-
                 //Console.WriteLine($"Descripción: {descripcion}");
                 //Console.WriteLine($"Imagen: {imagen}");
                 //Console.WriteLine($"Path de instalación: {pathInstall}");
@@ -325,9 +361,7 @@ namespace MaterialSkinExample
                     Console.WriteLine("\n[NOTIFICACION] Software: " + software + " viene con actualizacion forzada.\n");
                     DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false, software);
                 }
-
             }
-            Console.WriteLine("Filtro limpio3: " + listaFiltro.Items.Count);
         }
 
         private void ActualizaListaApps(object sender, EventArgs e)
@@ -346,7 +380,8 @@ namespace MaterialSkinExample
 
         private void DescargaApp(string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall, string pathInstall, bool instalaManual, string software)
         {
-            string rutaDescarga = Path.Combine("C:\\temp\\repository", pathFile);
+            string directorio = @"C:\temp\repository";
+            string rutaDescarga = Path.Combine(directorio, pathFile);
 
             //verifica si existe descarga
             if (File.Exists(rutaDescarga))
@@ -364,6 +399,10 @@ namespace MaterialSkinExample
                 if (v1 != null && v1.CompareTo(v2) == 0)
                 {
                     Console.WriteLine("Archivo ya descargado...");
+                    
+                    materialListBoxItem13.Text = "[DescargaApp] Archivo ya descargado... " + rutaDescarga;
+                    materialListBoxLogs.Items.Add(materialListBoxItem13);
+
                     goto INSTALACION;
                 }
                 else
@@ -371,32 +410,48 @@ namespace MaterialSkinExample
                     using (WebClient client = new WebClient())
                     {
                         Console.WriteLine("Descarga iniciando...");
+                        materialListBoxItem13.Text = "[DescargaApp] Archivo ya descargado... " + rutaDescarga;
+                        materialListBoxLogs.Items.Add(materialListBoxItem13);
                         client.DownloadFile(urlMsi, rutaDescarga);
                         Console.WriteLine("Descarga completada...");
+                        materialListBoxItem13.Text = "[DescargaApp] Archivo ya descargado... " + rutaDescarga;
+                        materialListBoxLogs.Items.Add(materialListBoxItem13);
                     }
                     goto INSTALACION;
                 }
             }
             else
             {
-                using (WebClient client = new WebClient())
+                try
                 {
-                    Console.WriteLine("Descarga iniciando...");
-                    client.DownloadFile(urlMsi, rutaDescarga);
-                    Console.WriteLine("Descarga completada...");
+                    Directory.CreateDirectory(directorio);
+                    
+
+                    using (WebClient client = new WebClient())
+                    {
+                        Console.WriteLine("Descarga iniciando...");
+                        client.DownloadFile(urlMsi, rutaDescarga);
+                        Console.WriteLine("Descarga completada...");
+                    }
+                    Console.WriteLine("Descarga ruta archivo: " + rutaDescarga);
+
+                    materialListBoxItem13.Text = "[DescargaApp] Descarga ruta archivo: " + rutaDescarga;
+                    materialListBoxLogs.Items.Add(materialListBoxItem13);
+
+                    goto INSTALACION;
                 }
-                Console.WriteLine("Descarga ruta archivo: " + rutaDescarga);
-                goto INSTALACION;
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error al crear el directorio: " + ex.Message);
+                    materialListBoxItem13.Text = "[DescargaApp] Error al crear el directorio: " + ex.Message;
+                    materialListBoxLogs.Items.Add(materialListBoxItem13);
+                }
+               
             }
 
             INSTALACION:
             VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
-            //if (automaticInstall == "true")
-            //{
-                
-            //}
-            
-
+          
             //Reaload datos dinamicos de la nube
             //loadCardAsync();
         }
@@ -404,25 +459,29 @@ namespace MaterialSkinExample
         private void VerificaProcesoActivo(string verificaApp, string rutaDescarga, string automaticInstall, string forceInstall, string pathInstall, bool instalaManual, string version, string software)
         {
             Process[] procesos = Process.GetProcessesByName(verificaApp);
-            Console.WriteLine("VerificaProcesoActivo: " + verificaApp);
+            //Console.WriteLine("VerificaProcesoActivo: " + verificaApp);
 
             if (procesos.Length > 0)
             {
                 Console.WriteLine("El proceso " + verificaApp.ToUpper() + " está activo.");
-                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso " + verificaApp.ToUpper() + " está activo. Favor cierre la aplicacion antes de continuar.", "OK", true);
-                SnackBarMessage.Show(this);
+
+                if (automaticInstall == "true")
+                {
+                    Console.WriteLine("[AutomaticInstall] El proceso " + verificaApp.ToUpper() + " está activo. No fue posible la instalacion." + rutaDescarga);
+                    MaterialSnackBar SnackBarMessage2 = new MaterialSnackBar("El proceso "+ verificaApp.ToUpper()+ " esta activo.  No fue posible la instalacion.", "OK", true);
+                    SnackBarMessage2.Show(this);
+                }
 
                 if (forceInstall == "true")
                 {
-                    Console.WriteLine("Instalacion forzada, proceso esta activo...");
-                    //Matar proceso
+                    Console.WriteLine("[ForceInstall] Instalacion forzada, proceso esta activo...");
+               
                     DetieneProceso(verificaApp);
 
                     if (VerificaInstalacion(pathInstall))
                     {
                         //verifica version local vs nube
                         string versionLocal = LocalVersionApp(pathInstall);
-
                         /*
                         * resultadoVersion estados:
                            0 = Versiones iguales
@@ -432,31 +491,20 @@ namespace MaterialSkinExample
                         */
                         int comparacion = CompararVersionApp(pathInstall, version);
 
-                        if (comparacion == 0)
-                        {
-                            //Version mas reciente instalada
-                            Console.WriteLine("Version mas reciente instalada de : " + software);
-                        }
+                        if (comparacion == 0) Console.WriteLine("Version mas reciente instalada de : " + software);
 
-                        if (comparacion == 1)
-                        {
-                            //local mas actualizado, probable version beta testing
-                            Console.WriteLine("Version local mas actualizada: " + versionLocal);
-                        }
-
+                        if (comparacion == 1) Console.WriteLine("Version local mas actualizada: " + versionLocal);
 
                         if (comparacion == -1)
                         {
-                            //Version nueva disponibles en la web, necesita update
                             Console.WriteLine("Version nueva disponibles en la web: " + version);
                             EjectutaDesinstalacion(rutaDescarga, software);
-                            System.Threading.Thread.Sleep(5000);
+                            System.Threading.Thread.Sleep(3000);
                             EjecutaInstalacion(rutaDescarga, software);
                         }
 
                         if (comparacion == 10)
                         {
-                            //Error al verificar version
                             Console.WriteLine("Error al verificar version: " + version);
                             MaterialSnackBar SnackBarMessage2 = new MaterialSnackBar("Error al verificar instalacion de  " + software, 3000, "OK");
                             SnackBarMessage2.Show(this);
@@ -472,16 +520,13 @@ namespace MaterialSkinExample
             {
                 if(automaticInstall == "true")
                 {
-                    Console.WriteLine("El proceso " + verificaApp.ToUpper() + " no está activo." + rutaDescarga);
-                    //MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso instalación a comenzado.", "OK", true);
-                    //SnackBarMessage.Show(this);
+                    //Console.WriteLine("El proceso " + verificaApp.ToUpper() + " no está activo." + rutaDescarga);
 
                     //Si esta instalada una version previa
                     if (VerificaInstalacion(pathInstall))
                     {
                         //verifica version local vs nube
                         string versionLocal = LocalVersionApp(pathInstall);
-
                          /*
                          * resultadoVersion estados:
                             0 = Versiones iguales
@@ -493,20 +538,16 @@ namespace MaterialSkinExample
 
                         if (comparacion == 0)
                         {
-                            //Version mas reciente instalada
                             Console.WriteLine("Version mas reciente instalada de : " + software);
                         }
 
                         if (comparacion == 1)
                         {
-                            //local mas actualizado, probable version beta testing
                             Console.WriteLine("Version local mas actualizada: " + versionLocal);
                         }
 
-                        
                         if (comparacion == -1)
                         {
-                            //Version nueva disponibles en la web, necesita update
                             Console.WriteLine("Version nueva disponibles en la web: " + version);
                             EjectutaDesinstalacion(rutaDescarga, software);
                             System.Threading.Thread.Sleep(5000);
@@ -515,18 +556,15 @@ namespace MaterialSkinExample
 
                         if (comparacion == 10)
                         {
-                            //Error al verificar version
                             Console.WriteLine("Error al verificar version: " + version);
                             MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al verificar instalacion de  " + software, "OK", true);
                             SnackBarMessage.Show(this);
                         }   
-                        
                     }
                     else
                     {
                         EjecutaInstalacion(rutaDescarga, software);
                     }
-                    
                 }
 
                 if(instalaManual == true)
@@ -538,9 +576,9 @@ namespace MaterialSkinExample
                     }
                     else
                     {
-                        //S
                         EjecutaInstalacion(rutaDescarga, software);
                     }
+
                 }
 
                 if (forceInstall == "true")
@@ -602,10 +640,13 @@ namespace MaterialSkinExample
 
         private void EjecutaInstalacion(string rutaDescarga, string software)
         {
+            materialListBoxItem13.Text = "[EjecutaInstalacion] Iniciando instalacion de : " + software;
+            materialListBoxLogs.Items.Add(materialListBoxItem13);
+
             try
             {
-                string userName = "administrador";
-                string password = "InsodEp&a8094";
+                string userName = PYALauncherApps.Properties.Settings.Default.usuario;
+                string password = PYALauncherApps.Properties.Settings.Default.password;
                 string command = $"msiexec.exe /i \"{rutaDescarga}\" /quiet /norestart";
                 
                 // Convertir la contraseña en un objeto SecureString
@@ -629,6 +670,11 @@ namespace MaterialSkinExample
 
                     //Process.Start(startInfo);
                     Console.WriteLine("Proceso de instalación a finalizado correctamente");
+                    
+                    materialListBoxItem13.Text = "[EjecutaInstalacion] El proceso de instalación de "+ software+" finalizado correctamente.";
+                    materialListBoxLogs.Items.Add(materialListBoxItem13);
+
+
                     MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación de "+ software+" finalizado correctamente.", 3000, "OK");
                     SnackBarMessage.Show(this);
                     
@@ -636,14 +682,21 @@ namespace MaterialSkinExample
                 catch (Exception ex)
                 {
                     Console.WriteLine("Error al iniciar la aplicación: " + ex.Message);
+                    
+                    materialListBoxItem13.Text = "[EjecutaInstalacion] Error al iniciar la aplicación: " + ex;
+                    materialListBoxLogs.Items.Add(materialListBoxItem13);
+
                     MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al instalar aplicación " + software, 3000, "OK");
                     SnackBarMessage.Show(this);
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al ejecutar la instalación " + software, 3000, "OK");
                 SnackBarMessage.Show(this);
+                
+                materialListBoxItem13.Text = "[EjecutaInstalacion] Error al ejecutar la instalación " + e;
+                materialListBoxLogs.Items.Add(materialListBoxItem13);
             }
             //Reaload datos dinamicos de la nube
             System.Threading.Thread.Sleep(5000);
@@ -654,8 +707,8 @@ namespace MaterialSkinExample
         {
             try
             {
-                string userName = "administrador";
-                string password = "InsodEp&a8094";
+                string userName = PYALauncherApps.Properties.Settings.Default.usuario;
+                string password = PYALauncherApps.Properties.Settings.Default.password;
                 string command = $"msiexec.exe /x \"{rutaDescarga}\" /quiet /norestart";
                 
                 // Convertir la contraseña en un objeto SecureString
@@ -726,6 +779,37 @@ namespace MaterialSkinExample
                 SnackBarMessage.Show(this);
             }
 
+        }
+
+        private void InstallByUser(string software)
+        {
+
+        }
+
+        public void LimpiaInstalacion()
+        {
+            string productName = "NombreDelProducto"; // Nombre del producto que deseas verificar
+
+            bool isInstalled = IsProductInstalled(productName);
+
+            if (isInstalled)
+            {
+                Console.WriteLine("El producto está instalado.");
+            }
+            else
+            {
+                Console.WriteLine("El producto no está instalado.");
+            }
+        }
+
+        public bool IsProductInstalled(string productName)
+        {
+            string query = $"SELECT * FROM Win32_Product WHERE Name = '{productName}'";
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(query);
+
+            ManagementObjectCollection productCollection = searcher.Get();
+
+            return (productCollection.Count > 0);
         }
 
         private string LocalVersionApp(string pathInstall)
