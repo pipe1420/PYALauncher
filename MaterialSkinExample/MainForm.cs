@@ -51,8 +51,8 @@ namespace MaterialSkinExample
             //Inicia proceso de captura de configuraciones generales
             EjecucionPorLapsosAsync();
 
-            
-
+            Console.WriteLine("UserDomainName : " + Environment.UserDomainName);
+            Console.WriteLine("UserName: {0}", Environment.UserName);
         }
 
         private async Task EjecucionPorLapsosAsync()
@@ -89,12 +89,35 @@ namespace MaterialSkinExample
             }
         }
 
+        public async Task<JArray> GetAppsServer()
+        {
+            try
+            {
+                ConexionFirebase.CargaConexion();
+                string result = await ConexionFirebase.ObtieneApps();
+
+                JObject data = JObject.Parse(result);
+                JProperty latestProperty = data.Properties().Last();
+                JArray latestRecords = (JArray)latestProperty.Value;
+                materialListBoxItem13.Text = "[GetAppsServer] Sincronizando con servidor..";
+                materialListBoxLogs.Items.Add(materialListBoxItem13);
+
+                return latestRecords;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                materialListBoxItem13.Text = "[GetAppsServer] Error al ejecutar sincronizacion " + ex.Message;
+                materialListBoxLogs.Items.Add(materialListBoxItem13);
+
+                return (JArray)"Error";
+            }
+        }
+
         private async Task loadCardAsync()
         {
             flowLayoutPanel1.Controls.Clear();
             listaFiltro.Items.Clear();
-
-    
 
             MaterialLabel reload = new MaterialLabel();
             reload.AutoSize = true;
@@ -111,16 +134,19 @@ namespace MaterialSkinExample
             
             flowLayoutPanel1.Controls.Add(reload);
 
-            ConexionFirebase.CargaConexion();
-            string result = await ConexionFirebase.ObtieneApps();
-            
-            JObject data = JObject.Parse(result);
-            JProperty latestProperty = data.Properties().Last();
-            JArray latestRecords = (JArray)latestProperty.Value;
+            JArray latestRecords = await GetAppsServer();
+
+            //ConexionFirebase.CargaConexion();
+            //string result = await ConexionFirebase.ObtieneApps();
+
+            //JObject data = JObject.Parse(result);
+            //JProperty latestProperty = data.Properties().Last();
+            //JArray latestRecords = (JArray)latestProperty.Value;
 
             flowLayoutPanel1.Controls.Clear();
 
-
+            materialListBoxItem13.Text = "[loadCardAsync] latestRecords " + latestRecords.Count();
+            materialListBoxLogs.Items.Add(materialListBoxItem13);
 
             foreach (JObject record in latestRecords)
             {
@@ -137,8 +163,8 @@ namespace MaterialSkinExample
                 string GUID = (string)record["GUID"];
                 string automaticInstall = (string)record["automatic_install"];
                 
-                JArray gruposArray = (JArray)record["version"];
-                string[] grupos = gruposArray.ToObject<string[]>();
+                //JArray gruposArray = (JArray)record["version"];
+                //string[] grupos = gruposArray.ToObject<string[]>();
 
 
                 #region Agrega elementos de card
@@ -398,8 +424,7 @@ namespace MaterialSkinExample
                 //si version local vs web son iguales va al proceso de instalacion
                 if (v1 != null && v1.CompareTo(v2) == 0)
                 {
-                    Console.WriteLine("Archivo ya descargado...");
-                    
+                    Console.WriteLine("[DescargaApp] Archivo ya descargado...");
                     materialListBoxItem13.Text = "[DescargaApp] Archivo ya descargado... " + rutaDescarga;
                     materialListBoxLogs.Items.Add(materialListBoxItem13);
 
@@ -410,11 +435,11 @@ namespace MaterialSkinExample
                     using (WebClient client = new WebClient())
                     {
                         Console.WriteLine("Descarga iniciando...");
-                        materialListBoxItem13.Text = "[DescargaApp] Archivo ya descargado... " + rutaDescarga;
+                        materialListBoxItem13.Text = "[DescargaApp] Descarga iniciando... " + rutaDescarga;
                         materialListBoxLogs.Items.Add(materialListBoxItem13);
                         client.DownloadFile(urlMsi, rutaDescarga);
                         Console.WriteLine("Descarga completada...");
-                        materialListBoxItem13.Text = "[DescargaApp] Archivo ya descargado... " + rutaDescarga;
+                        materialListBoxItem13.Text = "[DescargaApp] Descarga completada... " + rutaDescarga;
                         materialListBoxLogs.Items.Add(materialListBoxItem13);
                     }
                     goto INSTALACION;
@@ -425,7 +450,6 @@ namespace MaterialSkinExample
                 try
                 {
                     Directory.CreateDirectory(directorio);
-                    
 
                     using (WebClient client = new WebClient())
                     {
@@ -640,62 +664,59 @@ namespace MaterialSkinExample
 
         private void EjecutaInstalacion(string rutaDescarga, string software)
         {
-            materialListBoxItem13.Text = "[EjecutaInstalacion] Iniciando instalacion de : " + software;
-            materialListBoxLogs.Items.Add(materialListBoxItem13);
-
             try
             {
-                string userName = PYALauncherApps.Properties.Settings.Default.usuario;
-                string password = PYALauncherApps.Properties.Settings.Default.password;
-                string command = $"msiexec.exe /i \"{rutaDescarga}\" /quiet /norestart";
                 
-                // Convertir la contraseña en un objeto SecureString
-                var securePassword = new System.Security.SecureString();
-                foreach (char c in password)
+                if (Environment.UserDomainName == "PYAING")
                 {
-                    securePassword.AppendChar(c);
-                }
+                    Debug.WriteLine("[EjecutaInstalacion] UserDomainName " + Environment.UserDomainName);
+                    string userName = PYALauncherApps.Properties.Settings.Default.usuario;
+                    string password = PYALauncherApps.Properties.Settings.Default.password;
+                    var securePassword = new System.Security.SecureString();
 
-                try
-                {
+                    foreach (char c in password) securePassword.AppendChar(c);
+
                     Process process = new Process();
                     process.StartInfo.FileName = "msiexec.exe";
                     process.StartInfo.Arguments = string.Format(" /q /i \"{0}\" ALLUSERS=1", rutaDescarga);
                     process.StartInfo.UserName = userName;
                     process.StartInfo.Password = securePassword;
+                    process.StartInfo.Verb = "runas";
                     process.StartInfo.UseShellExecute = false;
                     process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                     process.Start();
                     process.WaitForExit();
-
-                    //Process.Start(startInfo);
-                    Console.WriteLine("Proceso de instalación a finalizado correctamente");
-                    
-                    materialListBoxItem13.Text = "[EjecutaInstalacion] El proceso de instalación de "+ software+" finalizado correctamente.";
-                    materialListBoxLogs.Items.Add(materialListBoxItem13);
-
-
-                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación de "+ software+" finalizado correctamente.", 3000, "OK");
-                    SnackBarMessage.Show(this);
-                    
+                    process.Close();
+                    process.Dispose();
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine("Error al iniciar la aplicación: " + ex.Message);
-                    
-                    materialListBoxItem13.Text = "[EjecutaInstalacion] Error al iniciar la aplicación: " + ex;
-                    materialListBoxLogs.Items.Add(materialListBoxItem13);
+                    Debug.WriteLine("[EjecutaInstalacion] UserDomainName " + Environment.UserDomainName);
+                    ProcessStartInfo startInfo = new ProcessStartInfo();
+                    startInfo.FileName = "msiexec.exe";
+                    startInfo.Arguments = string.Format(" /q /i \"{0}\" ALLUSERS=1", rutaDescarga);
+                    startInfo.Verb = "runas"; // Solicitar elevación de permisos
+                    startInfo.UseShellExecute = false;
 
-                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al instalar aplicación " + software, 3000, "OK");
-                    SnackBarMessage.Show(this);
+                    Process.Start(startInfo);
+                    
                 }
+
+               
+
+                Debug.WriteLine("[EjecutaInstalacion] El proceso de instalación de "+ software+" finalizado correctamente.");
+
+                materialListBoxItem13.Text = "[EjecutaInstalacion] El proceso de instalación de "+ software+" finalizado correctamente.";
+                materialListBoxLogs.Items.Add(materialListBoxItem13);
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación de "+ software+" finalizado correctamente.", 3000, "OK");
+                SnackBarMessage.Show(this);
+                
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al ejecutar la instalación " + software, 3000, "OK");
                 SnackBarMessage.Show(this);
-                
-                materialListBoxItem13.Text = "[EjecutaInstalacion] Error al ejecutar la instalación " + e;
+                materialListBoxItem13.Text = "[EjecutaInstalacion] Error al ejecutar la instalación de " + software + "." + ex.Message;
                 materialListBoxLogs.Items.Add(materialListBoxItem13);
             }
             //Reaload datos dinamicos de la nube
@@ -707,45 +728,47 @@ namespace MaterialSkinExample
         {
             try
             {
-                string userName = PYALauncherApps.Properties.Settings.Default.usuario;
-                string password = PYALauncherApps.Properties.Settings.Default.password;
-                string command = $"msiexec.exe /x \"{rutaDescarga}\" /quiet /norestart";
+                Process process = new Process();
+                process.StartInfo.FileName = "msiexec.exe";
+                process.StartInfo.Arguments = string.Format(" /q /x \"{0}\" ALLUSERS=1", rutaDescarga);
                 
-                // Convertir la contraseña en un objeto SecureString
-                var securePassword = new System.Security.SecureString();
-                foreach (char c in password)
+                if (Environment.UserDomainName == "PYAING")
                 {
-                    securePassword.AppendChar(c);
-                }
-                
-                try
-                {
-                    Process process = new Process();
-                    process.StartInfo.FileName = "msiexec.exe";
-                    process.StartInfo.Arguments = string.Format(" /q /x \"{0}\" ALLUSERS=1", rutaDescarga);
+                    string userName = PYALauncherApps.Properties.Settings.Default.usuario;
+                    string password = PYALauncherApps.Properties.Settings.Default.password;
+                    var securePassword = new System.Security.SecureString();
+
+                    foreach (char c in password) securePassword.AppendChar(c);
+
                     process.StartInfo.UserName = userName;
                     process.StartInfo.Password = securePassword;
-                    process.StartInfo.UseShellExecute = false;
-                    process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                    process.Start();
-                    process.WaitForExit();
-                    //Process.Start(startInfo);
-                    Console.WriteLine("El proceso de desinstalación a finalizado correctamente.");
-                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de desinstalación de "+ software+" finalizado correctamente.", 3000, "OK");
-                    SnackBarMessage.Show(this);
-                    
                 }
-                catch (Exception ex)
+                else
                 {
-                    Console.WriteLine("Error al desinstalar aplicación: " + ex.Message);
-                    MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al desinstalar aplicación " + software, 3000, "OK");
-                    SnackBarMessage.Show(this);
+                    process.StartInfo.Verb = "runas"; // Ejecuta el proceso con privilegios de administrador
                 }
+
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                process.Start();
+                process.WaitForExit();
+
+
+                
+                Console.WriteLine("[EjectutaDesinstalacion] El proceso de desinstalación de " + software + " finalizado correctamente.");
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de desinstalación de "+ software+" finalizado correctamente.", 3000, "OK");
+                SnackBarMessage.Show(this);
+                materialListBoxItem13.Text = "[EjectutaDesinstalacion] El proceso de desinstalación de " + software + " finalizado correctamente.";
+                materialListBoxLogs.Items.Add(materialListBoxItem13);
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al ejecutar desinstalación " + software, 3000, "OK");
                 SnackBarMessage.Show(this);
+
+                materialListBoxItem13.Text = "[EjectutaDesinstalacion] Error al ejecutar la desinstalación  de " + software + "."+ ex.Message;
+                materialListBoxLogs.Items.Add(materialListBoxItem13);
             }
             
         }
@@ -860,7 +883,6 @@ namespace MaterialSkinExample
             return 10;
         }
 
-        
         private Boolean VerificaInstalacion(String pathInstall)
         {
             if (File.Exists(pathInstall))
@@ -995,6 +1017,12 @@ namespace MaterialSkinExample
             Show();
             this.WindowState = FormWindowState.Normal;
             notifyIcon1.Visible = false;
+        }
+
+        private void materialButton3_Click(object sender, EventArgs e)
+        {
+            //Carga datos dinamicos de la nube
+            loadCardAsync();
         }
     }
 }

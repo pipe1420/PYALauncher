@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
+using MaterialSkin;
+using MaterialSkin.Controls;
+
 
 namespace MaterialSkinExample.Database
 {
@@ -34,63 +37,8 @@ namespace MaterialSkinExample.Database
             else
             {
                 Debug.WriteLine("****** Error de conexion a servidor remoto ******");
-
             }
         }
-
-        //public static async String ObtieneApps()
-        //{
-        //    try
-        //    {
-
-        //        FirebaseResponse response = await client.GetAsync("config/");
-
-
-        //        if (response != null && response.StatusCode == HttpStatusCode.OK)//200
-        //        {
-        //            Debug.WriteLine("200 OK: " + response);
-        //            string jsonResponse = response.Body;
-
-        //            JObject data = JObject.Parse(jsonResponse);
-        //            JProperty latestProperty = data.Properties().Last();
-        //            JArray latestRecords = (JArray)latestProperty.Value;
-
-        //            foreach (JObject record in latestRecords)
-        //            {
-        //                string descripcion = (string)record["descripcion"];
-        //                string imagen = (string)record["imagen"];
-        //                string pathInstall = (string)record["path_install"];
-        //                string software = (string)record["software"];
-        //                string tag = (string)record["tag"];
-        //                string urlMsi = (string)record["url_msi"];
-        //                string verificaApp = (string)record["verifica_app"];
-        //                string version = (string)record["version"];
-
-        //                Console.WriteLine($"Descripción: {descripcion}");
-        //                Console.WriteLine($"Imagen: {imagen}");
-        //                Console.WriteLine($"Path de instalación: {pathInstall}");
-        //                Console.WriteLine($"Software: {software}");
-        //                Console.WriteLine($"Tag: {tag}");
-        //                Console.WriteLine($"URL MSI: {urlMsi}");
-        //                Console.WriteLine($"Verificación de la aplicación: {verificaApp}");
-        //                Console.WriteLine($"Versión: {version}");
-        //                Console.WriteLine();
-        //            }
-
-
-        //        }
-        //        else
-        //        {
-        //            //service1.WriteLog("Fallo de subida, response : " + response.StatusCode);
-        //            Debug.WriteLine("Error de solicitud: " + response);
-        //        }
-
-        //    }
-        //    catch (SystemException ex)
-        //    {
-        //        Debug.WriteLine("Error al obtener registros : " + ex);
-        //    }
-        //}
 
         public static async Task<string> ObtieneApps()
         {
@@ -143,6 +91,9 @@ namespace MaterialSkinExample.Database
                 return "Error";
             }
         }
+
+
+        
 
 
     }
