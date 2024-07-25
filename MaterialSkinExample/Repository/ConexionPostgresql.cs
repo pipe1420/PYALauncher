@@ -48,7 +48,7 @@ namespace MaterialSkinExample.Database
             return softwareList;
         }
 
-        private List<Software> GetSoftwareList()
+        private List<Config> GetConfigList()
         {
             List<Software> softwareList = new List<Software>();
 

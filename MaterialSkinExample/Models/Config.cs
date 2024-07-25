@@ -11,7 +11,15 @@ namespace PYALauncherApps.Models
         public string Interval { get; set; }
         public bool Cleaning { get; set; }
 
-        //PostgreSQL
-        private List<Software> configListPQSL; // Propiedad para almacenar el JArray
+    }
+
+    public class ConfigList
+    {
+        public List<ConfigList> GetConfigListPQSL()
+        {
+            List<ConfigList> GetConfigListPQSL = null;
+            
+            return GetConfigListPQSL;
+        }
     }
 }
