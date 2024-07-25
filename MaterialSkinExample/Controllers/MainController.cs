@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,37 @@ namespace PYALauncherApps.Controllers
         public List<Software> LoadSoftware()
         {
             return _databaseService.GetSoftware();
+        }
+
+        public void InstallSoftware(List<Software> softwareList)
+        {
+            foreach (var software in softwareList)
+            {
+                Install(software);
+            }
+        }
+
+        private void Install(Software software)
+        {
+            if (!string.IsNullOrEmpty(software.PathInstall))
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = software.PathInstall,
+                    Arguments = "", // Agrega argumentos si son necesarios
+                    UseShellExecute = true
+                };
+
+                try
+                {
+                    Process.Start(startInfo);
+                    Console.WriteLine($"Instalando {software.Name}");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error al instalar {software.Name}: {ex.Message}");
+                }
+            }
         }
     }
 }

@@ -7,29 +7,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MaterialSkin;
+using MaterialSkin.Controls;
 using PYALauncherApps.Controllers;
 using PYALauncherApps.Models;
 using PYALauncherApps.Services;
 
 namespace PYALauncherApps.Views
 {
-    public partial class Main : Form
+    public partial class Main : MaterialForm
     {
         private readonly MainController _controller;
+        DatabaseService databaseService = new DatabaseService();
         private List<Config> _configs;
         private List<Software> _softwareList;
         private Timer updateTimer;
+        public readonly MaterialSkinManager materialSkinManager;
+        private int colorSchemeIndex;
 
         public Main()
         {
             InitializeComponent();
 
-            var databaseService = new DatabaseService();
+            // Initialize MaterialSkinManager
+            materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.EnforceBackcolorOnAllComponents = true;
+
+            // MaterialSkinManager properties
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.Red700, Primary.Red900, Primary.Red100, Accent.Red200, TextShade.WHITE);
+            colorSchemeIndex = PYALauncherApps.Properties.Settings.Default.codigoTema;
+
+            // Inicializa controller
             _controller = new MainController(databaseService);
 
             InitializeTimer();
             LoadData();
         }
+
 
         private void InitializeTimer()
         {
@@ -47,6 +63,16 @@ namespace PYALauncherApps.Views
             // Mostrar los datos en la interfaz gráfica
             listBoxConfigs.DataSource = _configs;
             listBoxSoftware.DataSource = _softwareList;
+
+            foreach (var item in _configs)
+            {
+                materialListBoxConfigs.AddItem(item.ToString());
+            }
+
+            foreach (var item in _softwareList)
+            {
+                materialListBoxSoftware.AddItem(item.ToString());
+            }
         }
 
         private void updateTimer_Tick(object sender, EventArgs e)
@@ -97,6 +123,20 @@ namespace PYALauncherApps.Views
             }
             return true;
         }
+
+
+        private void InstallButton_Click(object sender, EventArgs e)
+        {
+            List<Software> selectedSoftware = new List<Software>();
+
+            foreach (var item in checkedListBoxSoftware.CheckedItems)
+            {
+                selectedSoftware.Add(item as Software);
+            }
+
+            _controller.InstallSoftware(selectedSoftware);
+        }
+
 
 
     }

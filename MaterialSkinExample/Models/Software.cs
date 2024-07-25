@@ -51,6 +51,12 @@ namespace PYALauncherApps.Models
         {
             return Id.GetHashCode();
         }
+
+        // Sobrescribir el método ToString
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 
     //public class SoftwareList
