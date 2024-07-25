@@ -8,9 +8,25 @@ namespace PYALauncherApps.Models
 {
     public class Config
     {
-        public string Interval { get; set; }
+        public int Id { get; set; }
+        public decimal Interval { get; set; }
         public bool Cleaning { get; set; }
 
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            var config = (Config)obj;
+            return Id == config.Id &&
+                   Interval == config.Interval &&
+                   Cleaning == config.Cleaning;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id.GetHashCode();
+        }
     }
 
     public class ConfigList

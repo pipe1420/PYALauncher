@@ -44,17 +44,17 @@ namespace PYALauncherApps.Controllers
         public static void GetSoftwareAsync()
         {
             Console.WriteLine("GetSoftwareAsync()");
-            _softwareList = _serviceSoftware.GetSoftwareListPSQL();
+            //_softwareList = _serviceSoftware.GetSoftwareListPSQL();
         }
 
-        public static JArray GetAppsServerAsync()
-        {
-            Debug.WriteLine("\nGetAppsServer1: ");
-            JArray latestRecords = _serviceSoftware.GetSoftwareList();
-            Debug.WriteLine("\nGetAppsServer2: ");
+        //public static JArray GetAppsServerAsync()
+        //{
+        //    Debug.WriteLine("\nGetAppsServer1: ");
+        //    JArray latestRecords = _serviceSoftware.GetSoftwareList();
+        //    Debug.WriteLine("\nGetAppsServer2: ");
 
-            return latestRecords;
-        }
+        //    return latestRecords;
+        //}
 
         //public static async Task EjecucionPorLapsosAsync()
         //{

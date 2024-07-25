@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using PYALauncherApps.Controllers;
+using PYALauncherApps.Views;
 
 namespace MaterialSkinExample
 {
@@ -9,11 +10,14 @@ namespace MaterialSkinExample
         [STAThread]
         private static void Main()
         {
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(true);
-            //Application.Run(new MainForm());
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(true);
+            Application.Run(new Main());
 
-            AppController.Initialize();
+            //AppController.Initialize();
+
+
+
         }
     }
 }

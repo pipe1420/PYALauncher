@@ -10,14 +10,14 @@ namespace PYALauncherApps.Services
     public class ConfigService
     {
 
-        ConfigList _config = new ConfigList();
-        public ConfigService() { 
+        //ConfigList _config = new ConfigList();
+        //public ConfigService() { 
         
-        }
+        //}
 
-        public List<Config> GetSoftwareListPSQL()
-        {
-            return _config.GetConfigListPQSL();
-        }
+        //public List<Config> GetSoftwareListPSQL()
+        //{
+        //    return _config.GetConfigListPQSL();
+        //}
     }
 }
