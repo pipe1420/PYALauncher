@@ -19,11 +19,12 @@ namespace PYALauncherApps.Views
     {
         private readonly MainController _controller;
         DatabaseService databaseService = new DatabaseService();
-        private List<Config> _configs;
-        private List<Software> _softwareList;
         private Timer updateTimer;
         public readonly MaterialSkinManager materialSkinManager;
         private int colorSchemeIndex;
+
+        private List<Config> _configs;
+        private List<Software> _softwareList;
 
         public Main()
         {
@@ -43,7 +44,7 @@ namespace PYALauncherApps.Views
             _controller = new MainController(databaseService);
 
             InitializeTimer();
-            LoadData();
+            LoadDataAsync();
         }
 
 
@@ -51,14 +52,14 @@ namespace PYALauncherApps.Views
         {
             updateTimer = new Timer();
             updateTimer.Interval = 10000; // 10 segundos
-            updateTimer.Tick += new EventHandler(updateTimer_Tick);
+            updateTimer.Tick += new EventHandler(updateTimer_TickAsync);
             updateTimer.Start(); // Iniciar el timer
         }
 
-        private void LoadData()
+        private async Task LoadDataAsync()
         {
-            _configs = _controller.LoadConfigs();
-            _softwareList = _controller.LoadSoftware();
+            _configs = await _controller.LoadConfigs();
+            _softwareList = await _controller.LoadSoftware();
 
             // Mostrar los datos en la interfaz gráfica
             listBoxConfigs.DataSource = _configs;
@@ -75,36 +76,44 @@ namespace PYALauncherApps.Views
             }
         }
 
-        private void updateTimer_Tick(object sender, EventArgs e)
+        private async void updateTimer_TickAsync(object sender, EventArgs e)
         {
-            var newConfigs = _controller.LoadConfigs();
-            var newSoftwareList = _controller.LoadSoftware();
+            try
+            {
+                var newConfigs = await _controller.LoadConfigs();
+                var newSoftwareList = await _controller.LoadSoftware();
 
-            bool configsChanged = !AreListsEqual(_configs, newConfigs);
-            bool softwareChanged = !AreListsEqual(_softwareList, newSoftwareList);
+                bool configsChanged = !AreListsEqual(_configs, newConfigs);
+                bool softwareChanged = !AreListsEqual(_softwareList, newSoftwareList);
 
-            if (configsChanged)
-            {
-                _configs = newConfigs;
-                listBoxConfigs.DataSource = null;
-                listBoxConfigs.DataSource = _configs;
-                Console.WriteLine("La lista de configuraciones ha cambiado.");
-            }
-            else
-            {
-                Console.WriteLine("La lista de configuraciones no ha cambiado.");
-            }
+                if (configsChanged)
+                {
+                    _configs = newConfigs;
+                    listBoxConfigs.DataSource = null;
+                    listBoxConfigs.DataSource = _configs;
+                    Console.WriteLine("La lista de configuraciones ha cambiado.");
+                }
+                else
+                {
+                    Console.WriteLine("La lista de configuraciones no ha cambiado.");
+                }
 
-            if (softwareChanged)
-            {
-                _softwareList = newSoftwareList;
-                listBoxSoftware.DataSource = null;
-                listBoxSoftware.DataSource = _softwareList;
-                Console.WriteLine("La lista de software ha cambiado.");
+                if (softwareChanged)
+                {
+                    _softwareList = newSoftwareList;
+                    listBoxSoftware.DataSource = null;
+                    listBoxSoftware.DataSource = _softwareList;
+                    Console.WriteLine("La lista de software ha cambiado.");
+                }
+                else
+                {
+                    Console.WriteLine("La lista de software no ha cambiado.");
+                }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("La lista de software no ha cambiado.");
+                // Manejar la excepción de manera adecuada
+                Console.WriteLine($"Error: {ex.Message}");
             }
         }
 
@@ -124,18 +133,29 @@ namespace PYALauncherApps.Views
             return true;
         }
 
-
-        private void InstallButton_Click(object sender, EventArgs e)
+        private void tabPage1_Click(object sender, EventArgs e)
         {
-            List<Software> selectedSoftware = new List<Software>();
 
-            foreach (var item in checkedListBoxSoftware.CheckedItems)
-            {
-                selectedSoftware.Add(item as Software);
-            }
-
-            _controller.InstallSoftware(selectedSoftware);
         }
+
+        private void tabPage3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+        //private void InstallButton_Click(object sender, EventArgs e)
+        //{
+        //    List<Software> selectedSoftware = new List<Software>();
+
+        //    foreach (var item in checkedListBoxSoftware.CheckedItems)
+        //    {
+        //        selectedSoftware.Add(item as Software);
+        //    }
+
+        //    _controller.InstallSoftware(selectedSoftware);
+        //}
 
 
 

@@ -10,6 +10,10 @@ using System.IO;
 using System.Diagnostics;
 using System.Net;
 using System.Management;
+using PYALauncherApps.Models;
+using System.Collections.Generic;
+using PYALauncherApps.Controllers;
+using PYALauncherApps.Services;
 
 namespace MaterialSkinExample
 {
@@ -33,13 +37,13 @@ namespace MaterialSkinExample
             // MaterialSkinManager properties
             materialSkinManager.AddFormToManage(this);
             materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
-            materialSkinManager.ColorScheme = new ColorScheme(Primary.Red700,Primary.Red900, Primary.Red100, Accent.Red200, TextShade.WHITE);
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.Red700, Primary.Red900, Primary.Red100, Accent.Red200, TextShade.WHITE);
 
             colorSchemeIndex = PYALauncherApps.Properties.Settings.Default.codigoTema;
 
             bool tst = PYALauncherApps.Properties.Settings.Default.estiloTema;
             updateColor();
-            if(tst == true)
+            if (tst == true)
             {
                 materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             }
@@ -47,9 +51,11 @@ namespace MaterialSkinExample
             {
                 materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
             }
-            
+
             //Inicia proceso de captura de configuraciones generales
             EjecucionPorLapsosAsync();
+            //New
+            InitializeTimer();
 
             Console.WriteLine("UserDomainName : " + Environment.UserDomainName);
             Console.WriteLine("UserName: {0}", Environment.UserName);
@@ -131,7 +137,7 @@ namespace MaterialSkinExample
             reload.Size = new System.Drawing.Size(217, 58);
             reload.TabIndex = 69;
             reload.Text = "Cargando...";
-            
+
             flowLayoutPanel1.Controls.Add(reload);
 
             JArray latestRecords = await GetAppsServer();
@@ -162,7 +168,7 @@ namespace MaterialSkinExample
                 string forceInstall = (string)record["force_install"];
                 string GUID = (string)record["GUID"];
                 string automaticInstall = (string)record["automatic_install"];
-                
+
                 //JArray gruposArray = (JArray)record["version"];
                 //string[] grupos = gruposArray.ToObject<string[]>();
 
@@ -185,7 +191,7 @@ namespace MaterialSkinExample
                 MaterialButton button = new MaterialButton();
                 MaterialButton buttonUpdate = new MaterialButton();
                 MaterialLabel body = new MaterialLabel();
-                
+
 
 
 
@@ -237,11 +243,11 @@ namespace MaterialSkinExample
                 labelVersion.MouseState = MaterialSkin.MouseState.HOVER;
                 labelVersion.Size = new System.Drawing.Size(269, 17);
                 labelVersion.TabIndex = 82;
-                
 
-                if(localVersion != "null") labelVersion.Text = $"Version: {localVersion}";
 
-               
+                if (localVersion != "null") labelVersion.Text = $"Version: {localVersion}";
+
+
                 button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
                 button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
                 button.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
@@ -249,7 +255,7 @@ namespace MaterialSkinExample
                 button.HighEmphasis = true;
                 button.Icon = null;
                 button.Location = new System.Drawing.Point(427, 90);
-                button.Margin = new System.Windows.Forms.Padding(0,0,0,0);
+                button.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
                 button.MouseState = MaterialSkin.MouseState.HOVER;
                 button.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
                 button.NoAccentTextColor = System.Drawing.Color.Empty;
@@ -273,9 +279,9 @@ namespace MaterialSkinExample
 
                 if (estaInstalado)
                 {
-                    
+
                     int comparacion = CompararVersionApp(pathInstall, version);
-                    
+
                     if (comparacion == -1)
                     {
                         button.Text = "Actualización";
@@ -297,15 +303,15 @@ namespace MaterialSkinExample
                         labelVersionWeb.TabIndex = 82;
                         labelVersionWeb.Text = $"Nueva: {version}";
                     }
-                    
-                    if(comparacion == 0)
+
+                    if (comparacion == 0)
                     {
                         button.Text = "Instalado";
                         button.Enabled = false;
                         button.Click += (sender, e) => ValidaDescarga(sender, e, urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false, software);
                     }
 
-                    if(comparacion == 1)
+                    if (comparacion == 1)
                     {
                         button.Text = "Local mas nueva";
                         button.Enabled = false;
@@ -330,19 +336,19 @@ namespace MaterialSkinExample
                 button.UseAccentColor = false;
                 button.UseVisualStyleBackColor = true;
 
-                
+
                 card.Controls.Add(labelTitulo);
                 card.Controls.Add(labelVersion);
                 card.Controls.Add(labelVersionWeb);
                 card.Controls.Add(body);
                 card.Controls.Add(button);
                 flowLayoutPanel1.Controls.Add(card);
-                
+
                 if (automaticInstall == "true")
                 {
                     Console.WriteLine("\n[NOTIFICACION] Software: " + software + " viene con actualizacion automatica.\n");
                     DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false, software);
-                    
+
                     /* ROAD MAP VALIDATION
                      * 
                      * 
@@ -398,7 +404,7 @@ namespace MaterialSkinExample
             }
         }
 
-        public async Task ValidaDescarga(object sender, EventArgs e, string urlMsi, string version, string pathFile, string forceInstall, 
+        public async Task ValidaDescarga(object sender, EventArgs e, string urlMsi, string version, string pathFile, string forceInstall,
             string verificaApp, string automaticInstall, string pathInstall, bool instalaManual, string software)
         {
             DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, instalaManual, software);
@@ -470,12 +476,12 @@ namespace MaterialSkinExample
                     materialListBoxItem13.Text = "[DescargaApp] Error al crear el directorio: " + ex.Message;
                     materialListBoxLogs.Items.Add(materialListBoxItem13);
                 }
-               
+
             }
 
-            INSTALACION:
+        INSTALACION:
             VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
-          
+
             //Reaload datos dinamicos de la nube
             //loadCardAsync();
         }
@@ -492,14 +498,14 @@ namespace MaterialSkinExample
                 if (automaticInstall == "true")
                 {
                     Console.WriteLine("[AutomaticInstall] El proceso " + verificaApp.ToUpper() + " está activo. No fue posible la instalacion." + rutaDescarga);
-                    MaterialSnackBar SnackBarMessage2 = new MaterialSnackBar("El proceso "+ verificaApp.ToUpper()+ " esta activo.  No fue posible la instalacion.", "OK", true);
+                    MaterialSnackBar SnackBarMessage2 = new MaterialSnackBar("El proceso " + verificaApp.ToUpper() + " esta activo.  No fue posible la instalacion.", "OK", true);
                     SnackBarMessage2.Show(this);
                 }
 
                 if (forceInstall == "true")
                 {
                     Console.WriteLine("[ForceInstall] Instalacion forzada, proceso esta activo...");
-               
+
                     DetieneProceso(verificaApp);
 
                     if (VerificaInstalacion(pathInstall))
@@ -542,7 +548,7 @@ namespace MaterialSkinExample
             }
             else
             {
-                if(automaticInstall == "true")
+                if (automaticInstall == "true")
                 {
                     //Console.WriteLine("El proceso " + verificaApp.ToUpper() + " no está activo." + rutaDescarga);
 
@@ -551,13 +557,13 @@ namespace MaterialSkinExample
                     {
                         //verifica version local vs nube
                         string versionLocal = LocalVersionApp(pathInstall);
-                         /*
-                         * resultadoVersion estados:
-                            0 = Versiones iguales
-                            1 = Local mas actualizado
-                            -1 = Version nueva disponibles en la web
-                            10 = error al comparar version local con web 
-                         */
+                        /*
+                        * resultadoVersion estados:
+                           0 = Versiones iguales
+                           1 = Local mas actualizado
+                           -1 = Version nueva disponibles en la web
+                           10 = error al comparar version local con web 
+                        */
                         int comparacion = CompararVersionApp(pathInstall, version);
 
                         if (comparacion == 0)
@@ -583,7 +589,7 @@ namespace MaterialSkinExample
                             Console.WriteLine("Error al verificar version: " + version);
                             MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al verificar instalacion de  " + software, "OK", true);
                             SnackBarMessage.Show(this);
-                        }   
+                        }
                     }
                     else
                     {
@@ -591,7 +597,7 @@ namespace MaterialSkinExample
                     }
                 }
 
-                if(instalaManual == true)
+                if (instalaManual == true)
                 {
                     //Si esta instalada una version previa, desinstalar
                     if (VerificaInstalacion(pathInstall))
@@ -608,7 +614,7 @@ namespace MaterialSkinExample
                 if (forceInstall == "true")
                 {
                     Console.WriteLine("Instalacion forzada, proceso no esta activo...");
-                    
+
 
                     if (VerificaInstalacion(pathInstall))
                     {
@@ -666,7 +672,7 @@ namespace MaterialSkinExample
         {
             try
             {
-                
+
                 if (Environment.UserDomainName == "PYAING")
                 {
                     Debug.WriteLine("[EjecutaInstalacion] UserDomainName " + Environment.UserDomainName);
@@ -699,18 +705,18 @@ namespace MaterialSkinExample
                     startInfo.UseShellExecute = false;
 
                     Process.Start(startInfo);
-                    
+
                 }
 
-               
 
-                Debug.WriteLine("[EjecutaInstalacion] El proceso de instalación de "+ software+" finalizado correctamente.");
 
-                materialListBoxItem13.Text = "[EjecutaInstalacion] El proceso de instalación de "+ software+" finalizado correctamente.";
+                Debug.WriteLine("[EjecutaInstalacion] El proceso de instalación de " + software + " finalizado correctamente.");
+
+                materialListBoxItem13.Text = "[EjecutaInstalacion] El proceso de instalación de " + software + " finalizado correctamente.";
                 materialListBoxLogs.Items.Add(materialListBoxItem13);
-                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación de "+ software+" finalizado correctamente.", 3000, "OK");
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación de " + software + " finalizado correctamente.", 3000, "OK");
                 SnackBarMessage.Show(this);
-                
+
             }
             catch (Exception ex)
             {
@@ -731,7 +737,7 @@ namespace MaterialSkinExample
                 Process process = new Process();
                 process.StartInfo.FileName = "msiexec.exe";
                 process.StartInfo.Arguments = string.Format(" /q /x \"{0}\" ALLUSERS=1", rutaDescarga);
-                
+
                 if (Environment.UserDomainName == "PYAING")
                 {
                     string userName = PYALauncherApps.Properties.Settings.Default.usuario;
@@ -754,9 +760,9 @@ namespace MaterialSkinExample
                 process.WaitForExit();
 
 
-                
+
                 Console.WriteLine("[EjectutaDesinstalacion] El proceso de desinstalación de " + software + " finalizado correctamente.");
-                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de desinstalación de "+ software+" finalizado correctamente.", 3000, "OK");
+                MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de desinstalación de " + software + " finalizado correctamente.", 3000, "OK");
                 SnackBarMessage.Show(this);
                 materialListBoxItem13.Text = "[EjectutaDesinstalacion] El proceso de desinstalación de " + software + " finalizado correctamente.";
                 materialListBoxLogs.Items.Add(materialListBoxItem13);
@@ -767,10 +773,10 @@ namespace MaterialSkinExample
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al ejecutar desinstalación " + software, 3000, "OK");
                 SnackBarMessage.Show(this);
 
-                materialListBoxItem13.Text = "[EjectutaDesinstalacion] Error al ejecutar la desinstalación  de " + software + "."+ ex.Message;
+                materialListBoxItem13.Text = "[EjectutaDesinstalacion] Error al ejecutar la desinstalación  de " + software + "." + ex.Message;
                 materialListBoxLogs.Items.Add(materialListBoxItem13);
             }
-            
+
         }
 
         private void DetieneProceso(string verificaApp)
@@ -851,7 +857,7 @@ namespace MaterialSkinExample
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error al verificar version local en ruta: " + pathInstall + ex);   
+                Console.WriteLine("Error al verificar version local en ruta: " + pathInstall + ex);
             }
             return versionLocal;
         }
@@ -873,7 +879,7 @@ namespace MaterialSkinExample
 
                     return v1.CompareTo(v2);
                 }
-                
+
             }
             catch (Exception)
             {
@@ -896,15 +902,15 @@ namespace MaterialSkinExample
                 return false;
             }
 
-            
+
         }
-  
+
         private void materialButton1_Click(object sender, EventArgs e)
         {
             //materialSkinManager.Theme = materialSkinManager.Theme == MaterialSkinManager.Themes.DARK ? MaterialSkinManager.Themes.LIGHT : MaterialSkinManager.Themes.DARK;
-            
 
-            if(materialSkinManager.Theme == MaterialSkinManager.Themes.LIGHT)
+
+            if (materialSkinManager.Theme == MaterialSkinManager.Themes.LIGHT)
             {
                 materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
                 PYALauncherApps.Properties.Settings.Default.estiloTema = false;
@@ -991,7 +997,7 @@ namespace MaterialSkinExample
 
         private void materialButton1_Click_1(object sender, EventArgs e)
         {
-            
+
             listaFiltro.Items.Clear();
             listaFiltro.Items.Sort();
             listaFiltro.Refresh();
@@ -1024,5 +1030,104 @@ namespace MaterialSkinExample
             //Carga datos dinamicos de la nube
             loadCardAsync();
         }
+
+
+        #region NUEVO
+        private readonly MainController _controller;
+        DatabaseService databaseService = new DatabaseService();
+        private Timer updateTimer;
+        //public readonly MaterialSkinManager materialSkinManager;
+        //private int colorSchemeIndex;
+
+        private List<Config> _configs;
+        private List<Software> _softwareList;
+        private void InitializeTimer()
+        {
+            updateTimer = new Timer();
+            updateTimer.Interval = 10000; // 10 segundos
+            updateTimer.Tick += new EventHandler(updateTimer_TickAsync);
+            updateTimer.Start(); // Iniciar el timer
+        }
+
+        private async Task LoadDataAsync()
+        {
+            _configs = await _controller.LoadConfigs();
+            _softwareList = await _controller.LoadSoftware();
+
+            // Mostrar los datos en la interfaz gráfica
+            listBoxConfigs.DataSource = _configs;
+            listBoxSoftware.DataSource = _softwareList;
+
+            foreach (var item in _configs)
+            {
+                materialListBoxConfigs.AddItem(item.ToString());
+            }
+
+            foreach (var item in _softwareList)
+            {
+                materialListBoxSoftware.AddItem(item.ToString());
+            }
+        }
+
+        private async void updateTimer_TickAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                var newConfigs = await _controller.LoadConfigs();
+                var newSoftwareList = await _controller.LoadSoftware();
+
+                bool configsChanged = !AreListsEqual(_configs, newConfigs);
+                bool softwareChanged = !AreListsEqual(_softwareList, newSoftwareList);
+
+                if (configsChanged)
+                {
+                    _configs = newConfigs;
+                    listBoxConfigs.DataSource = null;
+                    listBoxConfigs.DataSource = _configs;
+                    Console.WriteLine("La lista de configuraciones ha cambiado.");
+                }
+                else
+                {
+                    Console.WriteLine("La lista de configuraciones no ha cambiado.");
+                }
+
+                if (softwareChanged)
+                {
+                    _softwareList = newSoftwareList;
+                    listBoxSoftware.DataSource = null;
+                    listBoxSoftware.DataSource = _softwareList;
+                    Console.WriteLine("La lista de software ha cambiado.");
+                }
+                else
+                {
+                    Console.WriteLine("La lista de software no ha cambiado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejar la excepción de manera adecuada
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        private bool AreListsEqual<T>(List<T> list1, List<T> list2)
+        {
+            if (list1 == null && list2 == null) return true;
+            if (list1 == null || list2 == null) return false;
+            if (list1.Count != list2.Count) return false;
+
+            for (int i = 0; i < list1.Count; i++)
+            {
+                if (!list1[i].Equals(list2[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+
+            #endregion
+        }
+
+
     }
 }

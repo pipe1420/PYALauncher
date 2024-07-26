@@ -18,14 +18,14 @@ namespace PYALauncherApps.Controllers
             _databaseService = databaseService;
         }
 
-        public List<Config> LoadConfigs()
+        public async Task<List<Config>> LoadConfigs()
         {
-            return _databaseService.GetConfigs();
+            return await _databaseService.GetConfigs();
         }
 
-        public List<Software> LoadSoftware()
+        public async Task<List<Software>> LoadSoftware()
         {
-            return _databaseService.GetSoftware();
+            return await _databaseService.GetSoftware();
         }
 
         public void InstallSoftware(List<Software> softwareList)

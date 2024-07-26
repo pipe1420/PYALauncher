@@ -16,12 +16,14 @@ namespace PYALauncherApps.Controllers
 {
     public class AppController
     {
+
+        #region OLD
         private static SoftwareService _serviceSoftware = new SoftwareService();
         private static MainForm _formulario = new MainForm();
         private static List<Config> _configList = new List<Config>();
         private static List<Software> _softwareList = new List<Software>();
 
-        public static void Initialize() 
+        public static void Initialize()
         {
             Console.WriteLine("Initialize()");
             GetConfigAsync();
@@ -32,7 +34,7 @@ namespace PYALauncherApps.Controllers
         {
             Console.WriteLine("OpenForm()");
             //EjecucionPorLapsosAsync();
-            _formulario.ShowDialog(); 
+            _formulario.ShowDialog();
         }
 
         public static void GetConfigAsync()
@@ -46,82 +48,6 @@ namespace PYALauncherApps.Controllers
             Console.WriteLine("GetSoftwareAsync()");
             //_softwareList = _serviceSoftware.GetSoftwareListPSQL();
         }
-
-        //public static JArray GetAppsServerAsync()
-        //{
-        //    Debug.WriteLine("\nGetAppsServer1: ");
-        //    JArray latestRecords = _serviceSoftware.GetSoftwareList();
-        //    Debug.WriteLine("\nGetAppsServer2: ");
-
-        //    return latestRecords;
-        //}
-
-        //public static async Task EjecucionPorLapsosAsync()
-        //{
-        //    string intervalo = "";
-        //    try
-        //    {
-        //        Console.WriteLine("Obteniendo configuracion");
-        //        //FirebaseRepository.CargaConexion();
-        //        string result = await FirebaseRepository.ObtieneConfig();
-
-        //        JObject data = JObject.Parse(result);
-        //        JProperty latestProperty = data.Properties().Last();
-        //        JArray latestRecords = (JArray)latestProperty.Value;
-
-        //        foreach (JObject record in latestRecords)
-        //        {
-        //            intervalo = (string)record["intervalo_check_segundos"];
-        //        }
-        //        Console.WriteLine("Configuracion cargada, intervalo: " + intervalo);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        //Carga en segundos intervalo de sincronizacion predeterminado
-        //        intervalo = "900";//15 minutos
-        //        Console.WriteLine("Error de configuracion, intervalo default: " + intervalo);
-        //        Console.WriteLine("Error de configuracion: " + ex);
-        //    }
-
-        //    while (true)
-        //    {
-        //        //MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Sincronizando...", "OK", true);
-        //        //SnackBarMessage.Show(this);
-
-        //        //var registros = await GetAppsServerAsync();
-                
-        //        Console.WriteLine("Configuracion usando intervalo: " + intervalo);
-        //        var registros = await FirebaseRepository.ObtieneApps();
-
-        //        JObject data = JObject.Parse(registros);
-        //        JProperty latestProperty = data.Properties().Last();
-        //        JArray latestRecords = (JArray)latestProperty.Value;
-
-        //        Console.WriteLine("\nlatestRecords: ");
-
-        //        //_serviceSoftware.SetSoftwareList((JArray)registros);
-        //        //var listadoSW = _serviceSoftware.GetSoftwareList();
-        //        //Console.Write(listadoSW);
-
-        //        // Llamar a tu método async Task aquí
-        //        await _formulario.loadCardAsync(latestRecords);
-        //        await Task.Delay(TimeSpan.FromSeconds(int.Parse(intervalo)));
-
-        //        try
-        //        {
-                   
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            Console.WriteLine("\nError while: " + ex);
-        //        }
-
-        //    }
-        //}
-        
-        
-
-
-        
+        #endregion
     }
 }

@@ -14,7 +14,7 @@ namespace MaterialSkinExample
             Application.SetCompatibleTextRenderingDefault(true);
             Application.Run(new Main());
 
-            //AppController.Initialize();
+            AppController.Initialize();
 
 
 

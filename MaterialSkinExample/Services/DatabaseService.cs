@@ -18,18 +18,18 @@ namespace PYALauncherApps.Services
             _connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         }
 
-        public List<Config> GetConfigs()
+        public async Task<List<Config>> GetConfigs()
         {
             var configs = new List<Config>();
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new NpgsqlCommand("SELECT id, interval, cleaning FROM pya_apps.config", connection))
                 {
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        while (reader.Read())
+                        while (await reader.ReadAsync())
                         {
                             configs.Add(new Config
                             {
@@ -45,18 +45,20 @@ namespace PYALauncherApps.Services
             return configs;
         }
 
-        public List<Software> GetSoftware()
+
+
+        public async Task<List<Software>> GetSoftware()
         {
             var softwareList = new List<Software>();
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
-                connection.Open();
+                await connection.OpenAsync();
                 using (var command = new NpgsqlCommand("SELECT * FROM pya_apps.software", connection))
                 {
-                    using (var reader = command.ExecuteReader())
+                    using (var reader = await command.ExecuteReaderAsync())
                     {
-                        while (reader.Read())
+                        while (await reader.ReadAsync())
                         {
                             softwareList.Add(new Software
                             {
