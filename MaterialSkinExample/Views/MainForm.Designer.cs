@@ -50,6 +50,10 @@ namespace MaterialSkinExample
             this.materialLabel45 = new MaterialSkin.Controls.MaterialLabel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tabPageInicio = new System.Windows.Forms.TabPage();
+            this.listBoxSoftware = new System.Windows.Forms.ListBox();
+            this.listBoxConfigs = new System.Windows.Forms.ListBox();
+            this.materialListBoxSoftware = new MaterialSkin.Controls.MaterialListBox();
+            this.materialListBoxConfigs = new MaterialSkin.Controls.MaterialListBox();
             this.materialCard1 = new MaterialSkin.Controls.MaterialCard();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -70,10 +74,10 @@ namespace MaterialSkinExample
             this.materialListBoxLogs = new MaterialSkin.Controls.MaterialListBox();
             this.materialCheckbox1 = new MaterialSkin.Controls.MaterialCheckbox();
             this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.materialListBoxConfigs = new MaterialSkin.Controls.MaterialListBox();
-            this.materialListBoxSoftware = new MaterialSkin.Controls.MaterialListBox();
-            this.listBoxConfigs = new System.Windows.Forms.ListBox();
-            this.listBoxSoftware = new System.Windows.Forms.ListBox();
+            this.tabPageApps2 = new System.Windows.Forms.TabPage();
+            this.materialLabel3 = new MaterialSkin.Controls.MaterialLabel();
+            this.materialLabel4 = new MaterialSkin.Controls.MaterialLabel();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.tabPageConfig.SuspendLayout();
             this.tabPageApps.SuspendLayout();
             this.tabPageInicio.SuspendLayout();
@@ -83,6 +87,7 @@ namespace MaterialSkinExample
             this.materialCard5.SuspendLayout();
             this.materialTabControl1.SuspendLayout();
             this.tabLogs.SuspendLayout();
+            this.tabPageApps2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuIconList
@@ -118,7 +123,7 @@ namespace MaterialSkinExample
             this.tabPageConfig.Controls.Add(this.materialLabel9);
             this.tabPageConfig.ImageKey = "round_build_white_24dp.png";
             this.tabPageConfig.Location = new System.Drawing.Point(4, 31);
-            this.tabPageConfig.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageConfig.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageConfig.Name = "tabPageConfig";
             this.tabPageConfig.Size = new System.Drawing.Size(1335, 771);
             this.tabPageConfig.TabIndex = 0;
@@ -203,7 +208,7 @@ namespace MaterialSkinExample
             this.tabPageApps.Controls.Add(this.flowLayoutPanel1);
             this.tabPageApps.ImageKey = "outline_apps_white_24dp.png";
             this.tabPageApps.Location = new System.Drawing.Point(4, 31);
-            this.tabPageApps.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabPageApps.Margin = new System.Windows.Forms.Padding(4);
             this.tabPageApps.Name = "tabPageApps";
             this.tabPageApps.Size = new System.Drawing.Size(1335, 771);
             this.tabPageApps.TabIndex = 8;
@@ -316,7 +321,7 @@ namespace MaterialSkinExample
             this.flowLayoutPanel1.AutoScroll = true;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(33, 170);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(825, 561);
             this.flowLayoutPanel1.TabIndex = 0;
@@ -344,6 +349,52 @@ namespace MaterialSkinExample
             this.tabPageInicio.TabIndex = 10;
             this.tabPageInicio.Text = "Inicio";
             // 
+            // listBoxSoftware
+            // 
+            this.listBoxSoftware.FormattingEnabled = true;
+            this.listBoxSoftware.ItemHeight = 16;
+            this.listBoxSoftware.Location = new System.Drawing.Point(778, 242);
+            this.listBoxSoftware.Name = "listBoxSoftware";
+            this.listBoxSoftware.Size = new System.Drawing.Size(234, 228);
+            this.listBoxSoftware.TabIndex = 75;
+            // 
+            // listBoxConfigs
+            // 
+            this.listBoxConfigs.FormattingEnabled = true;
+            this.listBoxConfigs.ItemHeight = 16;
+            this.listBoxConfigs.Location = new System.Drawing.Point(591, 242);
+            this.listBoxConfigs.Name = "listBoxConfigs";
+            this.listBoxConfigs.Size = new System.Drawing.Size(181, 228);
+            this.listBoxConfigs.TabIndex = 74;
+            // 
+            // materialListBoxSoftware
+            // 
+            this.materialListBoxSoftware.BackColor = System.Drawing.Color.White;
+            this.materialListBoxSoftware.BorderColor = System.Drawing.Color.LightGray;
+            this.materialListBoxSoftware.Depth = 0;
+            this.materialListBoxSoftware.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialListBoxSoftware.Location = new System.Drawing.Point(370, 242);
+            this.materialListBoxSoftware.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialListBoxSoftware.Name = "materialListBoxSoftware";
+            this.materialListBoxSoftware.SelectedIndex = -1;
+            this.materialListBoxSoftware.SelectedItem = null;
+            this.materialListBoxSoftware.Size = new System.Drawing.Size(180, 230);
+            this.materialListBoxSoftware.TabIndex = 73;
+            // 
+            // materialListBoxConfigs
+            // 
+            this.materialListBoxConfigs.BackColor = System.Drawing.Color.White;
+            this.materialListBoxConfigs.BorderColor = System.Drawing.Color.LightGray;
+            this.materialListBoxConfigs.Depth = 0;
+            this.materialListBoxConfigs.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialListBoxConfigs.Location = new System.Drawing.Point(221, 242);
+            this.materialListBoxConfigs.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialListBoxConfigs.Name = "materialListBoxConfigs";
+            this.materialListBoxConfigs.SelectedIndex = -1;
+            this.materialListBoxConfigs.SelectedItem = null;
+            this.materialListBoxConfigs.Size = new System.Drawing.Size(143, 230);
+            this.materialListBoxConfigs.TabIndex = 72;
+            // 
             // materialCard1
             // 
             this.materialCard1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
@@ -351,7 +402,7 @@ namespace MaterialSkinExample
             this.materialCard1.Depth = 0;
             this.materialCard1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialCard1.Location = new System.Drawing.Point(25, 242);
-            this.materialCard1.Margin = new System.Windows.Forms.Padding(9, 9, 9, 9);
+            this.materialCard1.Margin = new System.Windows.Forms.Padding(9);
             this.materialCard1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard1.Name = "materialCard1";
             this.materialCard1.Padding = new System.Windows.Forms.Padding(19, 17, 19, 17);
@@ -396,7 +447,7 @@ namespace MaterialSkinExample
             this.materialCard7.Depth = 0;
             this.materialCard7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialCard7.Location = new System.Drawing.Point(591, 507);
-            this.materialCard7.Margin = new System.Windows.Forms.Padding(9, 9, 9, 9);
+            this.materialCard7.Margin = new System.Windows.Forms.Padding(9);
             this.materialCard7.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard7.Name = "materialCard7";
             this.materialCard7.Padding = new System.Windows.Forms.Padding(19, 17, 19, 17);
@@ -464,7 +515,7 @@ namespace MaterialSkinExample
             this.materialCard5.Depth = 0;
             this.materialCard5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.materialCard5.Location = new System.Drawing.Point(25, 507);
-            this.materialCard5.Margin = new System.Windows.Forms.Padding(9, 9, 9, 9);
+            this.materialCard5.Margin = new System.Windows.Forms.Padding(9);
             this.materialCard5.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCard5.Name = "materialCard5";
             this.materialCard5.Padding = new System.Windows.Forms.Padding(19, 17, 19, 17);
@@ -557,13 +608,14 @@ namespace MaterialSkinExample
             // 
             this.materialTabControl1.Controls.Add(this.tabPageInicio);
             this.materialTabControl1.Controls.Add(this.tabPageApps);
+            this.materialTabControl1.Controls.Add(this.tabPageApps2);
             this.materialTabControl1.Controls.Add(this.tabPageConfig);
             this.materialTabControl1.Controls.Add(this.tabLogs);
             this.materialTabControl1.Depth = 0;
             this.materialTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.materialTabControl1.ImageList = this.menuIconList;
             this.materialTabControl1.Location = new System.Drawing.Point(4, 79);
-            this.materialTabControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.materialTabControl1.Margin = new System.Windows.Forms.Padding(4);
             this.materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialTabControl1.Multiline = true;
             this.materialTabControl1.Name = "materialTabControl1";
@@ -657,51 +709,59 @@ namespace MaterialSkinExample
             this.notifyIcon1.Text = "PYALauncherApps";
             this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
-            // materialListBoxConfigs
+            // tabPageApps2
             // 
-            this.materialListBoxConfigs.BackColor = System.Drawing.Color.White;
-            this.materialListBoxConfigs.BorderColor = System.Drawing.Color.LightGray;
-            this.materialListBoxConfigs.Depth = 0;
-            this.materialListBoxConfigs.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialListBoxConfigs.Location = new System.Drawing.Point(221, 242);
-            this.materialListBoxConfigs.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialListBoxConfigs.Name = "materialListBoxConfigs";
-            this.materialListBoxConfigs.SelectedIndex = -1;
-            this.materialListBoxConfigs.SelectedItem = null;
-            this.materialListBoxConfigs.Size = new System.Drawing.Size(143, 230);
-            this.materialListBoxConfigs.TabIndex = 72;
+            this.tabPageApps2.BackColor = System.Drawing.Color.White;
+            this.tabPageApps2.Controls.Add(this.flowLayoutPanel2);
+            this.tabPageApps2.Controls.Add(this.materialLabel3);
+            this.tabPageApps2.Controls.Add(this.materialLabel4);
+            this.tabPageApps2.ImageKey = "outline_apps_white_24dp.png";
+            this.tabPageApps2.Location = new System.Drawing.Point(4, 31);
+            this.tabPageApps2.Name = "tabPageApps2";
+            this.tabPageApps2.Size = new System.Drawing.Size(1335, 771);
+            this.tabPageApps2.TabIndex = 12;
+            this.tabPageApps2.Text = "Aplicaciones";
             // 
-            // materialListBoxSoftware
+            // materialLabel3
             // 
-            this.materialListBoxSoftware.BackColor = System.Drawing.Color.White;
-            this.materialListBoxSoftware.BorderColor = System.Drawing.Color.LightGray;
-            this.materialListBoxSoftware.Depth = 0;
-            this.materialListBoxSoftware.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialListBoxSoftware.Location = new System.Drawing.Point(370, 242);
-            this.materialListBoxSoftware.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialListBoxSoftware.Name = "materialListBoxSoftware";
-            this.materialListBoxSoftware.SelectedIndex = -1;
-            this.materialListBoxSoftware.SelectedItem = null;
-            this.materialListBoxSoftware.Size = new System.Drawing.Size(180, 230);
-            this.materialListBoxSoftware.TabIndex = 73;
+            this.materialLabel3.AutoSize = true;
+            this.materialLabel3.Depth = 0;
+            this.materialLabel3.Font = new System.Drawing.Font("Roboto", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.materialLabel3.FontType = MaterialSkin.MaterialSkinManager.fontType.H3;
+            this.materialLabel3.Location = new System.Drawing.Point(19, 22);
+            this.materialLabel3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel3.Name = "materialLabel3";
+            this.materialLabel3.Size = new System.Drawing.Size(274, 58);
+            this.materialLabel3.TabIndex = 73;
+            this.materialLabel3.Text = "Aplicaciones";
             // 
-            // listBoxConfigs
+            // materialLabel4
             // 
-            this.listBoxConfigs.FormattingEnabled = true;
-            this.listBoxConfigs.ItemHeight = 16;
-            this.listBoxConfigs.Location = new System.Drawing.Point(591, 242);
-            this.listBoxConfigs.Name = "listBoxConfigs";
-            this.listBoxConfigs.Size = new System.Drawing.Size(181, 228);
-            this.listBoxConfigs.TabIndex = 74;
+            this.materialLabel4.AutoSize = true;
+            this.materialLabel4.Depth = 0;
+            this.materialLabel4.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialLabel4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialLabel4.Location = new System.Drawing.Point(26, 98);
+            this.materialLabel4.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel4.Name = "materialLabel4";
+            this.materialLabel4.Size = new System.Drawing.Size(595, 19);
+            this.materialLabel4.TabIndex = 72;
+            this.materialLabel4.Text = "Listado de aplicaciones para potenciar el trabajo con herramientas de modelado 3D" +
+    ".";
             // 
-            // listBoxSoftware
+            // flowLayoutPanel2
             // 
-            this.listBoxSoftware.FormattingEnabled = true;
-            this.listBoxSoftware.ItemHeight = 16;
-            this.listBoxSoftware.Location = new System.Drawing.Point(778, 242);
-            this.listBoxSoftware.Name = "listBoxSoftware";
-            this.listBoxSoftware.Size = new System.Drawing.Size(234, 228);
-            this.listBoxSoftware.TabIndex = 75;
+            this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.flowLayoutPanel2.AutoScroll = true;
+            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(29, 142);
+            this.flowLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(1108, 561);
+            this.flowLayoutPanel2.TabIndex = 74;
+            this.flowLayoutPanel2.WrapContents = false;
             // 
             // MainForm
             // 
@@ -713,7 +773,7 @@ namespace MaterialSkinExample
             this.DrawerShowIconsWhenHidden = true;
             this.DrawerTabControl = this.materialTabControl1;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimumSize = new System.Drawing.Size(400, 246);
             this.Name = "MainForm";
@@ -738,6 +798,8 @@ namespace MaterialSkinExample
             this.materialTabControl1.ResumeLayout(false);
             this.tabLogs.ResumeLayout(false);
             this.tabLogs.PerformLayout();
+            this.tabPageApps2.ResumeLayout(false);
+            this.tabPageApps2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -782,5 +844,9 @@ namespace MaterialSkinExample
         private MaterialListBox materialListBoxSoftware;
         private ListBox listBoxConfigs;
         private ListBox listBoxSoftware;
+        private TabPage tabPageApps2;
+        private FlowLayoutPanel flowLayoutPanel2;
+        private MaterialLabel materialLabel3;
+        private MaterialLabel materialLabel4;
     }
 }

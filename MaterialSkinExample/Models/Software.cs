@@ -59,15 +59,4 @@ namespace PYALauncherApps.Models
         }
     }
 
-    //public class SoftwareList
-    //{
-    //    //Firebase
-    //    private JArray softwareList; // Propiedad para almacenar el JArray
-    //    public JArray ListSoftware { get => softwareList; set => softwareList = value; } // Propiedad para el JArray
-
-
-    //    //PostgreSQL
-    //    private List<Software> softwareListPQSL; // Propiedad para almacenar el JArray
-    //    public List<Software> ListSoftwarePSQL { get => softwareListPQSL; set => softwareListPQSL = value; } // Propiedad para el JArray
-    //}
 }

@@ -53,13 +53,213 @@ namespace MaterialSkinExample
             }
 
             //Inicia proceso de captura de configuraciones generales
-            EjecucionPorLapsosAsync();
+            //EjecucionPorLapsosAsync();
+            
             //New
+            _controller = new MainController(databaseService);
             InitializeTimer();
+            LoadDataAsync();
 
             Console.WriteLine("UserDomainName : " + Environment.UserDomainName);
             Console.WriteLine("UserName: {0}", Environment.UserName);
         }
+
+      
+
+        #region NUEVO
+        private readonly MainController _controller;
+        DatabaseService databaseService = new DatabaseService();
+        private Timer updateTimer;
+        private List<Config> _configs;
+        private List<Software> _softwareList;
+
+        private void InitializeTimer()
+        {
+            updateTimer = new Timer();
+            updateTimer.Interval = 10000; // 10 segundos
+            updateTimer.Tick += new EventHandler(updateTimer_TickAsync);
+            updateTimer.Start(); // Iniciar el timer
+        }
+
+        private async void updateTimer_TickAsync(object sender, EventArgs e)
+        {
+            try
+            {
+                var newConfigs = await _controller.LoadConfigs();
+                var newSoftwareList = await _controller.LoadSoftware();
+
+                bool configsChanged = !AreListsEqual(_configs, newConfigs);
+                bool softwareChanged = !AreListsEqual(_softwareList, newSoftwareList);
+
+                if (configsChanged)
+                {
+                    _configs = newConfigs;
+                    listBoxConfigs.DataSource = null;
+                    listBoxConfigs.DataSource = _configs;
+                    Console.WriteLine("La lista de configuraciones ha cambiado.");
+                }
+                else
+                {
+                    Console.WriteLine("La lista de configuraciones no ha cambiado.");
+                }
+
+                if (softwareChanged)
+                {
+                    _softwareList = newSoftwareList;
+                    listBoxSoftware.DataSource = null;
+                    listBoxSoftware.DataSource = _softwareList;
+                    Console.WriteLine("La lista de software ha cambiado.");
+                    // Crear y agregar tarjetas dinámicamente en el FlowLayoutPanel
+                    CreateCards(_softwareList);
+                }
+                else
+                {
+                    Console.WriteLine("La lista de software no ha cambiado.");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejar la excepción de manera adecuada
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+        }
+
+        private bool AreListsEqual<T>(List<T> list1, List<T> list2)
+        {
+            if (list1 == null && list2 == null) return true;
+            if (list1 == null || list2 == null) return false;
+            if (list1.Count != list2.Count) return false;
+
+            for (int i = 0; i < list1.Count; i++)
+            {
+                if (!list1[i].Equals(list2[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private async Task LoadDataAsync()
+        {
+            // Cargar los datos de la base de datos
+            _configs = await _controller.LoadConfigs();
+            _softwareList = await _controller.LoadSoftware();
+
+            // Mostrar los datos en la interfaz gráfica
+            listBoxConfigs.DataSource = _configs;
+            listBoxSoftware.DataSource = _softwareList;
+
+            // Limpiar cualquier elemento previo en las listas
+            materialListBoxConfigs.Clear();
+            materialListBoxSoftware.Clear();
+
+            // Añadir items a los listBox
+            foreach (var item in _configs)
+            {
+                materialListBoxConfigs.AddItem(item.ToString());
+            }
+
+            foreach (var item in _softwareList)
+            {
+                materialListBoxSoftware.AddItem(item.ToString());
+            }
+
+            // Crear y agregar tarjetas dinámicamente en el FlowLayoutPanel
+            CreateCards(_softwareList);
+        }
+
+        private void CreateCards(List<Software> softwareList)
+        {
+            flowLayoutPanel2.Controls.Clear(); // Limpiar cualquier control previo
+
+            foreach (var software in softwareList)
+            {
+                // Crear la tarjeta
+                MaterialCard card = new MaterialCard
+                {
+                    BackColor = System.Drawing.Color.FromArgb(255, 255, 255),
+                    Depth = 0,
+                    ForeColor = System.Drawing.Color.FromArgb(222, 0, 0, 0),
+                    Margin = new Padding(9),
+                    MouseState = MaterialSkin.MouseState.HOVER,
+                    Padding = new Padding(19, 17, 19, 17),
+                    Size = new System.Drawing.Size(526, 150),
+                    TabIndex = 70
+                };
+
+                // Crear y configurar el título
+                MaterialLabel labelTitulo = new MaterialLabel
+                {
+                    AutoSize = true,
+                    Depth = 0,
+                    Font = new System.Drawing.Font("Roboto Medium", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel),
+                    FontType = MaterialSkin.MaterialSkinManager.fontType.H6,
+                    HighEmphasis = true,
+                    Location = new System.Drawing.Point(23, 17),
+                    Margin = new Padding(4, 0, 4, 0),
+                    MouseState = MaterialSkin.MouseState.HOVER,
+                    Text = software.Name
+                };
+
+                // Crear y configurar el cuerpo
+                MaterialLabel body = new MaterialLabel
+                {
+                    Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+                    Depth = 0,
+                    Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel),
+                    Location = new System.Drawing.Point(23, 64),
+                    Margin = new Padding(4, 0, 4, 0),
+                    MouseState = MaterialSkin.MouseState.HOVER,
+                    Size = new System.Drawing.Size(340, 90),
+                    Text = software.Descripcion
+                };
+
+                // Crear y configurar el botón
+                MaterialButton button = new MaterialButton
+                {
+                    Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default,
+                    Depth = 0,
+                    HighEmphasis = true,
+                    Location = new System.Drawing.Point(427, 90),
+                    Margin = new Padding(0),
+                    MouseState = MaterialSkin.MouseState.HOVER,
+                    NoAccentTextColor = System.Drawing.Color.Empty,
+                    Size = new System.Drawing.Size(76, 36),
+                    TabIndex = 1,
+                    Text = "Instalar" // Este texto puede variar según el estado del software
+                };
+
+                // Configurar el evento Click del botón
+                button.Click += (sender, e) => ValidaDescarga(sender, e, software.UrlMsi, software.Version, software.PathFile, software.ForceInstall.ToString(), software.VerificaApp, software.AutomaticInstall.ToString(), software.PathInstall, true, software.Name);
+
+                // Agregar controles a la tarjeta
+                card.Controls.Add(labelTitulo);
+                card.Controls.Add(body);
+                card.Controls.Add(button);
+
+                // Agregar la tarjeta al FlowLayoutPanel
+                flowLayoutPanel2.Controls.Add(card);
+            }
+        }
+
+
+
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
+        #region OLD
 
         private async Task EjecucionPorLapsosAsync()
         {
@@ -1030,104 +1230,7 @@ namespace MaterialSkinExample
             //Carga datos dinamicos de la nube
             loadCardAsync();
         }
-
-
-        #region NUEVO
-        private readonly MainController _controller;
-        DatabaseService databaseService = new DatabaseService();
-        private Timer updateTimer;
-        //public readonly MaterialSkinManager materialSkinManager;
-        //private int colorSchemeIndex;
-
-        private List<Config> _configs;
-        private List<Software> _softwareList;
-        private void InitializeTimer()
-        {
-            updateTimer = new Timer();
-            updateTimer.Interval = 10000; // 10 segundos
-            updateTimer.Tick += new EventHandler(updateTimer_TickAsync);
-            updateTimer.Start(); // Iniciar el timer
-        }
-
-        private async Task LoadDataAsync()
-        {
-            _configs = await _controller.LoadConfigs();
-            _softwareList = await _controller.LoadSoftware();
-
-            // Mostrar los datos en la interfaz gráfica
-            listBoxConfigs.DataSource = _configs;
-            listBoxSoftware.DataSource = _softwareList;
-
-            foreach (var item in _configs)
-            {
-                materialListBoxConfigs.AddItem(item.ToString());
-            }
-
-            foreach (var item in _softwareList)
-            {
-                materialListBoxSoftware.AddItem(item.ToString());
-            }
-        }
-
-        private async void updateTimer_TickAsync(object sender, EventArgs e)
-        {
-            try
-            {
-                var newConfigs = await _controller.LoadConfigs();
-                var newSoftwareList = await _controller.LoadSoftware();
-
-                bool configsChanged = !AreListsEqual(_configs, newConfigs);
-                bool softwareChanged = !AreListsEqual(_softwareList, newSoftwareList);
-
-                if (configsChanged)
-                {
-                    _configs = newConfigs;
-                    listBoxConfigs.DataSource = null;
-                    listBoxConfigs.DataSource = _configs;
-                    Console.WriteLine("La lista de configuraciones ha cambiado.");
-                }
-                else
-                {
-                    Console.WriteLine("La lista de configuraciones no ha cambiado.");
-                }
-
-                if (softwareChanged)
-                {
-                    _softwareList = newSoftwareList;
-                    listBoxSoftware.DataSource = null;
-                    listBoxSoftware.DataSource = _softwareList;
-                    Console.WriteLine("La lista de software ha cambiado.");
-                }
-                else
-                {
-                    Console.WriteLine("La lista de software no ha cambiado.");
-                }
-            }
-            catch (Exception ex)
-            {
-                // Manejar la excepción de manera adecuada
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-        }
-
-        private bool AreListsEqual<T>(List<T> list1, List<T> list2)
-        {
-            if (list1 == null && list2 == null) return true;
-            if (list1 == null || list2 == null) return false;
-            if (list1.Count != list2.Count) return false;
-
-            for (int i = 0; i < list1.Count; i++)
-            {
-                if (!list1[i].Equals(list2[i]))
-                {
-                    return false;
-                }
-            }
-            return true;
-
-            #endregion
-        }
-
+        #endregion
 
     }
 }

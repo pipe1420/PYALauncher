@@ -26,8 +26,8 @@ namespace PYALauncherApps.Controllers
         public static void Initialize()
         {
             Console.WriteLine("Initialize()");
-            GetConfigAsync();
-            GetSoftwareAsync();
+            //GetConfigAsync();
+            //GetSoftwareAsync();
             OpenForm();
         }
         public static void OpenForm()
