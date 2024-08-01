@@ -184,7 +184,7 @@ namespace MaterialSkinExample
                     Margin = new Padding(9),
                     MouseState = MaterialSkin.MouseState.HOVER,
                     Padding = new Padding(19, 17, 19, 17),
-                    Size = new System.Drawing.Size(526, 150),
+                    Size = new System.Drawing.Size(650, 150),
                     TabIndex = 70
                 };
 
@@ -211,41 +211,100 @@ namespace MaterialSkinExample
                     Location = new System.Drawing.Point(23, 64),
                     Margin = new Padding(4, 0, 4, 0),
                     MouseState = MaterialSkin.MouseState.HOVER,
-                    Size = new System.Drawing.Size(340, 90),
+                    Size = new System.Drawing.Size(480, 90),
                     Text = software.Descripcion
                 };
 
-                // Crear y configurar el botón
-                MaterialButton button = new MaterialButton
+                // Crear y configurar el botón instalar
+                MaterialButton buttonInstall = new MaterialButton
                 {
                     Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-                    AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                    AutoSizeMode = AutoSizeMode.GrowOnly,
+                    AutoSize = false,
                     Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default,
                     Depth = 0,
                     HighEmphasis = true,
-                    Location = new System.Drawing.Point(427, 90),
+                    Location = new System.Drawing.Point(527, 30),
                     Margin = new Padding(0),
                     MouseState = MaterialSkin.MouseState.HOVER,
                     NoAccentTextColor = System.Drawing.Color.Empty,
-                    Size = new System.Drawing.Size(76, 36),
+                    Size = new System.Drawing.Size(100, 36),
                     TabIndex = 1,
                     Text = "Instalar" // Este texto puede variar según el estado del software
                 };
 
+                // Crear y configurar el botón instalar
+                MaterialButton buttonEdit = new MaterialButton
+                {
+                    Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                    AutoSizeMode = AutoSizeMode.GrowOnly,
+                    AutoSize = false,
+                    Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default,
+                    Depth = 0,
+                    HighEmphasis = true,
+                    Location = new System.Drawing.Point(527, 80),
+                    Margin = new Padding(0),
+                    MouseState = MaterialSkin.MouseState.HOVER,
+                    NoAccentTextColor = System.Drawing.Color.Empty,
+                    Size = new System.Drawing.Size(100, 36),
+                    TabIndex = 1,
+                    Text = "Editar" // Este texto puede variar según el estado del software
+                };
+
+                string localVersion = LocalVersionApp(software.PathInstall);
+                MaterialLabel labelVersion = new MaterialLabel
+                {
+                    AutoSize = true,
+                    Depth = 0,
+                    Enabled = false,
+                    Font = new System.Drawing.Font("Roboto Medium", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel),
+                    //FontType = MaterialSkin.MaterialSkinManager.fontType.Subtitle2,
+                    ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0))))),
+                    Location = new System.Drawing.Point(23, 43),
+                    Margin = new System.Windows.Forms.Padding(4, 0, 4, 0),
+                    MouseState = MaterialSkin.MouseState.HOVER,
+                    Size = new System.Drawing.Size(269, 17),
+                    TabIndex = 82,
+                    Text = localVersion != null ? Text = $"Version: {localVersion}" : Text = ""
+                };
+
                 // Configurar el evento Click del botón
-                button.Click += (sender, e) => ValidaDescarga(sender, e, software.UrlMsi, software.Version, software.PathFile, software.ForceInstall.ToString(), software.VerificaApp, software.AutomaticInstall.ToString(), software.PathInstall, true, software.Name);
+                buttonInstall.Click += (sender, e) => ValidaDescarga(sender, e, software.UrlMsi, software.Version, software.PathFile, software.ForceInstall.ToString(), software.VerificaApp, software.AutomaticInstall.ToString(), software.PathInstall, true, software.Name);
 
                 // Agregar controles a la tarjeta
                 card.Controls.Add(labelTitulo);
+                card.Controls.Add(labelVersion);
                 card.Controls.Add(body);
-                card.Controls.Add(button);
+                card.Controls.Add(buttonInstall);
+                card.Controls.Add(buttonEdit);
 
                 // Agregar la tarjeta al FlowLayoutPanel
                 flowLayoutPanel2.Controls.Add(card);
             }
         }
 
+        private string LocalVersionApp(string pathInstall)
+        {
+            string versionLocal;
+            try
+            {
+                if (File.Exists(pathInstall))
+                {
+                    FileVersionInfo infoArchivo = FileVersionInfo.GetVersionInfo(pathInstall);
+                    versionLocal = infoArchivo.FileVersion;
 
+                    return versionLocal;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+                Console.WriteLine("Error al verificar version local en ruta: " + pathInstall + ex);
+            }
+
+            return null;
+        }
 
 
         #endregion
@@ -290,7 +349,7 @@ namespace MaterialSkinExample
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Sincronizando...", "OK", true);
                 SnackBarMessage.Show(this);
                 // Llamar a tu método async Task aquí
-                await loadCardAsync();
+                //await loadCardAsync();
                 await Task.Delay(TimeSpan.FromSeconds(int.Parse(intervalo)));
             }
         }
@@ -322,8 +381,8 @@ namespace MaterialSkinExample
 
         private async Task loadCardAsync()
         {
-            flowLayoutPanel1.Controls.Clear();
-            listaFiltro.Items.Clear();
+            //flowLayoutPanel1.Controls.Clear();
+            //listaFiltro.Items.Clear();
 
             MaterialLabel reload = new MaterialLabel();
             reload.AutoSize = true;
@@ -338,7 +397,7 @@ namespace MaterialSkinExample
             reload.TabIndex = 69;
             reload.Text = "Cargando...";
 
-            flowLayoutPanel1.Controls.Add(reload);
+            //flowLayoutPanel1.Controls.Add(reload);
 
             JArray latestRecords = await GetAppsServer();
 
@@ -349,7 +408,7 @@ namespace MaterialSkinExample
             //JProperty latestProperty = data.Properties().Last();
             //JArray latestRecords = (JArray)latestProperty.Value;
 
-            flowLayoutPanel1.Controls.Clear();
+            //flowLayoutPanel1.Controls.Clear();
 
             materialListBoxItem13.Text = "[loadCardAsync] latestRecords " + latestRecords.Count();
             materialListBoxLogs.Items.Add(materialListBoxItem13);
@@ -459,7 +518,7 @@ namespace MaterialSkinExample
                 button.MouseState = MaterialSkin.MouseState.HOVER;
                 button.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
                 button.NoAccentTextColor = System.Drawing.Color.Empty;
-                button.Size = new System.Drawing.Size(76, 36);
+                button.Size = new System.Drawing.Size(100, 36);
                 button.TabIndex = 1;
 
                 //Agrega tags a filtro
@@ -542,7 +601,7 @@ namespace MaterialSkinExample
                 card.Controls.Add(labelVersionWeb);
                 card.Controls.Add(body);
                 card.Controls.Add(button);
-                flowLayoutPanel1.Controls.Add(card);
+                //flowLayoutPanel1.Controls.Add(card);
 
                 if (automaticInstall == "true")
                 {
@@ -598,10 +657,10 @@ namespace MaterialSkinExample
 
         private void ActualizaListaApps(object sender, EventArgs e)
         {
-            foreach (var item in listaFiltro.Items)
-            {
-                Console.WriteLine("Item Checked: " + item.Text);
-            }
+            //foreach (var item in listaFiltro.Items)
+            //{
+            //    Console.WriteLine("Item Checked: " + item.Text);
+            //}
         }
 
         public async Task ValidaDescarga(object sender, EventArgs e, string urlMsi, string version, string pathFile, string forceInstall,
@@ -927,7 +986,7 @@ namespace MaterialSkinExample
             }
             //Reaload datos dinamicos de la nube
             System.Threading.Thread.Sleep(5000);
-            loadCardAsync();
+            //loadCardAsync();
         }
 
         private void EjectutaDesinstalacion(string rutaDescarga, string software)
@@ -1041,26 +1100,7 @@ namespace MaterialSkinExample
             return (productCollection.Count > 0);
         }
 
-        private string LocalVersionApp(string pathInstall)
-        {
-            string versionLocal = "null";
-            try
-            {
-                if (File.Exists(pathInstall))
-                {
-                    FileVersionInfo infoArchivo = FileVersionInfo.GetVersionInfo(pathInstall);
-                    versionLocal = infoArchivo.FileVersion;
-
-                    return versionLocal;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error al verificar version local en ruta: " + pathInstall + ex);
-            }
-            return versionLocal;
-        }
+        
 
         public int CompararVersionApp(string pathInstall, string versionWeb)
         {
@@ -1184,7 +1224,7 @@ namespace MaterialSkinExample
         private void materialButtonReload_Click(object sender, EventArgs e)
         {
             //Carga datos dinamicos de la nube
-            loadCardAsync();
+            //loadCardAsync();
         }
 
         private void materialButton2_Click(object sender, EventArgs e)
@@ -1195,14 +1235,14 @@ namespace MaterialSkinExample
             updateColor();
         }
 
-        private void materialButton1_Click_1(object sender, EventArgs e)
-        {
+        //private void materialButton1_Click_1(object sender, EventArgs e)
+        //{
 
-            listaFiltro.Items.Clear();
-            listaFiltro.Items.Sort();
-            listaFiltro.Refresh();
-            Console.WriteLine("Filtro limpio" + listaFiltro.Items.Count);
-        }
+        //    listaFiltro.Items.Clear();
+        //    listaFiltro.Items.Sort();
+        //    listaFiltro.Refresh();
+        //    Console.WriteLine("Filtro limpio" + listaFiltro.Items.Count);
+        //}
 
         private void MainForm_Resize(object sender, EventArgs e)
         {
@@ -1228,9 +1268,10 @@ namespace MaterialSkinExample
         private void materialButton3_Click(object sender, EventArgs e)
         {
             //Carga datos dinamicos de la nube
-            loadCardAsync();
+            //loadCardAsync();
         }
         #endregion
 
+       
     }
 }

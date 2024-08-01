@@ -113,6 +113,16 @@ namespace PYALauncherApps.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap icons8_log_24 {
+            get {
+                object obj = ResourceManager.GetObject("icons8_log_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Logo_horizontal_Definitivo_2__removebg_preview {
             get {
                 object obj = ResourceManager.GetObject("Logo_horizontal_Definitivo_2_-removebg-preview", resourceCulture);
