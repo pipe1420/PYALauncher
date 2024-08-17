@@ -46,10 +46,8 @@ namespace MaterialSkinExample
             this.tabPageLogs = new System.Windows.Forms.TabPage();
             this.labelTitleHistory = new MaterialSkin.Controls.MaterialLabel();
             this.labelSubTitleHistory = new MaterialSkin.Controls.MaterialLabel();
-            this.buttonRefreshHistory = new MaterialSkin.Controls.MaterialButton();
             this.materialListBoxLogs = new MaterialSkin.Controls.MaterialListBox();
             this.tabPageApps = new System.Windows.Forms.TabPage();
-            this.buttonAppsRefresh = new MaterialSkin.Controls.MaterialButton();
             this.materialButtonAddSoftware = new MaterialSkin.Controls.MaterialButton();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.labelTitleApps = new MaterialSkin.Controls.MaterialLabel();
@@ -61,7 +59,6 @@ namespace MaterialSkinExample
             this.materialListBoxConfigs = new MaterialSkin.Controls.MaterialListBox();
             this.materialCard1 = new MaterialSkin.Controls.MaterialCard();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.materialCard7 = new MaterialSkin.Controls.MaterialCard();
             this.materialButton32 = new MaterialSkin.Controls.MaterialButton();
             this.materialLabel67 = new MaterialSkin.Controls.MaterialLabel();
@@ -73,15 +70,18 @@ namespace MaterialSkinExample
             this.materialLabel61 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel62 = new MaterialSkin.Controls.MaterialLabel();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.buttonAppsRefresh = new MaterialSkin.Controls.MaterialButton();
+            this.buttonRefreshHistory = new MaterialSkin.Controls.MaterialButton();
             this.tabPageConfig.SuspendLayout();
             this.tabPageLogs.SuspendLayout();
             this.tabPageApps.SuspendLayout();
             this.tabPageInicio.SuspendLayout();
             this.materialCard1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.materialCard7.SuspendLayout();
             this.materialCard5.SuspendLayout();
             this.materialTabControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuIconList
@@ -216,8 +216,8 @@ namespace MaterialSkinExample
             this.tabPageLogs.BackColor = System.Drawing.Color.White;
             this.tabPageLogs.Controls.Add(this.labelTitleHistory);
             this.tabPageLogs.Controls.Add(this.labelSubTitleHistory);
-            this.tabPageLogs.Controls.Add(this.buttonRefreshHistory);
             this.tabPageLogs.Controls.Add(this.materialListBoxLogs);
+            this.tabPageLogs.Controls.Add(this.buttonRefreshHistory);
             this.tabPageLogs.ImageKey = "round_bookmark_white_24dp.png";
             this.tabPageLogs.Location = new System.Drawing.Point(4, 31);
             this.tabPageLogs.Margin = new System.Windows.Forms.Padding(2);
@@ -254,26 +254,6 @@ namespace MaterialSkinExample
             this.labelSubTitleHistory.TabIndex = 88;
             this.labelSubTitleHistory.Text = "Registros de movimientos de descargas, instalaciones, actualizaciones y otros.";
             // 
-            // buttonRefreshHistory
-            // 
-            this.buttonRefreshHistory.AutoSize = false;
-            this.buttonRefreshHistory.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonRefreshHistory.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.buttonRefreshHistory.Depth = 0;
-            this.buttonRefreshHistory.HighEmphasis = true;
-            this.buttonRefreshHistory.Icon = global::PYALauncherApps.Properties.Resources.outline_sync_white_24dp;
-            this.buttonRefreshHistory.Location = new System.Drawing.Point(779, 80);
-            this.buttonRefreshHistory.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.buttonRefreshHistory.MouseState = MaterialSkin.MouseState.HOVER;
-            this.buttonRefreshHistory.Name = "buttonRefreshHistory";
-            this.buttonRefreshHistory.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonRefreshHistory.Size = new System.Drawing.Size(39, 39);
-            this.buttonRefreshHistory.TabIndex = 87;
-            this.buttonRefreshHistory.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.buttonRefreshHistory.UseAccentColor = false;
-            this.buttonRefreshHistory.UseVisualStyleBackColor = true;
-            this.buttonRefreshHistory.Click += new System.EventHandler(this.materialButton3_Click);
-            // 
             // materialListBoxLogs
             // 
             this.materialListBoxLogs.BackColor = System.Drawing.Color.White;
@@ -304,25 +284,6 @@ namespace MaterialSkinExample
             this.tabPageApps.Size = new System.Drawing.Size(938, 612);
             this.tabPageApps.TabIndex = 12;
             this.tabPageApps.Text = "Aplicaciones";
-            // 
-            // buttonAppsRefresh
-            // 
-            this.buttonAppsRefresh.AutoSize = false;
-            this.buttonAppsRefresh.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonAppsRefresh.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.buttonAppsRefresh.Depth = 0;
-            this.buttonAppsRefresh.HighEmphasis = true;
-            this.buttonAppsRefresh.Icon = global::PYALauncherApps.Properties.Resources.outline_sync_white_24dp;
-            this.buttonAppsRefresh.Location = new System.Drawing.Point(770, 79);
-            this.buttonAppsRefresh.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.buttonAppsRefresh.MouseState = MaterialSkin.MouseState.HOVER;
-            this.buttonAppsRefresh.Name = "buttonAppsRefresh";
-            this.buttonAppsRefresh.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonAppsRefresh.Size = new System.Drawing.Size(39, 39);
-            this.buttonAppsRefresh.TabIndex = 76;
-            this.buttonAppsRefresh.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.buttonAppsRefresh.UseAccentColor = false;
-            this.buttonAppsRefresh.UseVisualStyleBackColor = true;
             // 
             // materialButtonAddSoftware
             // 
@@ -483,18 +444,6 @@ namespace MaterialSkinExample
             this.materialLabel1.TabIndex = 0;
             this.materialLabel1.Text = "Feed List";
             this.materialLabel1.UseMnemonic = false;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::PYALauncherApps.Properties.Resources.Logo_horizontal_Definitivo_2__removebg_preview;
-            this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(443, 22);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(394, 104);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 71;
-            this.pictureBox1.TabStop = false;
             // 
             // materialCard7
             // 
@@ -673,6 +622,57 @@ namespace MaterialSkinExample
             this.materialTabControl1.Size = new System.Drawing.Size(946, 647);
             this.materialTabControl1.TabIndex = 18;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::PYALauncherApps.Properties.Resources.Logo_horizontal_Definitivo_2__removebg_preview;
+            this.pictureBox1.InitialImage = null;
+            this.pictureBox1.Location = new System.Drawing.Point(443, 22);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(394, 104);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 71;
+            this.pictureBox1.TabStop = false;
+            // 
+            // buttonAppsRefresh
+            // 
+            this.buttonAppsRefresh.AutoSize = false;
+            this.buttonAppsRefresh.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.buttonAppsRefresh.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.buttonAppsRefresh.Depth = 0;
+            this.buttonAppsRefresh.HighEmphasis = true;
+            this.buttonAppsRefresh.Icon = global::PYALauncherApps.Properties.Resources.outline_sync_white_24dp;
+            this.buttonAppsRefresh.Location = new System.Drawing.Point(770, 79);
+            this.buttonAppsRefresh.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.buttonAppsRefresh.MouseState = MaterialSkin.MouseState.HOVER;
+            this.buttonAppsRefresh.Name = "buttonAppsRefresh";
+            this.buttonAppsRefresh.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.buttonAppsRefresh.Size = new System.Drawing.Size(39, 39);
+            this.buttonAppsRefresh.TabIndex = 76;
+            this.buttonAppsRefresh.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.buttonAppsRefresh.UseAccentColor = false;
+            this.buttonAppsRefresh.UseVisualStyleBackColor = true;
+            // 
+            // buttonRefreshHistory
+            // 
+            this.buttonRefreshHistory.AutoSize = false;
+            this.buttonRefreshHistory.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.buttonRefreshHistory.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.buttonRefreshHistory.Depth = 0;
+            this.buttonRefreshHistory.HighEmphasis = true;
+            this.buttonRefreshHistory.Icon = global::PYALauncherApps.Properties.Resources.outline_sync_white_24dp;
+            this.buttonRefreshHistory.Location = new System.Drawing.Point(779, 80);
+            this.buttonRefreshHistory.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.buttonRefreshHistory.MouseState = MaterialSkin.MouseState.HOVER;
+            this.buttonRefreshHistory.Name = "buttonRefreshHistory";
+            this.buttonRefreshHistory.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.buttonRefreshHistory.Size = new System.Drawing.Size(39, 39);
+            this.buttonRefreshHistory.TabIndex = 87;
+            this.buttonRefreshHistory.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.buttonRefreshHistory.UseAccentColor = false;
+            this.buttonRefreshHistory.UseVisualStyleBackColor = true;
+            this.buttonRefreshHistory.Click += new System.EventHandler(this.materialButton3_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -700,12 +700,12 @@ namespace MaterialSkinExample
             this.tabPageInicio.PerformLayout();
             this.materialCard1.ResumeLayout(false);
             this.materialCard1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.materialCard7.ResumeLayout(false);
             this.materialCard7.PerformLayout();
             this.materialCard5.ResumeLayout(false);
             this.materialCard5.PerformLayout();
             this.materialTabControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }

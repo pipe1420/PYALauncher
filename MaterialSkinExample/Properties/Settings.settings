@@ -12,7 +12,7 @@
       <Value Profile="(Default)">administrador</Value>
     </Setting>
     <Setting Name="password" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">InsodEp&amp;a8094</Value>
+      <Value Profile="(Default)">admin</Value>
     </Setting>
   </Settings>
 </SettingsFile>

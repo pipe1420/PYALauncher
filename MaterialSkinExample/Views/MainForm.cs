@@ -14,6 +14,7 @@ using PYALauncherApps.Models;
 using System.Collections.Generic;
 using PYALauncherApps.Controllers;
 using PYALauncherApps.Services;
+using PYALauncherApps.Views;
 
 namespace MaterialSkinExample
 {
@@ -270,6 +271,8 @@ namespace MaterialSkinExample
 
                 // Configurar el evento Click del botón
                 buttonInstall.Click += (sender, e) => ValidaDescarga(sender, e, software.UrlMsi, software.Version, software.PathFile, software.ForceInstall.ToString(), software.VerificaApp, software.AutomaticInstall.ToString(), software.PathInstall, true, software.Name);
+                buttonEdit.Click += new EventHandler(AddEdit_Click);
+
 
                 // Agregar controles a la tarjeta
                 card.Controls.Add(labelTitulo);
@@ -306,6 +309,13 @@ namespace MaterialSkinExample
             return null;
         }
 
+
+        // Método que se ejecuta al hacer clic en el botón
+        private void AddEdit_Click(object sender, EventArgs e)
+        {
+            AddEditForm _addEditForm = new AddEditForm();
+            _addEditForm.ShowDialog();
+    }
 
         #endregion
 
@@ -1270,6 +1280,7 @@ namespace MaterialSkinExample
             //Carga datos dinamicos de la nube
             //loadCardAsync();
         }
+
         #endregion
 
        
