@@ -4,7 +4,9 @@ using System.Windows.Forms;
 using Microsoft.Extensions.DependencyInjection;
 using PYALauncherApps;
 using PYALauncherApps.Controllers;
+using PYALauncherApps.Models;
 using PYALauncherApps.Services;
+using PYALauncherApps.Views;
 
 namespace MaterialSkinExample
 {
@@ -23,9 +25,10 @@ namespace MaterialSkinExample
             var mainForm = serviceProvider.GetRequiredService<MainForm>();
 
             mainController.SetMainForm(mainForm);
+            await mainController.OpenForm();
 
             // Iniciar la aplicación
-            await mainController.OpenForm();
+            //Application.Run(mainForm);
 
         }
 
@@ -33,10 +36,13 @@ namespace MaterialSkinExample
         {
             // Registrar servicios y componentes
             services.AddSingleton<DatabaseService>();
+            services.AddSingleton<SoftwareModel>();
+            services.AddSingleton<SoftwareService>(); 
             services.AddSingleton<MainController>();
             services.AddSingleton<MainForm>();
-            services.AddSingleton<MainMenu>();
-            
+            //services.AddSingleton<MainMenu>();
+            services.AddScoped<AddEditForm>();
+
 
 
             /* Casos Inyección de dependencias 

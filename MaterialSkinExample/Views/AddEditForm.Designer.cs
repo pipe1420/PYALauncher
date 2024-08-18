@@ -36,10 +36,10 @@
             this.txtDescrip = new MaterialSkin.Controls.MaterialTextBox();
             this.cbxActions = new MaterialSkin.Controls.MaterialComboBox();
             this.cbxModality = new MaterialSkin.Controls.MaterialComboBox();
-            this.txtListMachines = new MaterialSkin.Controls.MaterialTextBox();
-            this.btnLoadMachines = new MaterialSkin.Controls.MaterialButton();
             this.txtInstaller = new MaterialSkin.Controls.MaterialTextBox();
-            this.btnLoadInstaller = new MaterialSkin.Controls.MaterialButton();
+            this.dataGridViewMachines = new System.Windows.Forms.DataGridView();
+            this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMachines)).BeginInit();
             this.SuspendLayout();
             // 
             // labelTitle
@@ -93,7 +93,7 @@
             this.btnSave.Depth = 0;
             this.btnSave.HighEmphasis = true;
             this.btnSave.Icon = null;
-            this.btnSave.Location = new System.Drawing.Point(420, 535);
+            this.btnSave.Location = new System.Drawing.Point(420, 706);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnSave.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnSave.Name = "btnSave";
@@ -114,7 +114,7 @@
             this.btnDelete.Depth = 0;
             this.btnDelete.HighEmphasis = true;
             this.btnDelete.Icon = null;
-            this.btnDelete.Location = new System.Drawing.Point(53, 535);
+            this.btnDelete.Location = new System.Drawing.Point(28, 706);
             this.btnDelete.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnDelete.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnDelete.Name = "btnDelete";
@@ -164,7 +164,7 @@
             "Instalación",
             "Actualización",
             "Desinstalación"});
-            this.cbxActions.Location = new System.Drawing.Point(28, 413);
+            this.cbxActions.Location = new System.Drawing.Point(28, 344);
             this.cbxActions.MaxDropDownItems = 4;
             this.cbxActions.MouseState = MaterialSkin.MouseState.OUT;
             this.cbxActions.Name = "cbxActions";
@@ -191,7 +191,7 @@
             "Manual",
             "Automática",
             "Forzada"});
-            this.cbxModality.Location = new System.Drawing.Point(306, 413);
+            this.cbxModality.Location = new System.Drawing.Point(306, 344);
             this.cbxModality.MaxDropDownItems = 4;
             this.cbxModality.MouseState = MaterialSkin.MouseState.OUT;
             this.cbxModality.Name = "cbxModality";
@@ -199,92 +199,52 @@
             this.cbxModality.StartIndex = 0;
             this.cbxModality.TabIndex = 47;
             // 
-            // txtListMachines
-            // 
-            this.txtListMachines.AnimateReadOnly = false;
-            this.txtListMachines.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtListMachines.Depth = 0;
-            this.txtListMachines.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txtListMachines.Hint = "Listado de equipos";
-            this.txtListMachines.LeadingIcon = null;
-            this.txtListMachines.Location = new System.Drawing.Point(28, 288);
-            this.txtListMachines.MaxLength = 50;
-            this.txtListMachines.MouseState = MaterialSkin.MouseState.OUT;
-            this.txtListMachines.Multiline = false;
-            this.txtListMachines.Name = "txtListMachines";
-            this.txtListMachines.Size = new System.Drawing.Size(490, 50);
-            this.txtListMachines.TabIndex = 48;
-            this.txtListMachines.Text = "";
-            this.txtListMachines.TrailingIcon = null;
-            // 
-            // btnLoadMachines
-            // 
-            this.btnLoadMachines.AutoSize = false;
-            this.btnLoadMachines.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnLoadMachines.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btnLoadMachines.Depth = 0;
-            this.btnLoadMachines.HighEmphasis = true;
-            this.btnLoadMachines.Icon = null;
-            this.btnLoadMachines.Location = new System.Drawing.Point(525, 288);
-            this.btnLoadMachines.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnLoadMachines.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnLoadMachines.Name = "btnLoadMachines";
-            this.btnLoadMachines.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnLoadMachines.Size = new System.Drawing.Size(53, 50);
-            this.btnLoadMachines.TabIndex = 49;
-            this.btnLoadMachines.Text = "...";
-            this.btnLoadMachines.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btnLoadMachines.UseAccentColor = false;
-            this.btnLoadMachines.UseVisualStyleBackColor = true;
-            this.btnLoadMachines.Click += new System.EventHandler(this.btnLoadMachines_Click);
-            // 
             // txtInstaller
             // 
             this.txtInstaller.AnimateReadOnly = false;
             this.txtInstaller.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtInstaller.Depth = 0;
             this.txtInstaller.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txtInstaller.Hint = "Instalador MSI";
+            this.txtInstaller.Hint = "URL MSI";
             this.txtInstaller.LeadingIcon = null;
-            this.txtInstaller.Location = new System.Drawing.Point(28, 344);
+            this.txtInstaller.Location = new System.Drawing.Point(28, 288);
             this.txtInstaller.MaxLength = 50;
             this.txtInstaller.MouseState = MaterialSkin.MouseState.OUT;
             this.txtInstaller.Multiline = false;
             this.txtInstaller.Name = "txtInstaller";
-            this.txtInstaller.Size = new System.Drawing.Size(490, 50);
+            this.txtInstaller.Size = new System.Drawing.Size(550, 50);
             this.txtInstaller.TabIndex = 50;
             this.txtInstaller.Text = "";
             this.txtInstaller.TrailingIcon = null;
             // 
-            // btnLoadInstaller
+            // dataGridViewMachines
             // 
-            this.btnLoadInstaller.AutoSize = false;
-            this.btnLoadInstaller.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnLoadInstaller.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btnLoadInstaller.Depth = 0;
-            this.btnLoadInstaller.HighEmphasis = true;
-            this.btnLoadInstaller.Icon = null;
-            this.btnLoadInstaller.Location = new System.Drawing.Point(525, 344);
-            this.btnLoadInstaller.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnLoadInstaller.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnLoadInstaller.Name = "btnLoadInstaller";
-            this.btnLoadInstaller.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnLoadInstaller.Size = new System.Drawing.Size(53, 50);
-            this.btnLoadInstaller.TabIndex = 51;
-            this.btnLoadInstaller.Text = "...";
-            this.btnLoadInstaller.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btnLoadInstaller.UseAccentColor = false;
-            this.btnLoadInstaller.UseVisualStyleBackColor = true;
+            this.dataGridViewMachines.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewMachines.Location = new System.Drawing.Point(28, 438);
+            this.dataGridViewMachines.Name = "dataGridViewMachines";
+            this.dataGridViewMachines.Size = new System.Drawing.Size(550, 227);
+            this.dataGridViewMachines.TabIndex = 52;
+            // 
+            // materialLabel1
+            // 
+            this.materialLabel1.Depth = 0;
+            this.materialLabel1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialLabel1.Location = new System.Drawing.Point(28, 407);
+            this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel1.Name = "materialLabel1";
+            this.materialLabel1.Size = new System.Drawing.Size(550, 28);
+            this.materialLabel1.TabIndex = 53;
+            this.materialLabel1.Text = "Listado de equipos";
             // 
             // AddEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(630, 632);
-            this.Controls.Add(this.btnLoadInstaller);
+            this.ClientSize = new System.Drawing.Size(625, 776);
+            this.Controls.Add(this.materialLabel1);
+            this.Controls.Add(this.dataGridViewMachines);
             this.Controls.Add(this.txtInstaller);
-            this.Controls.Add(this.btnLoadMachines);
-            this.Controls.Add(this.txtListMachines);
             this.Controls.Add(this.cbxModality);
             this.Controls.Add(this.cbxActions);
             this.Controls.Add(this.txtDescrip);
@@ -299,6 +259,7 @@
             this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Agregar / Editar";
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMachines)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -314,9 +275,8 @@
         private MaterialSkin.Controls.MaterialTextBox txtDescrip;
         private MaterialSkin.Controls.MaterialComboBox cbxActions;
         private MaterialSkin.Controls.MaterialComboBox cbxModality;
-        private MaterialSkin.Controls.MaterialTextBox txtListMachines;
-        private MaterialSkin.Controls.MaterialButton btnLoadMachines;
         private MaterialSkin.Controls.MaterialTextBox txtInstaller;
-        private MaterialSkin.Controls.MaterialButton btnLoadInstaller;
+        private System.Windows.Forms.DataGridView dataGridViewMachines;
+        private MaterialSkin.Controls.MaterialLabel materialLabel1;
     }
 }

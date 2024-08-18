@@ -25,12 +25,13 @@ namespace PYALauncherApps
         MaterialSkin.MaterialListBoxItem materialListBoxItem13 = new MaterialSkin.MaterialListBoxItem();
         private readonly MainController _mainController;
         private DatabaseService _databaseService;
+        private AddEditForm _addEditForm;
         private Timer updateTimer;
         private List<Config> _configs;
         private List<Software> _softwareList;
+        private readonly SoftwareService _softwareService;
 
-
-        public MainForm(DatabaseService databaseService, MainController mainController)
+        public MainForm(DatabaseService databaseService, MainController mainController, AddEditForm addEditForm, SoftwareService softwareService)
         {
             InitializeComponent();
 
@@ -61,10 +62,11 @@ namespace PYALauncherApps
 
             _databaseService = databaseService;
             _mainController = mainController;
-
+            _addEditForm = addEditForm;
+            _softwareService = softwareService;
         }
 
-      
+
 
         #region NUEVO
         public async Task InitializeAsync()
@@ -83,7 +85,7 @@ namespace PYALauncherApps
         private void InitializeTimer()
         {
             updateTimer = new Timer();
-            updateTimer.Interval = 10000; // 10 segundos
+            updateTimer.Interval = 30000; // 10 segundos
             updateTimer.Tick += new EventHandler(async (sender, e) => await UpdateSoftwareListAsync());
             updateTimer.Start(); // Iniciar el timer
         }
@@ -328,12 +330,33 @@ namespace PYALauncherApps
         // Método que se ejecuta al hacer clic en el botón
         private void AddEdit_Click(object sender, EventArgs e)
         {
+            if (InvokeRequired)
+            {
+                Invoke(new Action<object, EventArgs>(AddEdit_Click), sender, e);
+                return;
+            }
+
             Button button = (Button)sender;
             string btnAcessibleName = button.AccessibleName;
 
-            AddEditForm _addEditForm = new AddEditForm(btnAcessibleName, _softwareList, _databaseService);
-            _addEditForm.ShowDialog();
+            _softwareService.SetSoftwareList(_softwareList);
+            _softwareService.SetSoftwareName(button.AccessibleName);
+
+            //AddEditForm _addEditForm = new AddEditForm(model);
+            //_addEditForm.ShowDialog();
+
+            _addEditForm.InitializeAsync();
+            
+
+            Console.WriteLine("SoftwareName: " + button.AccessibleName); // Datos recibidos
         }
+
+        private void OnDataReceived(string data)
+        {
+            // Aquí recibes los datos del segundo formulario
+            Console.WriteLine("Datos recibidos: " + data);
+        }
+
 
         private async Task UpdateSoftwareListAsync()
         {

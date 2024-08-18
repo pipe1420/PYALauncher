@@ -25,7 +25,8 @@ namespace PYALauncherApps.Models
         public string[] Grupos { get; set; }
         public bool Hidden { get; set; }
         public int Actions { get; set; }
-        public List<string> Machines { get; set; } // 'machines' (jsonb)
+        //public List<string> Machines { get; set; } // 'machines' (jsonb)
+        public Dictionary<string, Machine> Machines { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -66,6 +67,8 @@ namespace PYALauncherApps.Models
         {
             public static string SelectedApp { get; set; }
         }
+
+     
     }
 
 }
