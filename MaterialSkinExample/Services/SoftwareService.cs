@@ -129,5 +129,22 @@ namespace PYALauncherApps.Services
             }
         }
 
+        public async Task<bool> DeleteSoftware(int id)
+        {
+            bool result = await _databaseService.DeleteSoftware(id);
+
+            if (result)
+            {
+                // Opcional: Remover el software eliminado de la lista en memoria, si es que la estás usando
+                var softwareToRemove = _softwareModel.SoftwareList.FirstOrDefault(s => s.Id == id);
+                if (softwareToRemove != null)
+                {
+                    _softwareModel.SoftwareList.Remove(softwareToRemove);
+                }
+            }
+
+            return result;
+        }
+
     }
 }

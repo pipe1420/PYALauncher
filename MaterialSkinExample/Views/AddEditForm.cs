@@ -68,9 +68,12 @@ namespace PYALauncherApps.Views
 
         public async Task InitializeAsync()
         {
+            // Inicializar las columnas del DataGridView
+            InitializeDataGridViewColumns();
 
             if (_softwareService.GetSoftwareList() != null)
             {
+                //Edicion de app
                 this._btnAcessibleName = _softwareService.GetSoftwareName();
                 this._softwareList = _softwareService.GetSoftwareList();
 
@@ -82,9 +85,15 @@ namespace PYALauncherApps.Views
                 }
                 else
                 {
-                    MessageBox.Show("Aplicacion no encontrada!", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Aplicación no encontrada!", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     this.Dispose();
                 }
+            }
+            else
+            {
+                // Si es una nueva aplicación, muestra el formulario sin datos pero con las columnas listas
+                dataGridViewMachines.DataSource = new BindingList<MachineDisplayItem>();
+                this.ShowDialog();
             }
 
         }
@@ -112,8 +121,10 @@ namespace PYALauncherApps.Views
 
             //var softwareFind = _softwareService.FindSoftware(software.SoftwareName);
             txtName.Text = software.SoftwareName;
-            txtDescrip.Text = software.Descripcion;
-            txtInstaller.Text = software.UrlMsi;
+            multiLineDescrip.Text = software.Descripcion;
+            multiLineURLMSI.Text = software.UrlMsi;
+            multiLinePathDll.Text = software.PathFile;
+            txtVersion.Text = software.Version; 
             cbxActions.SelectedIndex = 0;
 
             /* Acciones de la aplicacion
@@ -201,13 +212,22 @@ namespace PYALauncherApps.Views
             Invalidate();
         }
 
-        private void btnDelete_Click(object sender, EventArgs e)
+        private async void btnDelete_Click(object sender, EventArgs e)
         {
-            var result = MessageBox.Show("¿Esta seguro que desea eliminar la aplicación?", "Eliminar Aplicación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            var result = MessageBox.Show("¿Está seguro que desea eliminar la aplicación?", "Eliminar Aplicación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                MessageBox.Show("Aplicacion eliminada!", "Eliminar Aplicación", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Dispose();
+                bool deleteResult = await _softwareService.DeleteSoftware(softwareTemp.Id);
+
+                if (deleteResult)
+                {
+                    MessageBox.Show("Aplicación eliminada!", "Eliminar Aplicación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.Close();
+                }
+                else
+                {
+                    MessageBox.Show("Error al eliminar la aplicación.", "Eliminar Aplicación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -222,15 +242,15 @@ namespace PYALauncherApps.Views
                     var UpdateSoftware = new Software
                     {
                         Id = softwareTemp.Id, // Asumiendo que el campo 'Id' es serial y se autogenera en la base de datos
-                        Descripcion = txtDescrip.Text,
+                        Descripcion = multiLineDescrip.Text,
                         Imagen = "img",
-                        PathInstall = "asd2",
+                        PathInstall = multiLinePathDll.Text,
                         SoftwareName = txtName.Text,
                         Tag = "tag",
-                        UrlMsi = txtInstaller.Text,
-                        VerificaApp = "test",
-                        Version = "1.0.0",
-                        PathFile = @"c:\ubicacion\app.dll",
+                        UrlMsi = multiLineURLMSI.Text,
+                        VerificaApp = txtProcessVerificaApp.Text,
+                        Version = txtVersion.Text,
+                        PathFile = @multiLinePathDll.Text,
                         ForceInstall = cbxModality.SelectedIndex == 2 ? true : false,
                         AutomaticInstall = cbxActions.SelectedIndex == 1 ? true : false,
                         Guid = Guid.NewGuid().ToString(), // Genera un nuevo GUID
@@ -247,7 +267,7 @@ namespace PYALauncherApps.Views
                     {
                         // La operación fue exitosa
                         MessageBox.Show("Cambios guardados!", "Agregar / Editar Aplicación", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                        this.Dispose();
+                        this.Close();
                     }
                     else
                     {
@@ -268,16 +288,14 @@ namespace PYALauncherApps.Views
         {
             return _softwareList.Find(software => software.SoftwareName.Equals(name, StringComparison.OrdinalIgnoreCase));
         }
-       
+
         // Método para cargar las máquinas en el DataGridView
         private async void LoadMachines(string softwareName)
         {
-            // Espera a que LoadSoftwareMachines termine y obtén las máquinas
             var software = await _softwareService.FindSoftware(softwareName);
 
             if (software != null && software.Machines != null)
             {
-                // Convertimos el diccionario en una lista para mostrar en el DataGridView
                 var machineList = software.Machines.Select(m => new MachineDisplayItem
                 {
                     MachineKey = m.Key,
@@ -285,13 +303,42 @@ namespace PYALauncherApps.Views
                     User = m.Value.User
                 }).ToList();
 
-                // Asigna la lista al DataGridView
                 dataGridViewMachines.DataSource = new BindingList<MachineDisplayItem>(machineList);
             }
             else
             {
+                // Si no se encontraron máquinas, asignar una lista vacía pero con columnas definidas
+                dataGridViewMachines.DataSource = new BindingList<MachineDisplayItem>();
                 MessageBox.Show("No se encontraron máquinas para este software.");
             }
+        }
+
+        private void InitializeDataGridViewColumns()
+        {
+            // Limpiar columnas existentes
+            dataGridViewMachines.Columns.Clear();
+
+            // Agregar columnas manualmente
+            dataGridViewMachines.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "MachineKey",
+                HeaderText = "MachineKey",
+                DataPropertyName = "MachineKey"
+            });
+
+            dataGridViewMachines.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Name",
+                HeaderText = "Name",
+                DataPropertyName = "Name"
+            });
+
+            dataGridViewMachines.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "User",
+                HeaderText = "User",
+                DataPropertyName = "User"
+            });
         }
 
         private Dictionary<string, Machine> GetMachinesFromDataGridView()
@@ -317,6 +364,11 @@ namespace PYALauncherApps.Views
             }
 
             return machines;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Close();          
         }
     }
 }

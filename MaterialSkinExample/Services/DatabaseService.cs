@@ -212,6 +212,30 @@ namespace PYALauncherApps.Services
             return softwareItem;
         }
 
+        public async Task<bool> DeleteSoftware(int id)
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+                    using (var command = new NpgsqlCommand("DELETE FROM pya_apps.software WHERE id = @id", connection))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+
+                        int rowsAffected = await command.ExecuteNonQueryAsync();
+
+                        return rowsAffected > 0; // Retorna true si al menos una fila fue afectada (software eliminado)
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejar o registrar la excepción
+                Debug.WriteLine($"Error al eliminar el software: {ex.Message}");
+                return false; // Retorna false si hubo un fallo
+            }
+        }
 
 
 

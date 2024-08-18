@@ -344,6 +344,7 @@ namespace PYALauncherApps
             this.materialButtonAddSoftware.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.materialButtonAddSoftware.UseAccentColor = false;
             this.materialButtonAddSoftware.UseVisualStyleBackColor = true;
+            this.materialButtonAddSoftware.Click += new System.EventHandler(this.materialButtonAddSoftware_Click);
             // 
             // flowLayoutPanel2
             // 

@@ -1422,5 +1422,10 @@ namespace PYALauncherApps
         {
             ReloadApps();
         }
+
+        private void materialButtonAddSoftware_Click(object sender, EventArgs e)
+        {
+            _addEditForm.InitializeAsync();
+        }
     }
 }
