@@ -267,9 +267,27 @@ namespace PYALauncherApps
                     TabIndex = 82,
                     Text = localVersion != null ? Text = $"Version: {localVersion}" : Text = ""                    
                 };
-                string ejemplo = "Asd";
+
+                // Verificar si el software ya está instalado y actualizar el texto del botón
+                if (VerificaInstalacion(software.PathInstall))
+                {
+                    buttonInstall.Text = "Instalado";
+                    buttonInstall.Enabled = false;
+                }
+
                 // Configurar el evento Click del botón
-                buttonInstall.Click += (sender, e) => ValidaDescarga(sender, e, software.UrlMsi, software.Version, software.PathFile, software.ForceInstall.ToString(), software.VerificaApp, software.AutomaticInstall.ToString(), software.PathInstall, true, software.SoftwareName);
+                buttonInstall.Click += async (sender, e) =>
+                {
+                    // Aquí llamas al método de instalación
+                    ValidaDescarga(sender, e, software.UrlMsi, software.Version, software.PathFile, software.ForceInstall.ToString(), software.VerificaApp, software.AutomaticInstall.ToString(), software.PathInstall, true, software.SoftwareName);
+
+                    // Después de la instalación, verifica de nuevo el estado e actualiza el botón
+                    if (VerificaInstalacion(software.PathInstall))
+                    {
+                        buttonInstall.Text = "Instalado";
+                        buttonInstall.Enabled = false;
+                    }
+                };
                 buttonEdit.Click += new EventHandler(AddEdit_Click);
 
 
@@ -282,6 +300,8 @@ namespace PYALauncherApps
 
                 // Agregar la tarjeta al FlowLayoutPanel
                 flowLayoutPanel2.Controls.Add(card);
+
+
             }
         }
 
@@ -1255,8 +1275,12 @@ namespace PYALauncherApps
             //loadCardAsync();
         }
 
+
         #endregion
 
-       
+        private void buttonAppsRefresh_Click(object sender, EventArgs e)
+        {
+            updateTimer_TickAsync(sender, e);
+        }
     }
 }
