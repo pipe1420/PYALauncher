@@ -212,7 +212,7 @@
             this.txtListMachines.MouseState = MaterialSkin.MouseState.OUT;
             this.txtListMachines.Multiline = false;
             this.txtListMachines.Name = "txtListMachines";
-            this.txtListMachines.Size = new System.Drawing.Size(504, 50);
+            this.txtListMachines.Size = new System.Drawing.Size(490, 50);
             this.txtListMachines.TabIndex = 48;
             this.txtListMachines.Text = "";
             this.txtListMachines.TrailingIcon = null;
@@ -236,6 +236,7 @@
             this.btnLoadMachines.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btnLoadMachines.UseAccentColor = false;
             this.btnLoadMachines.UseVisualStyleBackColor = true;
+            this.btnLoadMachines.Click += new System.EventHandler(this.btnLoadMachines_Click);
             // 
             // txtInstaller
             // 
@@ -250,7 +251,7 @@
             this.txtInstaller.MouseState = MaterialSkin.MouseState.OUT;
             this.txtInstaller.Multiline = false;
             this.txtInstaller.Name = "txtInstaller";
-            this.txtInstaller.Size = new System.Drawing.Size(504, 50);
+            this.txtInstaller.Size = new System.Drawing.Size(490, 50);
             this.txtInstaller.TabIndex = 50;
             this.txtInstaller.Text = "";
             this.txtInstaller.TrailingIcon = null;
@@ -295,6 +296,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AddEditForm";
+            this.Sizable = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Agregar / Editar";
             this.ResumeLayout(false);

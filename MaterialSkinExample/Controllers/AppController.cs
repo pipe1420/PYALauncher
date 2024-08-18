@@ -19,7 +19,7 @@ namespace PYALauncherApps.Controllers
 
         #region OLD
         private static SoftwareService _serviceSoftware = new SoftwareService();
-        private static MainForm _formulario = new MainForm();
+        //private static MainForm _formulario = new MainForm();
         private static List<Config> _configList = new List<Config>();
         private static List<Software> _softwareList = new List<Software>();
 
@@ -34,7 +34,7 @@ namespace PYALauncherApps.Controllers
         {
             Console.WriteLine("OpenForm()");
             //EjecucionPorLapsosAsync();
-            _formulario.ShowDialog();
+            //_formulario.ShowDialog();
         }
 
         public static void GetConfigAsync()

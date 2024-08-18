@@ -13,7 +13,7 @@ namespace PYALauncherApps.Models
         public string Descripcion { get; set; }
         public string Imagen { get; set; }
         public string PathInstall { get; set; }
-        public string Name { get; set; }
+        public string SoftwareName { get; set; }
         public string Tag { get; set; }
         public string UrlMsi { get; set; }
         public string VerificaApp { get; set; }
@@ -24,6 +24,8 @@ namespace PYALauncherApps.Models
         public string Guid { get; set; }
         public string[] Grupos { get; set; }
         public bool Hidden { get; set; }
+        public int Actions { get; set; }
+        public List<string> Machines { get; set; } // 'machines' (jsonb)
 
         public override bool Equals(object obj)
         {
@@ -35,7 +37,7 @@ namespace PYALauncherApps.Models
                    Descripcion == software.Descripcion &&
                    Imagen == software.Imagen &&
                    PathInstall == software.PathInstall &&
-                   Name == software.Name &&
+                   SoftwareName == software.SoftwareName &&
                    Tag == software.Tag &&
                    UrlMsi == software.UrlMsi &&
                    VerificaApp == software.VerificaApp &&
@@ -44,7 +46,9 @@ namespace PYALauncherApps.Models
                    ForceInstall == software.ForceInstall &&
                    AutomaticInstall == software.AutomaticInstall &&
                    Guid == software.Guid &&
-                   Hidden == software.Hidden;
+                   Hidden == software.Hidden &&
+                   Actions == software.Actions &&
+                   Machines == software.Machines;
         }
 
         public override int GetHashCode()
@@ -55,7 +59,12 @@ namespace PYALauncherApps.Models
         // Sobrescribir el método ToString
         public override string ToString()
         {
-            return Name;
+            return SoftwareName;
+        }
+
+        public static class SelectedApplication
+        {
+            public static string SelectedApp { get; set; }
         }
     }
 

@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using MaterialSkin;
 using MaterialSkin.Controls;
 
-namespace MaterialSkinExample
+namespace PYALauncherApps
 {
     partial class MainForm
     {

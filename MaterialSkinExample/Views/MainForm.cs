@@ -16,15 +16,21 @@ using PYALauncherApps.Controllers;
 using PYALauncherApps.Services;
 using PYALauncherApps.Views;
 
-namespace MaterialSkinExample
+namespace PYALauncherApps
 {
     public partial class MainForm : MaterialForm
     {
         private readonly MaterialSkinManager materialSkinManager;
         private int colorSchemeIndex;
         MaterialSkin.MaterialListBoxItem materialListBoxItem13 = new MaterialSkin.MaterialListBoxItem();
+        private readonly MainController _mainController;
+        private DatabaseService _databaseService;
+        private Timer updateTimer;
+        private List<Config> _configs;
+        private List<Software> _softwareList;
 
-        public MainForm()
+
+        public MainForm(DatabaseService databaseService, MainController mainController)
         {
             InitializeComponent();
 
@@ -53,27 +59,27 @@ namespace MaterialSkinExample
                 materialSkinManager.Theme = MaterialSkinManager.Themes.DARK;
             }
 
+            _databaseService = databaseService;
+            _mainController = mainController;
+
+        }
+
+      
+
+        #region NUEVO
+        public async Task InitializeAsync()
+        {
             //Inicia proceso de captura de configuraciones generales
             //EjecucionPorLapsosAsync();
-            
+
             //New
-            _controller = new MainController(databaseService);
+            
             InitializeTimer();
             LoadDataAsync();
 
             Console.WriteLine("UserDomainName : " + Environment.UserDomainName);
             Console.WriteLine("UserName: {0}", Environment.UserName);
         }
-
-      
-
-        #region NUEVO
-        private readonly MainController _controller;
-        DatabaseService databaseService = new DatabaseService();
-        private Timer updateTimer;
-        private List<Config> _configs;
-        private List<Software> _softwareList;
-
         private void InitializeTimer()
         {
             updateTimer = new Timer();
@@ -86,8 +92,8 @@ namespace MaterialSkinExample
         {
             try
             {
-                var newConfigs = await _controller.LoadConfigs();
-                var newSoftwareList = await _controller.LoadSoftware();
+                var newConfigs = await _mainController.LoadConfigs();
+                var newSoftwareList = await _mainController.LoadSoftware();
 
                 bool configsChanged = !AreListsEqual(_configs, newConfigs);
                 bool softwareChanged = !AreListsEqual(_softwareList, newSoftwareList);
@@ -129,23 +135,15 @@ namespace MaterialSkinExample
         {
             if (list1 == null && list2 == null) return true;
             if (list1 == null || list2 == null) return false;
-            if (list1.Count != list2.Count) return false;
-
-            for (int i = 0; i < list1.Count; i++)
-            {
-                if (!list1[i].Equals(list2[i]))
-                {
-                    return false;
-                }
-            }
-            return true;
+            return list1.SequenceEqual(list2);
         }
+
 
         private async Task LoadDataAsync()
         {
             // Cargar los datos de la base de datos
-            _configs = await _controller.LoadConfigs();
-            _softwareList = await _controller.LoadSoftware();
+            _configs = await _mainController.LoadConfigs();
+            _softwareList = await _mainController.LoadSoftware();
 
             // Mostrar los datos en la interfaz gráfica
             listBoxConfigs.DataSource = _configs;
@@ -200,7 +198,7 @@ namespace MaterialSkinExample
                     Location = new System.Drawing.Point(23, 17),
                     Margin = new Padding(4, 0, 4, 0),
                     MouseState = MaterialSkin.MouseState.HOVER,
-                    Text = software.Name
+                    Text = software.SoftwareName
                 };
 
                 // Crear y configurar el cuerpo
@@ -249,7 +247,8 @@ namespace MaterialSkinExample
                     NoAccentTextColor = System.Drawing.Color.Empty,
                     Size = new System.Drawing.Size(100, 36),
                     TabIndex = 1,
-                    Text = "Editar" // Este texto puede variar según el estado del software
+                    Text = "Editar",
+                    AccessibleName = software.SoftwareName.ToString()
                 };
 
                 string localVersion = LocalVersionApp(software.PathInstall);
@@ -266,11 +265,11 @@ namespace MaterialSkinExample
                     MouseState = MaterialSkin.MouseState.HOVER,
                     Size = new System.Drawing.Size(269, 17),
                     TabIndex = 82,
-                    Text = localVersion != null ? Text = $"Version: {localVersion}" : Text = ""
+                    Text = localVersion != null ? Text = $"Version: {localVersion}" : Text = ""                    
                 };
-
+                string ejemplo = "Asd";
                 // Configurar el evento Click del botón
-                buttonInstall.Click += (sender, e) => ValidaDescarga(sender, e, software.UrlMsi, software.Version, software.PathFile, software.ForceInstall.ToString(), software.VerificaApp, software.AutomaticInstall.ToString(), software.PathInstall, true, software.Name);
+                buttonInstall.Click += (sender, e) => ValidaDescarga(sender, e, software.UrlMsi, software.Version, software.PathFile, software.ForceInstall.ToString(), software.VerificaApp, software.AutomaticInstall.ToString(), software.PathInstall, true, software.SoftwareName);
                 buttonEdit.Click += new EventHandler(AddEdit_Click);
 
 
@@ -313,9 +312,12 @@ namespace MaterialSkinExample
         // Método que se ejecuta al hacer clic en el botón
         private void AddEdit_Click(object sender, EventArgs e)
         {
-            AddEditForm _addEditForm = new AddEditForm();
+            Button button = (Button)sender;
+            string btnAcessibleName = button.AccessibleName;
+
+            AddEditForm _addEditForm = new AddEditForm(btnAcessibleName, _softwareList, _databaseService);
             _addEditForm.ShowDialog();
-    }
+        }
 
         #endregion
 
@@ -684,76 +686,48 @@ namespace MaterialSkinExample
             string directorio = @"C:\temp\repository";
             string rutaDescarga = Path.Combine(directorio, pathFile);
 
-            //verifica si existe descarga
             if (File.Exists(rutaDescarga))
             {
-                Console.WriteLine("rutaDescarga" + rutaDescarga);
                 string[] versionLocalSucia = pathFile.Split('_');
                 string versionLocal = versionLocalSucia[1].Substring(0, 7);
-
-                Console.WriteLine("verifica si existe descarga..." + versionLocal + ", " + version);
                 Version v1 = Version.Parse(versionLocal);
                 Version v2 = Version.Parse(version);
-                Console.WriteLine("Compara versiones: " + v1.CompareTo((Object)v2));
 
-                //si version local vs web son iguales va al proceso de instalacion
-                if (v1 != null && v1.CompareTo(v2) == 0)
+                if (v1.CompareTo(v2) == 0)
                 {
                     Console.WriteLine("[DescargaApp] Archivo ya descargado...");
                     materialListBoxItem13.Text = "[DescargaApp] Archivo ya descargado... " + rutaDescarga;
                     materialListBoxLogs.Items.Add(materialListBoxItem13);
 
-                    goto INSTALACION;
-                }
-                else
-                {
-                    using (WebClient client = new WebClient())
-                    {
-                        Console.WriteLine("Descarga iniciando...");
-                        materialListBoxItem13.Text = "[DescargaApp] Descarga iniciando... " + rutaDescarga;
-                        materialListBoxLogs.Items.Add(materialListBoxItem13);
-                        client.DownloadFile(urlMsi, rutaDescarga);
-                        Console.WriteLine("Descarga completada...");
-                        materialListBoxItem13.Text = "[DescargaApp] Descarga completada... " + rutaDescarga;
-                        materialListBoxLogs.Items.Add(materialListBoxItem13);
-                    }
-                    goto INSTALACION;
+                    VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
+                    return;
                 }
             }
-            else
+
+            try
             {
-                try
+                Directory.CreateDirectory(directorio);
+
+                using (WebClient client = new WebClient())
                 {
-                    Directory.CreateDirectory(directorio);
-
-                    using (WebClient client = new WebClient())
-                    {
-                        Console.WriteLine("Descarga iniciando...");
-                        client.DownloadFile(urlMsi, rutaDescarga);
-                        Console.WriteLine("Descarga completada...");
-                    }
-                    Console.WriteLine("Descarga ruta archivo: " + rutaDescarga);
-
-                    materialListBoxItem13.Text = "[DescargaApp] Descarga ruta archivo: " + rutaDescarga;
-                    materialListBoxLogs.Items.Add(materialListBoxItem13);
-
-                    goto INSTALACION;
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Error al crear el directorio: " + ex.Message);
-                    materialListBoxItem13.Text = "[DescargaApp] Error al crear el directorio: " + ex.Message;
-                    materialListBoxLogs.Items.Add(materialListBoxItem13);
+                    Console.WriteLine("Descarga iniciando...");
+                    client.DownloadFile(urlMsi, rutaDescarga);
+                    Console.WriteLine("Descarga completada...");
                 }
 
+                materialListBoxItem13.Text = "[DescargaApp] Descarga ruta archivo: " + rutaDescarga;
+                materialListBoxLogs.Items.Add(materialListBoxItem13);
+
+                VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
             }
-
-        INSTALACION:
-            VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
-
-            //Reaload datos dinamicos de la nube
-            //loadCardAsync();
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al crear el directorio: " + ex.Message);
+                materialListBoxItem13.Text = "[DescargaApp] Error al crear el directorio: " + ex.Message;
+                materialListBoxLogs.Items.Add(materialListBoxItem13);
+            }
         }
+
 
         private void VerificaProcesoActivo(string verificaApp, string rutaDescarga, string automaticInstall, string forceInstall, string pathInstall, bool instalaManual, string version, string software)
         {
@@ -944,7 +918,7 @@ namespace MaterialSkinExample
 
                 if (Environment.UserDomainName == "PYAING")
                 {
-                    Debug.WriteLine("[EjecutaInstalacion] UserDomainName " + Environment.UserDomainName);
+                    Debug.WriteLine("[EjecutaInstalacion] UserDomainName :" + Environment.UserDomainName);
                     string userName = PYALauncherApps.Properties.Settings.Default.usuario;
                     string password = PYALauncherApps.Properties.Settings.Default.password;
                     var securePassword = new System.Security.SecureString();
@@ -966,7 +940,7 @@ namespace MaterialSkinExample
                 }
                 else
                 {
-                    Debug.WriteLine("[EjecutaInstalacion] UserDomainName " + Environment.UserDomainName);
+                    Debug.WriteLine("[EjecutaInstalacion] UserDomainName :" + Environment.UserDomainName);
                     ProcessStartInfo startInfo = new ProcessStartInfo();
                     startInfo.FileName = "msiexec.exe";
                     startInfo.Arguments = string.Format(" /q /i \"{0}\" ALLUSERS=1", rutaDescarga);

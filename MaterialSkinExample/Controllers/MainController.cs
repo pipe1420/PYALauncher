@@ -12,10 +12,23 @@ namespace PYALauncherApps.Controllers
     public class MainController
     {
         private readonly DatabaseService _databaseService;
+        private MainForm _mainForm;
 
         public MainController(DatabaseService databaseService)
         {
             _databaseService = databaseService;
+        }
+
+        public void SetMainForm(MainForm mainForm)
+        {
+            _mainForm = mainForm;
+        }
+
+        public async Task OpenForm()
+        {
+            Console.WriteLine("OpenForm()");
+            await _mainForm.InitializeAsync();
+            _mainForm.ShowDialog();
         }
 
         public async Task<List<Config>> LoadConfigs()
@@ -26,6 +39,11 @@ namespace PYALauncherApps.Controllers
         public async Task<List<Software>> LoadSoftware()
         {
             return await _databaseService.GetSoftware();
+        }
+
+        public async Task<bool> PutSoftware(Software software)
+        {
+            return await _databaseService.InsertUpdateSoftware(software);
         }
 
         public void InstallSoftware(List<Software> softwareList)
@@ -50,11 +68,11 @@ namespace PYALauncherApps.Controllers
                 try
                 {
                     Process.Start(startInfo);
-                    Console.WriteLine($"Instalando {software.Name}");
+                    Console.WriteLine($"Instalando {software.SoftwareName}");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error al instalar {software.Name}: {ex.Message}");
+                    Console.WriteLine($"Error al instalar {software.SoftwareName}: {ex.Message}");
                 }
             }
         }
