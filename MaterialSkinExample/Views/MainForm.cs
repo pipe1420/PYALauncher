@@ -84,9 +84,10 @@ namespace PYALauncherApps
         {
             updateTimer = new Timer();
             updateTimer.Interval = 10000; // 10 segundos
-            updateTimer.Tick += new EventHandler(updateTimer_TickAsync);
+            updateTimer.Tick += new EventHandler(async (sender, e) => await UpdateSoftwareListAsync());
             updateTimer.Start(); // Iniciar el timer
         }
+
 
         private async void updateTimer_TickAsync(object sender, EventArgs e)
         {
@@ -278,15 +279,10 @@ namespace PYALauncherApps
                 // Configurar el evento Click del botón
                 buttonInstall.Click += async (sender, e) =>
                 {
-                    // Aquí llamas al método de instalación
-                    ValidaDescarga(sender, e, software.UrlMsi, software.Version, software.PathFile, software.ForceInstall.ToString(), software.VerificaApp, software.AutomaticInstall.ToString(), software.PathInstall, true, software.SoftwareName);
-
-                    // Después de la instalación, verifica de nuevo el estado e actualiza el botón
-                    if (VerificaInstalacion(software.PathInstall))
+                    await Task.Run(() =>
                     {
-                        buttonInstall.Text = "Instalado";
-                        buttonInstall.Enabled = false;
-                    }
+                        ValidaDescarga(sender, e, software.UrlMsi, software.Version, software.PathFile, software.ForceInstall.ToString(), software.VerificaApp, software.AutomaticInstall.ToString(), software.PathInstall, true, software.SoftwareName);
+                    });
                 };
                 buttonEdit.Click += new EventHandler(AddEdit_Click);
 
@@ -338,6 +334,27 @@ namespace PYALauncherApps
             AddEditForm _addEditForm = new AddEditForm(btnAcessibleName, _softwareList, _databaseService);
             _addEditForm.ShowDialog();
         }
+
+        private async Task UpdateSoftwareListAsync()
+        {
+            var newSoftwareList = await _mainController.LoadSoftware();
+
+            // Comprobar si la lista ha cambiado
+            bool softwareChanged = !AreListsEqual(_softwareList, newSoftwareList);
+
+            if (softwareChanged)
+            {
+                _softwareList = newSoftwareList;
+                // Actualizar las tarjetas si la lista cambió
+                CreateCards(_softwareList);
+            }
+            else
+            {
+                // Incluso si la lista no cambió, actualizar el estado de los botones
+                CreateCards(_softwareList);
+            }
+        }
+
 
         #endregion
 
@@ -695,10 +712,75 @@ namespace PYALauncherApps
             //}
         }
 
-        public async Task ValidaDescarga(object sender, EventArgs e, string urlMsi, string version, string pathFile, string forceInstall,
-            string verificaApp, string automaticInstall, string pathInstall, bool instalaManual, string software)
+        private async void ValidaDescarga(object sender, EventArgs e, string urlMsi, string version, string pathFile, string forceInstall,
+    string verificaApp, string automaticInstall, string pathInstall, bool instalaManual, string software)
         {
-            DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, instalaManual, software);
+            // Desactivar el botón mientras se realiza la descarga/instalación
+            var buttonInstall = sender as MaterialButton;
+
+            if (buttonInstall != null)
+            {
+                if (buttonInstall.InvokeRequired)
+                {
+                    buttonInstall.Invoke(new Action(() =>
+                    {
+                        buttonInstall.Enabled = false;
+                        buttonInstall.Text = "Instalando...";
+                    }));
+                }
+                else
+                {
+                    buttonInstall.Enabled = false;
+                    buttonInstall.Text = "Instalando...";
+                }
+            }
+
+            // Ejecutar la descarga e instalación de manera asíncrona
+            await Task.Run(() =>
+            {
+                DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, instalaManual, software);
+            });
+
+            // Verificar y actualizar el estado del botón después de la instalación
+            if (VerificaInstalacion(pathInstall))
+            {
+                if (buttonInstall != null)
+                {
+                    if (buttonInstall.InvokeRequired)
+                    {
+                        buttonInstall.Invoke(new Action(() =>
+                        {
+                            buttonInstall.Text = "Instalado";
+                            buttonInstall.Enabled = false;
+                        }));
+                    }
+                    else
+                    {
+                        buttonInstall.Text = "Instalado";
+                        buttonInstall.Enabled = false;
+                    }
+                }
+            }
+            else
+            {
+                // Si la instalación falla, reactivar el botón para permitir un nuevo intento
+                if (buttonInstall != null)
+                {
+                    if (buttonInstall.InvokeRequired)
+                    {
+                        buttonInstall.Invoke(new Action(() =>
+                        {
+                            buttonInstall.Text = "Instalar";
+                            buttonInstall.Enabled = true;
+                        }));
+                    }
+                    else
+                    {
+                        buttonInstall.Text = "Instalar";
+                        buttonInstall.Enabled = true;
+                    }
+                }
+            }
         }
 
         private void DescargaApp(string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall, string pathInstall, bool instalaManual, string software)
@@ -709,18 +791,28 @@ namespace PYALauncherApps
             if (File.Exists(rutaDescarga))
             {
                 string[] versionLocalSucia = pathFile.Split('_');
-                string versionLocal = versionLocalSucia[1].Substring(0, 7);
-                Version v1 = Version.Parse(versionLocal);
-                Version v2 = Version.Parse(version);
 
-                if (v1.CompareTo(v2) == 0)
+                if (versionLocalSucia.Length > 1 && versionLocalSucia[1].Length >= 7)
                 {
-                    Console.WriteLine("[DescargaApp] Archivo ya descargado...");
-                    materialListBoxItem13.Text = "[DescargaApp] Archivo ya descargado... " + rutaDescarga;
-                    materialListBoxLogs.Items.Add(materialListBoxItem13);
+                    string versionLocal = versionLocalSucia[1].Substring(0, 7);
 
-                    VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
-                    return;
+                    if (Version.TryParse(versionLocal, out Version v1) && Version.TryParse(version, out Version v2))
+                    {
+                        if (v1.CompareTo(v2) == 0)
+                        {
+                            SafeUpdateLogs("[DescargaApp] Archivo ya descargado... " + rutaDescarga);
+                            VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        SafeUpdateLogs("[DescargaApp] La versión local o la versión proporcionada no son válidas.");
+                    }
+                }
+                else
+                {
+                    SafeUpdateLogs("[DescargaApp] El formato del archivo o la versión local no es válido.");
                 }
             }
 
@@ -730,20 +822,33 @@ namespace PYALauncherApps
 
                 using (WebClient client = new WebClient())
                 {
-                    Console.WriteLine("Descarga iniciando...");
+                    SafeUpdateLogs("Descarga iniciando...");
                     client.DownloadFile(urlMsi, rutaDescarga);
-                    Console.WriteLine("Descarga completada...");
+                    SafeUpdateLogs("Descarga completada...");
                 }
 
-                materialListBoxItem13.Text = "[DescargaApp] Descarga ruta archivo: " + rutaDescarga;
-                materialListBoxLogs.Items.Add(materialListBoxItem13);
-
+                SafeUpdateLogs("[DescargaApp] Descarga ruta archivo: " + rutaDescarga);
                 VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error al crear el directorio: " + ex.Message);
-                materialListBoxItem13.Text = "[DescargaApp] Error al crear el directorio: " + ex.Message;
+                SafeUpdateLogs("[DescargaApp] Error al crear el directorio: " + ex.Message);
+            }
+        }
+
+        private void SafeUpdateLogs(string message)
+        {
+            if (InvokeRequired)
+            {
+                this.Invoke(new Action(() =>
+                {
+                    materialListBoxItem13.Text = message;
+                    materialListBoxLogs.Items.Add(materialListBoxItem13);
+                }));
+            }
+            else
+            {
+                materialListBoxItem13.Text = message;
                 materialListBoxLogs.Items.Add(materialListBoxItem13);
             }
         }
@@ -935,10 +1040,15 @@ namespace PYALauncherApps
         {
             try
             {
+                if (InvokeRequired)
+                {
+                    this.Invoke(new Action(() => EjecutaInstalacion(rutaDescarga, software)));
+                    return;
+                }
 
                 if (Environment.UserDomainName == "PYAING")
                 {
-                    Debug.WriteLine("[EjecutaInstalacion] UserDomainName :" + Environment.UserDomainName);
+                    Debug.WriteLine("[EjecutaInstalacion] UserDomainName " + Environment.UserDomainName);
                     string userName = PYALauncherApps.Properties.Settings.Default.usuario;
                     string password = PYALauncherApps.Properties.Settings.Default.password;
                     var securePassword = new System.Security.SecureString();
@@ -960,7 +1070,7 @@ namespace PYALauncherApps
                 }
                 else
                 {
-                    Debug.WriteLine("[EjecutaInstalacion] UserDomainName :" + Environment.UserDomainName);
+                    Debug.WriteLine("[EjecutaInstalacion] UserDomainName " + Environment.UserDomainName);
                     ProcessStartInfo startInfo = new ProcessStartInfo();
                     startInfo.FileName = "msiexec.exe";
                     startInfo.Arguments = string.Format(" /q /i \"{0}\" ALLUSERS=1", rutaDescarga);
@@ -968,30 +1078,29 @@ namespace PYALauncherApps
                     startInfo.UseShellExecute = false;
 
                     Process.Start(startInfo);
-
                 }
 
-
-
                 Debug.WriteLine("[EjecutaInstalacion] El proceso de instalación de " + software + " finalizado correctamente.");
+                
 
+                // Actualizar la UI para notificar que la instalación se completó
                 materialListBoxItem13.Text = "[EjecutaInstalacion] El proceso de instalación de " + software + " finalizado correctamente.";
                 materialListBoxLogs.Items.Add(materialListBoxItem13);
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar("El proceso de instalación de " + software + " finalizado correctamente.", 3000, "OK");
                 SnackBarMessage.Show(this);
 
+                ReloadApps();
             }
             catch (Exception ex)
             {
+                // Manejar errores aquí
                 MaterialSnackBar SnackBarMessage = new MaterialSnackBar("Error al ejecutar la instalación " + software, 3000, "OK");
                 SnackBarMessage.Show(this);
-                materialListBoxItem13.Text = "[EjecutaInstalacion] Error al ejecutar la instalación de " + software + "." + ex.Message;
+                materialListBoxItem13.Text = "[EjecutaInstalacion] Error al ejecutar la instalación de " + software + ": " + ex.Message;
                 materialListBoxLogs.Items.Add(materialListBoxItem13);
             }
-            //Reaload datos dinamicos de la nube
-            System.Threading.Thread.Sleep(5000);
-            //loadCardAsync();
         }
+
 
         private void EjectutaDesinstalacion(string rutaDescarga, string software)
         {
@@ -1277,10 +1386,18 @@ namespace PYALauncherApps
 
 
         #endregion
-
-        private void buttonAppsRefresh_Click(object sender, EventArgs e)
+        private async void ReloadApps()
         {
-            updateTimer_TickAsync(sender, e);
+            // Obtener nuevamente la lista de software desde la base de datos
+            _softwareList = await _mainController.LoadSoftware();
+
+            // Limpiar y recrear las tarjetas con el nuevo estado de los botones
+            CreateCards(_softwareList);
+        }
+
+        private async void buttonAppsRefresh_Click(object sender, EventArgs e)
+        {
+            ReloadApps();
         }
     }
 }
