@@ -237,8 +237,145 @@ namespace PYALauncherApps.Services
             }
         }
 
+        public async Task<UserPermissions> GetUserPermissionsAsync(string userName)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                var query = @"SELECT up.CanEditApps, up.CanViewUserTab
+                          FROM Users u
+                          JOIN UserPermissions up ON u.UserId = up.UserId
+                          WHERE u.UserName = @UserName";
+
+                var command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserName", userName);
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    if (await reader.ReadAsync())
+                    {
+                        return new UserPermissions
+                        {
+                            CanEditApps = reader.GetBoolean(0),
+                            CanViewUserTab = reader.GetBoolean(1)
+                        };
+                    }
+                }
+            }
+            return null;
+        }
+
+        public async Task<List<UserPermissionDisplayItem>> GetAllUserPermissionsAsync()
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                var query = @"SELECT u.userName, up.caneditapps, up.canviewusertab
+                      FROM pya_apps.users u
+                      JOIN pya_apps.userpermissions up ON u.userid = up.userid";
+
+                var command = new NpgsqlCommand(query, connection);
+                var userPermissionsList = new List<UserPermissionDisplayItem>();
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        userPermissionsList.Add(new UserPermissionDisplayItem
+                        {
+                            UserName = reader.GetString(0),
+                            CanEditApps = reader.GetBoolean(1),
+                            CanViewUserTab = reader.GetBoolean(2)
+                        });
+                    }
+                }
+
+                return userPermissionsList;
+            }
+        }
 
 
+
+        public async Task<bool> SaveUserPermissionAsync(UserPermissionDisplayItem permission)
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    await connection.OpenAsync();
+
+                    // Verificar si el usuario ya existe
+                    var userId = await GetUserIdAsync(permission.UserName);
+
+                    if (userId != null)
+                    {
+                        // Si existe, actualiza sus permisos
+                        var query = @"UPDATE pya_apps.UserPermissions 
+                              SET CanEditApps = @CanEditApps, CanViewUserTab = @CanViewUserTab
+                              WHERE UserId = @UserId";
+
+                        var command = new NpgsqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@CanEditApps", permission.CanEditApps);
+                        command.Parameters.AddWithValue("@CanViewUserTab", permission.CanViewUserTab);
+                        command.Parameters.AddWithValue("@UserId", userId);
+
+                        var rowsAffected = await command.ExecuteNonQueryAsync();
+
+                        return rowsAffected > 0;
+                    }
+                    else
+                    {
+                        // Si no existe, insertar el usuario y sus permisos
+                        userId = await InsertUserAsync(permission.UserName, connection);
+
+                        var query = @"INSERT INTO pya_apps.UserPermissions (UserId, CanEditApps, CanViewUserTab)
+                              VALUES (@UserId, @CanEditApps, @CanViewUserTab)";
+
+                        var command = new NpgsqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@UserId", userId);
+                        command.Parameters.AddWithValue("@CanEditApps", permission.CanEditApps);
+                        command.Parameters.AddWithValue("@CanViewUserTab", permission.CanViewUserTab);
+
+                        var rowsAffected = await command.ExecuteNonQueryAsync();
+
+                        return rowsAffected > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Manejo del error (puedes registrar el error o mostrar un mensaje)
+                // Opcional: log de errores
+                Console.WriteLine($"Error al guardar permisos: {ex.Message}");
+                return false;
+            }
+        }
+
+
+        private async Task<int?> GetUserIdAsync(string userName)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                var query = "SELECT UserId FROM pya_apps.Users WHERE UserName = @UserName";
+                var command = new NpgsqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserName", userName);
+
+                var result = await command.ExecuteScalarAsync();
+
+                return result != null ? (int?)result : null;
+            }
+        }
+
+        private async Task<int> InsertUserAsync(string userName, NpgsqlConnection connection)
+        {
+            var query = "INSERT INTO pya_apps.Users (UserName) VALUES (@UserName) RETURNING UserId";
+            var command = new NpgsqlCommand(query, connection);
+            command.Parameters.AddWithValue("@UserName", userName);
+
+            return (int)await command.ExecuteScalarAsync();
+        }
 
     }
 }

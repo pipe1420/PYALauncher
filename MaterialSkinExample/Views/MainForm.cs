@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using PYALauncherApps.Controllers;
 using PYALauncherApps.Services;
 using PYALauncherApps.Views;
+using System.ComponentModel;
 
 namespace PYALauncherApps
 {
@@ -30,10 +31,16 @@ namespace PYALauncherApps
         private List<Config> _configs;
         private List<Software> _softwareList;
         private readonly SoftwareService _softwareService;
+        private readonly UsersService _usersService;
+        private TabPage tabPageHidePermisos, tabPageHideLogs;
+        private List<UserPermissionDisplayItem> _userPermissionsList;
 
-        public MainForm(DatabaseService databaseService, MainController mainController, AddEditForm addEditForm, SoftwareService softwareService)
+        public MainForm(DatabaseService databaseService, MainController mainController, AddEditForm addEditForm, SoftwareService softwareService, UsersService usersService)
         {
             InitializeComponent();
+            tabPageHidePermisos = materialTabControl1.TabPages["tabPagePerm"];
+            tabPageHideLogs = materialTabControl1.TabPages["tabPageLogs"];
+            materialTabControl1.TabPages.Remove(tabPageHideLogs);
 
             // Initialize MaterialSkinManager
             materialSkinManager = MaterialSkinManager.Instance;
@@ -64,6 +71,10 @@ namespace PYALauncherApps
             _mainController = mainController;
             _addEditForm = addEditForm;
             _softwareService = softwareService;
+            _usersService = usersService;
+            _usersService = usersService;
+            
+            LoadUserPermissions();
         }
 
 
@@ -78,6 +89,7 @@ namespace PYALauncherApps
             
             InitializeTimer();
             LoadDataAsync();
+            
 
             Console.WriteLine("UserDomainName : " + Environment.UserDomainName);
             Console.WriteLine("UserName: {0}", Environment.UserName);
@@ -126,6 +138,8 @@ namespace PYALauncherApps
                 {
                     Console.WriteLine("La lista de software no ha cambiado.");
                 }
+
+
             }
             catch (Exception ex)
             {
@@ -173,6 +187,16 @@ namespace PYALauncherApps
 
         private void CreateCards(List<Software> softwareList)
         {
+            bool canEditApps = false;
+
+            var currentUserPermission = _userPermissionsList
+                .FirstOrDefault(up => up.UserName.Equals(Environment.UserName, StringComparison.OrdinalIgnoreCase));
+
+            if (currentUserPermission != null)
+            {
+                canEditApps = currentUserPermission.CanEditApps;
+            }
+
             flowLayoutPanel2.Controls.Clear(); // Limpiar cualquier control previo
 
             foreach (var software in softwareList)
@@ -251,7 +275,8 @@ namespace PYALauncherApps
                     Size = new System.Drawing.Size(100, 36),
                     TabIndex = 1,
                     Text = "Editar",
-                    AccessibleName = software.SoftwareName.ToString()
+                    AccessibleName = software.SoftwareName.ToString(),
+                    Enabled = canEditApps ? true : false
                 };
 
                 string localVersion = LocalVersionApp(software.PathInstall);
@@ -294,7 +319,9 @@ namespace PYALauncherApps
                 card.Controls.Add(labelVersion);
                 card.Controls.Add(body);
                 card.Controls.Add(buttonInstall);
-                card.Controls.Add(buttonEdit);
+                //if (canEditApps) 
+                    card.Controls.Add(buttonEdit);
+                
 
                 // Agregar la tarjeta al FlowLayoutPanel
                 flowLayoutPanel2.Controls.Add(card);
@@ -1411,8 +1438,26 @@ namespace PYALauncherApps
         #endregion
         private async void ReloadApps()
         {
+            flowLayoutPanel2.Controls.Clear();
+
+            MaterialLabel reload = new MaterialLabel();
+            reload.AutoSize = true;
+            reload.Depth = 0;
+            reload.Font = new System.Drawing.Font("Roboto", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            reload.FontType = MaterialSkin.MaterialSkinManager.fontType.H3;
+            reload.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            reload.Location = new System.Drawing.Point(647, 228);
+            reload.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            reload.MouseState = MaterialSkin.MouseState.HOVER;
+            reload.Size = new System.Drawing.Size(217, 58);
+            reload.TabIndex = 69;
+            reload.Text = "Cargando...";
+
+            flowLayoutPanel2.Controls.Add(reload);
+
             // Obtener nuevamente la lista de software desde la base de datos
             _softwareList = await _mainController.LoadSoftware();
+
 
             // Limpiar y recrear las tarjetas con el nuevo estado de los botones
             CreateCards(_softwareList);
@@ -1426,6 +1471,115 @@ namespace PYALauncherApps
         private void materialButtonAddSoftware_Click(object sender, EventArgs e)
         {
             _addEditForm.InitializeAsync();
+        }
+
+
+        private async void LoadUserPermissions()
+        {
+            _userPermissionsList = await _usersService.GetAllUserPermissionsAsync();
+
+            if (_userPermissionsList != null && _userPermissionsList.Any())
+            {
+                var permissionDisplayList = _userPermissionsList.Select(up => new UserPermissionDisplayItem
+                {
+                    UserName = up.UserName,
+                    CanEditApps = up.CanEditApps,
+                    CanViewUserTab = up.CanViewUserTab
+                }).ToList();
+
+                // Verifica si el usuario actual tiene permiso para ver la pestaña de usuarios
+                var currentUserPermission = _userPermissionsList
+                    .FirstOrDefault(up => up.UserName.Equals(Environment.UserName, StringComparison.OrdinalIgnoreCase));
+                
+
+                if (currentUserPermission == null)
+                {
+                    HideTabPage();
+                }
+
+                
+
+
+                dataGridViewPermisos.DataSource = new BindingList<UserPermissionDisplayItem>(permissionDisplayList);
+            } 
+            else
+            {
+                // Si no se encontraron permisos, asignar una lista vacía pero con columnas definidas
+                dataGridViewPermisos.DataSource = new BindingList<UserPermissionDisplayItem>();
+                //InitializeDataGridViewColumns();
+                Console.WriteLine("No se encontraron permisos de usuarios.");
+            }
+        }
+
+        private void btnSavePerm_Click(object sender, EventArgs e)
+        {
+            SaveUserPermissionsAsync();
+        }
+
+        private async Task SaveUserPermissionsAsync()
+        {
+            var result = MessageBox.Show("¿Está seguro que desea guardar los cambios?", "Permisos", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                var permissionsList = (BindingList<UserPermissionDisplayItem>)dataGridViewPermisos.DataSource;
+                bool saveResult = await _softwareService.SaveUserPermissions(permissionsList);
+
+                if (saveResult)
+                {
+                    // Refrescar la visualización de permisos
+                    MessageBox.Show("Permisos guardados!", "Permisos", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    RefreshUserPermissions();
+                }
+                else
+                {
+                    MessageBox.Show("Error al guardar los permisos.", "Permisos", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+
+        }
+
+        private async void RefreshUserPermissions()
+        {
+            try
+            {
+                // Volver a cargar los permisos desde la base de datos
+                var userPermissionsList = await _usersService.GetAllUserPermissionsAsync();
+
+                if (userPermissionsList != null && userPermissionsList.Any())
+                {
+                    // Actualizar el DataGridView con los permisos actualizados
+                    var permissionDisplayList = userPermissionsList.Select(up => new UserPermissionDisplayItem
+                    {
+                        UserName = up.UserName,
+                        CanEditApps = up.CanEditApps,
+                        CanViewUserTab = up.CanViewUserTab
+                    }).ToList();
+
+                    dataGridViewPermisos.DataSource = new BindingList<UserPermissionDisplayItem>(permissionDisplayList);
+                }
+                else
+                {
+                    // Si no se encontraron permisos, mostrar una lista vacía pero con columnas definidas
+                    dataGridViewPermisos.DataSource = new BindingList<UserPermissionDisplayItem>();
+                    MessageBox.Show("No se encontraron permisos de usuarios.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al actualizar permisos: {ex.Message}");
+            }
+        }
+
+        // Para ocultar el TabPage
+        private void HideTabPage()
+        {
+            materialTabControl1.TabPages.Remove(tabPageHidePermisos);
+        }
+
+        // Para mostrar nuevamente el TabPage
+        private void ShowTabPage()
+        {
+            materialTabControl1.TabPages.Add(tabPageHidePermisos);
         }
     }
 }

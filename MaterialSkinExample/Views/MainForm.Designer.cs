@@ -73,6 +73,11 @@ namespace PYALauncherApps
             this.materialLabel61 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel62 = new MaterialSkin.Controls.MaterialLabel();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
+            this.tabPagePerm = new System.Windows.Forms.TabPage();
+            this.btnSavePerm = new MaterialSkin.Controls.MaterialButton();
+            this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
+            this.dataGridViewPermisos = new System.Windows.Forms.DataGridView();
+            this.labelTitlePermisos = new MaterialSkin.Controls.MaterialLabel();
             this.tabPageConfig.SuspendLayout();
             this.tabPageLogs.SuspendLayout();
             this.tabPageApps.SuspendLayout();
@@ -82,6 +87,8 @@ namespace PYALauncherApps
             this.materialCard7.SuspendLayout();
             this.materialCard5.SuspendLayout();
             this.materialTabControl1.SuspendLayout();
+            this.tabPagePerm.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPermisos)).BeginInit();
             this.SuspendLayout();
             // 
             // menuIconList
@@ -662,6 +669,7 @@ namespace PYALauncherApps
             // 
             this.materialTabControl1.Controls.Add(this.tabPageInicio);
             this.materialTabControl1.Controls.Add(this.tabPageApps);
+            this.materialTabControl1.Controls.Add(this.tabPagePerm);
             this.materialTabControl1.Controls.Add(this.tabPageLogs);
             this.materialTabControl1.Controls.Add(this.tabPageConfig);
             this.materialTabControl1.Depth = 0;
@@ -674,6 +682,75 @@ namespace PYALauncherApps
             this.materialTabControl1.SelectedIndex = 0;
             this.materialTabControl1.Size = new System.Drawing.Size(946, 647);
             this.materialTabControl1.TabIndex = 18;
+            // 
+            // tabPagePerm
+            // 
+            this.tabPagePerm.BackColor = System.Drawing.Color.White;
+            this.tabPagePerm.Controls.Add(this.btnSavePerm);
+            this.tabPagePerm.Controls.Add(this.materialLabel2);
+            this.tabPagePerm.Controls.Add(this.dataGridViewPermisos);
+            this.tabPagePerm.Controls.Add(this.labelTitlePermisos);
+            this.tabPagePerm.ImageKey = "round_bookmark_white_24dp.png";
+            this.tabPagePerm.Location = new System.Drawing.Point(4, 31);
+            this.tabPagePerm.Name = "tabPagePerm";
+            this.tabPagePerm.Size = new System.Drawing.Size(938, 612);
+            this.tabPagePerm.TabIndex = 13;
+            this.tabPagePerm.Text = "Permisos";
+            // 
+            // btnSavePerm
+            // 
+            this.btnSavePerm.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnSavePerm.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnSavePerm.Depth = 0;
+            this.btnSavePerm.HighEmphasis = true;
+            this.btnSavePerm.Icon = null;
+            this.btnSavePerm.Location = new System.Drawing.Point(340, 518);
+            this.btnSavePerm.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnSavePerm.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnSavePerm.Name = "btnSavePerm";
+            this.btnSavePerm.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnSavePerm.Size = new System.Drawing.Size(88, 36);
+            this.btnSavePerm.TabIndex = 77;
+            this.btnSavePerm.Text = "Guardar";
+            this.btnSavePerm.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnSavePerm.UseAccentColor = false;
+            this.btnSavePerm.UseVisualStyleBackColor = true;
+            this.btnSavePerm.Click += new System.EventHandler(this.btnSavePerm_Click);
+            // 
+            // materialLabel2
+            // 
+            this.materialLabel2.AutoSize = true;
+            this.materialLabel2.Depth = 0;
+            this.materialLabel2.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialLabel2.Location = new System.Drawing.Point(19, 90);
+            this.materialLabel2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel2.Name = "materialLabel2";
+            this.materialLabel2.Size = new System.Drawing.Size(544, 19);
+            this.materialLabel2.TabIndex = 76;
+            this.materialLabel2.Text = "Listado de usuarios con permisos para gestionar las aplicaciones y usuarios.";
+            // 
+            // dataGridViewPermisos
+            // 
+            this.dataGridViewPermisos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewPermisos.Location = new System.Drawing.Point(22, 137);
+            this.dataGridViewPermisos.Name = "dataGridViewPermisos";
+            this.dataGridViewPermisos.Size = new System.Drawing.Size(710, 342);
+            this.dataGridViewPermisos.TabIndex = 75;
+            // 
+            // labelTitlePermisos
+            // 
+            this.labelTitlePermisos.AutoSize = true;
+            this.labelTitlePermisos.Depth = 0;
+            this.labelTitlePermisos.Font = new System.Drawing.Font("Roboto", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
+            this.labelTitlePermisos.FontType = MaterialSkin.MaterialSkinManager.fontType.H3;
+            this.labelTitlePermisos.Location = new System.Drawing.Point(20, 15);
+            this.labelTitlePermisos.MouseState = MaterialSkin.MouseState.HOVER;
+            this.labelTitlePermisos.Name = "labelTitlePermisos";
+            this.labelTitlePermisos.Size = new System.Drawing.Size(203, 58);
+            this.labelTitlePermisos.TabIndex = 73;
+            this.labelTitlePermisos.Text = "Permisos";
             // 
             // MainForm
             // 
@@ -708,6 +785,9 @@ namespace PYALauncherApps
             this.materialCard5.ResumeLayout(false);
             this.materialCard5.PerformLayout();
             this.materialTabControl1.ResumeLayout(false);
+            this.tabPagePerm.ResumeLayout(false);
+            this.tabPagePerm.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPermisos)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -751,5 +831,10 @@ namespace PYALauncherApps
         private MaterialButton materialButtonAddSoftware;
         private MaterialLabel labelTitleHistory;
         private MaterialLabel labelSubTitleHistory;
+        private TabPage tabPagePerm;
+        private MaterialLabel labelTitlePermisos;
+        private DataGridView dataGridViewPermisos;
+        private MaterialLabel materialLabel2;
+        private MaterialButton btnSavePerm;
     }
 }

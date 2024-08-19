@@ -38,9 +38,9 @@ namespace MaterialSkinExample
             services.AddSingleton<DatabaseService>();
             services.AddSingleton<SoftwareModel>();
             services.AddSingleton<SoftwareService>(); 
+            services.AddSingleton<UsersService>(); 
             services.AddSingleton<MainController>();
             services.AddSingleton<MainForm>();
-            //services.AddSingleton<MainMenu>();
             services.AddScoped<AddEditForm>();
 
 

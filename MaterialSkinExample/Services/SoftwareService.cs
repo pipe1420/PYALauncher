@@ -146,5 +146,33 @@ namespace PYALauncherApps.Services
             return result;
         }
 
+        internal async Task<bool> SaveUserPermissions(BindingList<UserPermissionDisplayItem> permissionsList)
+        {
+            try
+            {
+                if (permissionsList != null)
+                {
+                    foreach (var permission in permissionsList)
+                    {
+                        bool res = await _databaseService.SaveUserPermissionAsync(permission);
+                        if (res)
+                        {
+                            Console.WriteLine($"Permiso de {permission.UserName} guardardado correctamente.");
+                        }
+                    }
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("No hay permisos para guardar.");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al guardar permisos: {ex.Message}");
+                return false;
+            }
+        }
     }
 }
