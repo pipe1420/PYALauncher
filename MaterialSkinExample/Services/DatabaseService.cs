@@ -8,6 +8,11 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Npgsql;
 using PYALauncherApps.Models;
+using Supabase;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Supabase.Postgrest;
+
 
 namespace PYALauncherApps.Services
 {
@@ -104,12 +109,13 @@ namespace PYALauncherApps.Services
                     using (var command = new NpgsqlCommand(
                         "INSERT INTO pya_apps.software " +
                         "(id, descripcion, imagen, path_install, software_name, tag, url_msi, verifica_app, " +
-                        "version, path_file, force_install, automatic_install, guid, grupos, hidden, actions, machines, installername) " +
-                        "VALUES " +
+                        "version, path_file, force_install, automatic_install, guid, grupos, hidden, actions, machines" +
+                        (software.InstallerName != null ? ", installername" : "") + // Incluir solo si installername tiene valor
+                        ") VALUES " +
                         "(@id, @descripcion, @imagen, @path_install, @software_name, @tag, @url_msi, @verifica_app, " +
-                        "@version, @path_file, @force_install, @automatic_install, @guid, @grupos, @hidden, @actions, @machines, @installername) " +
-                        "ON CONFLICT (id) " +
-                        "DO UPDATE SET " +
+                        "@version, @path_file, @force_install, @automatic_install, @guid, @grupos, @hidden, @actions, @machines" +
+                        (software.InstallerName != null ? ", @installername" : "") + // Incluir solo si installername tiene valor
+                        ") ON CONFLICT (id) DO UPDATE SET " +
                         "descripcion = EXCLUDED.descripcion, " +
                         "imagen = EXCLUDED.imagen, " +
                         "path_install = EXCLUDED.path_install, " +
@@ -125,10 +131,10 @@ namespace PYALauncherApps.Services
                         "grupos = EXCLUDED.grupos, " +
                         "hidden = EXCLUDED.hidden, " +
                         "actions = EXCLUDED.actions, " +
-                        "machines = EXCLUDED.machines, " +
-                        "installername = EXCLUDED.installername; ", connection))
+                        "machines = EXCLUDED.machines" +
+                        (software.InstallerName != null ? ", installername = EXCLUDED.installername" : "") + // Incluir solo si installername tiene valor
+                        ";", connection))
                     {
-                        
                         command.Parameters.AddWithValue("@id", software.Id);
                         command.Parameters.AddWithValue("@descripcion", software.Descripcion);
                         command.Parameters.AddWithValue("@imagen", software.Imagen);
@@ -152,9 +158,13 @@ namespace PYALauncherApps.Services
                         {
                             Value = machinesJson
                         };
-                        command.Parameters.AddWithValue("@installername", software.InstallerName);
-
                         command.Parameters.Add(machinesParameter);
+
+                        // Agregar installername solo si no es nulo
+                        if (software.InstallerName != null)
+                        {
+                            command.Parameters.AddWithValue("@installername", software.InstallerName);
+                        }
 
                         await command.ExecuteNonQueryAsync();
                     }
@@ -381,5 +391,7 @@ namespace PYALauncherApps.Services
             return (int)await command.ExecuteScalarAsync();
         }
 
+
+       
     }
 }

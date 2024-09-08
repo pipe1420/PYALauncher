@@ -70,7 +70,29 @@ namespace PYALauncherApps.Models
             public static string SelectedApp { get; set; }
         }
 
-     
+        // Método para limpiar los campos
+        public void ClearFields()
+        {
+            Id = 0;
+            Descripcion = string.Empty;
+            Imagen = string.Empty;
+            PathInstall = string.Empty;
+            SoftwareName = string.Empty;
+            Tag = string.Empty;
+            UrlMsi = string.Empty;
+            VerificaApp = string.Empty;
+            Version = string.Empty;
+            PathFile = string.Empty;
+            ForceInstall = false;
+            AutomaticInstall = false;
+            Guid = string.Empty;
+            Grupos = null;
+            Hidden = false;
+            Actions = 0;
+            Machines = new Dictionary<string, Machine>();
+            InstallerName = string.Empty;
+        }
+
     }
 
 }

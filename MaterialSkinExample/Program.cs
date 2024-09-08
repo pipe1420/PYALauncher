@@ -37,6 +37,7 @@ namespace MaterialSkinExample
         {
             // Registrar servicios y componentes
             services.AddSingleton<DatabaseService>();
+            services.AddSingleton<SupabaseService>();
             services.AddSingleton<SoftwareModel>();
             services.AddSingleton<SoftwareService>();
             services.AddSingleton<UsersService>();

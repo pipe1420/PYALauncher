@@ -36,11 +36,13 @@ namespace PYALauncherApps.Services
     {
         private readonly SoftwareModel _softwareModel;
         private DatabaseService _databaseService;
+        private SupabaseService _supabaseService;
 
-        public SoftwareService(SoftwareModel softwareModel, DatabaseService databaseService)
+        public SoftwareService(SoftwareModel softwareModel, DatabaseService databaseService, SupabaseService supabaseService)
         {
             _softwareModel = softwareModel;
             _databaseService = databaseService;
+            _supabaseService = supabaseService;
         }
 
         public List<Software> GetSoftwareList()
@@ -119,6 +121,7 @@ namespace PYALauncherApps.Services
             {
                 // Llama al método de la base de datos para actualizar o insertar el software
                 bool result = await _databaseService.InsertUpdateSoftware(software);
+
                 return result;
             }
             catch (Exception ex)

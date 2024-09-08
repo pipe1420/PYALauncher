@@ -1620,8 +1620,6 @@ namespace PYALauncherApps
             {
                 reload.Text = "No hay softwares para mostrar...";
             }
-
-            // Limpiar y recrear las tarjetas con el nuevo estado de los botones
             
         }
 

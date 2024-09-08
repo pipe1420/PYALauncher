@@ -26,7 +26,7 @@ namespace PYALauncherApps.Views
         private readonly MaterialSkinManager materialSkinManager;
         private int colorSchemeIndex;
         MaterialSkin.MaterialListBoxItem materialListBoxItem13 = new MaterialSkin.MaterialListBoxItem();
-        private readonly MainController _controller;
+        private readonly MainController _mainController;
         private DatabaseService _databaseService;
         private string _btnAcessibleName;
         private List<Software> _softwareList;
@@ -34,7 +34,7 @@ namespace PYALauncherApps.Views
         private SoftwareService _softwareService;
         private Software softwareTemp = new Software();
 
-        public AddEditForm(SoftwareService softwareService/*,string btnAcessibleName, List<Software> softwareList, DatabaseService databaseService*/)
+        public AddEditForm(SoftwareService softwareService, MainController mainController/*,string btnAcessibleName, List<Software> softwareList, DatabaseService databaseService*/)
         {
             InitializeComponent();
 
@@ -64,6 +64,7 @@ namespace PYALauncherApps.Views
             }
 
             _softwareService = softwareService;
+            _mainController = mainController;
         }
 
         public async Task InitializeAsync()
@@ -93,6 +94,14 @@ namespace PYALauncherApps.Views
             {
                 // Si es una nueva aplicación, muestra el formulario sin datos pero con las columnas listas
                 dataGridViewMachines.DataSource = new BindingList<MachineDisplayItem>();
+                txtName.Text = null;
+                multiLineDescrip.Text = null;
+                multiLinePathDll.Text = null;
+                textSelectPathInstaller.Text = null;
+                cbxModality.SelectedIndex = -1;
+                cbxActions.SelectedIndex = -1;
+                softwareTemp.ClearFields();
+
                 this.ShowDialog();
             }
 
@@ -122,7 +131,7 @@ namespace PYALauncherApps.Views
             //var softwareFind = _softwareService.FindSoftware(software.SoftwareName);
             txtName.Text = software.SoftwareName;
             multiLineDescrip.Text = software.Descripcion;
-            textSelectPathInstaller.Text = software.InstallerName;
+            //textSelectPathInstaller.Text = software.InstallerName;
             multiLinePathDll.Text = software.PathFile;
             txtVersion.Text = software.Version; 
             cbxActions.SelectedIndex = 0;
@@ -234,23 +243,40 @@ namespace PYALauncherApps.Views
 
         private async void btnSave_Click(object sender, EventArgs e)
         {
+            // Validar que el campo Nombre y la Ruta del Instalador no estén vacíos
+            if (string.IsNullOrWhiteSpace(txtName.Text))
+            {
+                MessageBox.Show("El nombre de la aplicación es obligatorio.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return; // Detener la ejecución si el campo está vacío
+            }
+
+            if (string.IsNullOrWhiteSpace(textSelectPathInstaller.Text))
+            {
+                MessageBox.Show("La ruta del instalador es obligatoria.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return; // Detener la ejecución si el campo está vacío
+            }
+
             var resultPopUp = MessageBox.Show("¿Está seguro que desea guardar los cambios a la aplicación?", "Guardar Aplicación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (resultPopUp == DialogResult.Yes)
             {
                 try
                 {
+                    // Limpiar las comillas de la ruta
+                    string multiLinePathDllClean = multiLinePathDll.Text.Trim('\"');
+
+                    // Crear objeto Software para la actualización
                     var UpdateSoftware = new Software
                     {
                         Id = softwareTemp.Id, // Asumiendo que el campo 'Id' es serial y se autogenera en la base de datos
                         Descripcion = multiLineDescrip.Text,
                         Imagen = "img",
-                        PathInstall = multiLinePathDll.Text,
+                        PathInstall = multiLinePathDllClean,
                         SoftwareName = txtName.Text,
                         Tag = "tag",
                         UrlMsi = textSelectPathInstaller.Text,
                         VerificaApp = txtProcessVerificaApp.Text,
                         Version = txtVersion.Text,
-                        PathFile = @multiLinePathDll.Text,
+                        PathFile = multiLinePathDllClean,
                         ForceInstall = cbxModality.SelectedIndex == 2 ? true : false,
                         AutomaticInstall = cbxActions.SelectedIndex == 1 ? true : false,
                         Guid = Guid.NewGuid().ToString(), // Genera un nuevo GUID
@@ -266,8 +292,10 @@ namespace PYALauncherApps.Views
 
                     if (result)
                     {
-                        // La operación fue exitosa
-                        MessageBox.Show("Cambios guardados!", "Agregar / Editar Aplicación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        // La operación fue exitosa, ahora subir el archivo a Supabase
+                        await SubirArchivoASupabase(textSelectPathInstaller.Text);
+
+                        MessageBox.Show("Cambios guardados y archivo subido exitosamente.", "Agregar / Editar Aplicación", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         this.Close();
                     }
                     else
@@ -279,9 +307,13 @@ namespace PYALauncherApps.Views
                 catch (Exception ex)
                 {
                     // Manejo de excepciones
+                    Debug.WriteLine($"Error al guardar los datos: {ex}");
                     MessageBox.Show($"Error al guardar los datos: {ex.Message}", "Agregar / Editar Aplicación", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+
+            // Cargar nuevamente la lista de software
+            _softwareList = await _mainController.LoadSoftware();
         }
 
 
@@ -372,14 +404,19 @@ namespace PYALauncherApps.Views
             this.Close();          
         }
 
-        public async Task SubirArchivoASupabase()
+        // Método para subir el archivo a Supabase
+        public async Task SubirArchivoASupabase(string filePath)
         {
             SupabaseService supabaseService = new SupabaseService();
 
-            string filePath = @"C:\ruta\del\archivo\mi-archivo.txt";
-            string destinationPath = "documentos/mi-archivo.txt";
+            // Asegúrate de que la ruta del archivo no sea nula o vacía
+            if (!File.Exists(filePath))
+            {
+                MessageBox.Show("El archivo seleccionado no existe.", "Error de Archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-            await supabaseService.SubirArchivoAsync(filePath, destinationPath);
+            await supabaseService.SubirArchivoAsync(filePath);
         }
 
         private void btnSelectPathInstaller_Click(object sender, EventArgs e)
@@ -396,8 +433,8 @@ namespace PYALauncherApps.Views
                 using (OpenFileDialog openFileDialog = new OpenFileDialog())
                 {
                     // Filtrar para mostrar solo archivos .msi
-                    openFileDialog.Filter = "Archivos MSI (*.msi)|*.msi";
-                    openFileDialog.Title = "Seleccione el archivo MSI";
+                    openFileDialog.Filter = "Archivos MSI o EXE (*.msi;*.exe)|*.msi;*.exe";
+                    openFileDialog.Title = "Seleccione el archivo MSI o EXE";
 
                     // Mostrar el diálogo de selección de archivo
                     if (openFileDialog.ShowDialog() == DialogResult.OK)
