@@ -55,8 +55,8 @@ namespace PYALauncherApps.Services
             {
                 await connection.OpenAsync();
                 using (var command = new NpgsqlCommand("select s.id, s.descripcion, s.imagen, s.path_install, s.software_name, s.tag, s.url_msi, " +
-                    "s.verifica_app, s.version, s.path_file, s.force_install, s.automatic_install, s.guid, s.grupos, s.hidden, s.actions, s.machines " +
-                    "from pya_apps.software s order by s.software_name", connection))
+                    "s.verifica_app, s.version, s.path_file, s.force_install, s.automatic_install, s.guid, s.grupos, s.hidden, s.actions, s.machines, s.installername " +
+                    "from pya_apps.software s where s.hidden = false order by s.software_name", connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
                     {
@@ -80,7 +80,8 @@ namespace PYALauncherApps.Services
                                 Grupos = reader.IsDBNull(13) ? null : reader.GetFieldValue<string[]>(13),
                                 Hidden = reader.GetBoolean(14),
                                 Actions = reader.GetInt32(15),
-                                Machines = reader.IsDBNull(16) ? null : JsonConvert.DeserializeObject<Dictionary<string, Machine>>(reader.GetString(16))
+                                Machines = reader.IsDBNull(16) ? null : JsonConvert.DeserializeObject<Dictionary<string, Machine>>(reader.GetString(16)),
+                                InstallerName = reader.IsDBNull(17) ? null : reader.GetString(17),
                             };
 
                             softwareList.Add(software);
@@ -103,10 +104,10 @@ namespace PYALauncherApps.Services
                     using (var command = new NpgsqlCommand(
                         "INSERT INTO pya_apps.software " +
                         "(id, descripcion, imagen, path_install, software_name, tag, url_msi, verifica_app, " +
-                        "version, path_file, force_install, automatic_install, guid, grupos, hidden, actions, machines) " +
+                        "version, path_file, force_install, automatic_install, guid, grupos, hidden, actions, machines, installername) " +
                         "VALUES " +
                         "(@id, @descripcion, @imagen, @path_install, @software_name, @tag, @url_msi, @verifica_app, " +
-                        "@version, @path_file, @force_install, @automatic_install, @guid, @grupos, @hidden, @actions, @machines) " +
+                        "@version, @path_file, @force_install, @automatic_install, @guid, @grupos, @hidden, @actions, @machines, @installername) " +
                         "ON CONFLICT (id) " +
                         "DO UPDATE SET " +
                         "descripcion = EXCLUDED.descripcion, " +
@@ -124,7 +125,8 @@ namespace PYALauncherApps.Services
                         "grupos = EXCLUDED.grupos, " +
                         "hidden = EXCLUDED.hidden, " +
                         "actions = EXCLUDED.actions, " +
-                        "machines = EXCLUDED.machines;", connection))
+                        "machines = EXCLUDED.machines, " +
+                        "installername = EXCLUDED.installername; ", connection))
                     {
                         
                         command.Parameters.AddWithValue("@id", software.Id);
@@ -150,6 +152,8 @@ namespace PYALauncherApps.Services
                         {
                             Value = machinesJson
                         };
+                        command.Parameters.AddWithValue("@installername", software.InstallerName);
+
                         command.Parameters.Add(machinesParameter);
 
                         await command.ExecuteNonQueryAsync();

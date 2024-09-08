@@ -16,6 +16,9 @@ using PYALauncherApps.Controllers;
 using PYALauncherApps.Services;
 using PYALauncherApps.Views;
 using System.ComponentModel;
+using System.Net.Http;
+using NLog;
+using System.Security.Policy;
 
 namespace PYALauncherApps
 {
@@ -34,6 +37,8 @@ namespace PYALauncherApps
         private readonly UsersService _usersService;
         private TabPage tabPageHidePermisos, tabPageHideLogs;
         private List<UserPermissionDisplayItem> _userPermissionsList;
+        private static readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+        private MaterialSnackBar SnackBarMessage;
 
         public MainForm(DatabaseService databaseService, MainController mainController, AddEditForm addEditForm, SoftwareService softwareService, UsersService usersService)
         {
@@ -88,7 +93,8 @@ namespace PYALauncherApps
             //New
             
             InitializeTimer();
-            LoadDataAsync();
+            ReloadApps();
+            //LoadDataAsync();
             
 
             Console.WriteLine("UserDomainName : " + Environment.UserDomainName);
@@ -101,7 +107,6 @@ namespace PYALauncherApps
             updateTimer.Tick += new EventHandler(async (sender, e) => await UpdateSoftwareListAsync());
             updateTimer.Start(); // Iniciar el timer
         }
-
 
         private async void updateTimer_TickAsync(object sender, EventArgs e)
         {
@@ -187,146 +192,154 @@ namespace PYALauncherApps
 
         private void CreateCards(List<Software> softwareList)
         {
-            bool canEditApps = false;
-
-            var currentUserPermission = _userPermissionsList
-                .FirstOrDefault(up => up.UserName.Equals(Environment.UserName, StringComparison.OrdinalIgnoreCase));
-
-            if (currentUserPermission != null)
+            try
             {
-                canEditApps = currentUserPermission.CanEditApps;
-            }
+                bool canEditApps = false;
 
-            flowLayoutPanel2.Controls.Clear(); // Limpiar cualquier control previo
+                var currentUserPermission = _userPermissionsList
+                    .FirstOrDefault(up => up.UserName.Equals(Environment.UserName, StringComparison.OrdinalIgnoreCase));
 
-            foreach (var software in softwareList)
-            {
-                // Crear la tarjeta
-                MaterialCard card = new MaterialCard
+                if (currentUserPermission != null)
                 {
-                    BackColor = System.Drawing.Color.FromArgb(255, 255, 255),
-                    Depth = 0,
-                    ForeColor = System.Drawing.Color.FromArgb(222, 0, 0, 0),
-                    Margin = new Padding(9),
-                    MouseState = MaterialSkin.MouseState.HOVER,
-                    Padding = new Padding(19, 17, 19, 17),
-                    Size = new System.Drawing.Size(650, 150),
-                    TabIndex = 70
-                };
-
-                // Crear y configurar el título
-                MaterialLabel labelTitulo = new MaterialLabel
-                {
-                    AutoSize = true,
-                    Depth = 0,
-                    Font = new System.Drawing.Font("Roboto Medium", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel),
-                    FontType = MaterialSkin.MaterialSkinManager.fontType.H6,
-                    HighEmphasis = true,
-                    Location = new System.Drawing.Point(23, 17),
-                    Margin = new Padding(4, 0, 4, 0),
-                    MouseState = MaterialSkin.MouseState.HOVER,
-                    Text = software.SoftwareName
-                };
-
-                // Crear y configurar el cuerpo
-                MaterialLabel body = new MaterialLabel
-                {
-                    Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
-                    Depth = 0,
-                    Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel),
-                    Location = new System.Drawing.Point(23, 64),
-                    Margin = new Padding(4, 0, 4, 0),
-                    MouseState = MaterialSkin.MouseState.HOVER,
-                    Size = new System.Drawing.Size(480, 90),
-                    Text = software.Descripcion
-                };
-
-                // Crear y configurar el botón instalar
-                MaterialButton buttonInstall = new MaterialButton
-                {
-                    Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-                    AutoSizeMode = AutoSizeMode.GrowOnly,
-                    AutoSize = false,
-                    Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default,
-                    Depth = 0,
-                    HighEmphasis = true,
-                    Location = new System.Drawing.Point(527, 30),
-                    Margin = new Padding(0),
-                    MouseState = MaterialSkin.MouseState.HOVER,
-                    NoAccentTextColor = System.Drawing.Color.Empty,
-                    Size = new System.Drawing.Size(100, 36),
-                    TabIndex = 1,
-                    Text = "Instalar" // Este texto puede variar según el estado del software
-                };
-
-                // Crear y configurar el botón instalar
-                MaterialButton buttonEdit = new MaterialButton
-                {
-                    Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
-                    AutoSizeMode = AutoSizeMode.GrowOnly,
-                    AutoSize = false,
-                    Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default,
-                    Depth = 0,
-                    HighEmphasis = true,
-                    Location = new System.Drawing.Point(527, 80),
-                    Margin = new Padding(0),
-                    MouseState = MaterialSkin.MouseState.HOVER,
-                    NoAccentTextColor = System.Drawing.Color.Empty,
-                    Size = new System.Drawing.Size(100, 36),
-                    TabIndex = 1,
-                    Text = "Editar",
-                    AccessibleName = software.SoftwareName.ToString(),
-                    Enabled = canEditApps ? true : false
-                };
-
-                string localVersion = LocalVersionApp(software.PathInstall);
-                MaterialLabel labelVersion = new MaterialLabel
-                {
-                    AutoSize = true,
-                    Depth = 0,
-                    Enabled = false,
-                    Font = new System.Drawing.Font("Roboto Medium", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel),
-                    //FontType = MaterialSkin.MaterialSkinManager.fontType.Subtitle2,
-                    ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0))))),
-                    Location = new System.Drawing.Point(23, 43),
-                    Margin = new System.Windows.Forms.Padding(4, 0, 4, 0),
-                    MouseState = MaterialSkin.MouseState.HOVER,
-                    Size = new System.Drawing.Size(269, 17),
-                    TabIndex = 82,
-                    Text = localVersion != null ? Text = $"Version: {localVersion}" : Text = ""                    
-                };
-
-                // Verificar si el software ya está instalado y actualizar el texto del botón
-                if (VerificaInstalacion(software.PathInstall))
-                {
-                    buttonInstall.Text = "Instalado";
-                    buttonInstall.Enabled = false;
+                    canEditApps = currentUserPermission.CanEditApps;
                 }
 
-                // Configurar el evento Click del botón
-                buttonInstall.Click += async (sender, e) =>
+                flowLayoutPanel2.Controls.Clear(); // Limpiar cualquier control previo
+
+                foreach (var software in softwareList)
                 {
-                    await Task.Run(() =>
+                    // Crear la tarjeta
+                    MaterialCard card = new MaterialCard
                     {
-                        ValidaDescarga(sender, e, software.UrlMsi, software.Version, software.PathFile, software.ForceInstall.ToString(), software.VerificaApp, software.AutomaticInstall.ToString(), software.PathInstall, true, software.SoftwareName);
-                    });
-                };
-                buttonEdit.Click += new EventHandler(AddEdit_Click);
+                        BackColor = System.Drawing.Color.FromArgb(255, 255, 255),
+                        Depth = 0,
+                        ForeColor = System.Drawing.Color.FromArgb(222, 0, 0, 0),
+                        Margin = new Padding(9),
+                        MouseState = MaterialSkin.MouseState.HOVER,
+                        Padding = new Padding(19, 17, 19, 17),
+                        Size = new System.Drawing.Size(650, 150),
+                        TabIndex = 70
+                    };
+
+                    // Crear y configurar el título
+                    MaterialLabel labelTitulo = new MaterialLabel
+                    {
+                        AutoSize = true,
+                        Depth = 0,
+                        Font = new System.Drawing.Font("Roboto Medium", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel),
+                        FontType = MaterialSkin.MaterialSkinManager.fontType.H6,
+                        HighEmphasis = true,
+                        Location = new System.Drawing.Point(23, 17),
+                        Margin = new Padding(4, 0, 4, 0),
+                        MouseState = MaterialSkin.MouseState.HOVER,
+                        Text = software.SoftwareName
+                    };
+
+                    // Crear y configurar el cuerpo
+                    MaterialLabel body = new MaterialLabel
+                    {
+                        Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right,
+                        Depth = 0,
+                        Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel),
+                        Location = new System.Drawing.Point(23, 64),
+                        Margin = new Padding(4, 0, 4, 0),
+                        MouseState = MaterialSkin.MouseState.HOVER,
+                        Size = new System.Drawing.Size(480, 90),
+                        Text = software.Descripcion
+                    };
+
+                    // Crear y configurar el botón instalar
+                    MaterialButton buttonInstall = new MaterialButton
+                    {
+                        Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                        AutoSizeMode = AutoSizeMode.GrowOnly,
+                        AutoSize = false,
+                        Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default,
+                        Depth = 0,
+                        HighEmphasis = true,
+                        Location = new System.Drawing.Point(527, 30),
+                        Margin = new Padding(0),
+                        MouseState = MaterialSkin.MouseState.HOVER,
+                        NoAccentTextColor = System.Drawing.Color.Empty,
+                        Size = new System.Drawing.Size(100, 36),
+                        TabIndex = 1,
+                        Text = "Instalar" // Este texto puede variar según el estado del software
+                    };
+
+                    // Crear y configurar el botón instalar
+                    MaterialButton buttonEdit = new MaterialButton
+                    {
+                        Anchor = AnchorStyles.Bottom | AnchorStyles.Right,
+                        AutoSizeMode = AutoSizeMode.GrowOnly,
+                        AutoSize = false,
+                        Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default,
+                        Depth = 0,
+                        HighEmphasis = true,
+                        Location = new System.Drawing.Point(527, 80),
+                        Margin = new Padding(0),
+                        MouseState = MaterialSkin.MouseState.HOVER,
+                        NoAccentTextColor = System.Drawing.Color.Empty,
+                        Size = new System.Drawing.Size(100, 36),
+                        TabIndex = 1,
+                        Text = "Editar",
+                        AccessibleName = software.SoftwareName.ToString(),
+                        Enabled = canEditApps ? true : false
+                    };
+
+                    string localVersion = LocalVersionApp(software.PathInstall);
+                    MaterialLabel labelVersion = new MaterialLabel
+                    {
+                        AutoSize = true,
+                        Depth = 0,
+                        Enabled = false,
+                        Font = new System.Drawing.Font("Roboto Medium", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel),
+                        //FontType = MaterialSkin.MaterialSkinManager.fontType.Subtitle2,
+                        ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0))))),
+                        Location = new System.Drawing.Point(23, 43),
+                        Margin = new System.Windows.Forms.Padding(4, 0, 4, 0),
+                        MouseState = MaterialSkin.MouseState.HOVER,
+                        Size = new System.Drawing.Size(269, 17),
+                        TabIndex = 82,
+                        Text = localVersion != null ? Text = $"Version: {localVersion}" : Text = ""
+                    };
+
+                    // Verificar si el software ya está instalado y actualizar el texto del botón
+                    if (VerificaInstalacion(software.PathInstall))
+                    {
+                        buttonInstall.Text = "Instalado";
+                        buttonInstall.Enabled = false;
+                    }
+
+                    // Configurar el evento Click del botón
+                    buttonInstall.Click += async (sender, e) =>
+                    {
+                        await Task.Run(() =>
+                        {
+                            //ValidaDescarga(sender, e, software.UrlMsi, software.Version, software.PathFile, software.ForceInstall.ToString(), software.VerificaApp, software.AutomaticInstall.ToString(), software.PathInstall, true, software.SoftwareName);
+                            DescargarEInstalar(software.InstallerName);
+                        });
+                    };
+                    buttonEdit.Click += new EventHandler(AddEdit_Click);
 
 
-                // Agregar controles a la tarjeta
-                card.Controls.Add(labelTitulo);
-                card.Controls.Add(labelVersion);
-                card.Controls.Add(body);
-                card.Controls.Add(buttonInstall);
-                //if (canEditApps) 
+                    // Agregar controles a la tarjeta
+                    card.Controls.Add(labelTitulo);
+                    card.Controls.Add(labelVersion);
+                    card.Controls.Add(body);
+                    card.Controls.Add(buttonInstall);
+                    //if (canEditApps) 
                     card.Controls.Add(buttonEdit);
-                
-
-                // Agregar la tarjeta al FlowLayoutPanel
-                flowLayoutPanel2.Controls.Add(card);
 
 
+                    // Agregar la tarjeta al FlowLayoutPanel
+                    flowLayoutPanel2.Controls.Add(card);
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error CreateCards : " + ex);
             }
         }
 
@@ -346,8 +359,8 @@ namespace PYALauncherApps
             }
             catch (Exception ex)
             {
+                Debug.WriteLine("Error al verificar version local en ruta: " + pathInstall + ex);
                 return null;
-                Console.WriteLine("Error al verificar version local en ruta: " + pathInstall + ex);
             }
 
             return null;
@@ -375,34 +388,29 @@ namespace PYALauncherApps
             _addEditForm.InitializeAsync();
             
 
-            Console.WriteLine("SoftwareName: " + button.AccessibleName); // Datos recibidos
+            Console.WriteLine("AddEdit_Click SoftwareName: " + button.AccessibleName); // Datos recibidos
         }
-
-        private void OnDataReceived(string data)
-        {
-            // Aquí recibes los datos del segundo formulario
-            Console.WriteLine("Datos recibidos: " + data);
-        }
-
 
         private async Task UpdateSoftwareListAsync()
         {
-            var newSoftwareList = await _mainController.LoadSoftware();
+            ReloadApps();
 
-            // Comprobar si la lista ha cambiado
-            bool softwareChanged = !AreListsEqual(_softwareList, newSoftwareList);
+            //var newSoftwareList = await _mainController.LoadSoftware();
 
-            if (softwareChanged)
-            {
-                _softwareList = newSoftwareList;
-                // Actualizar las tarjetas si la lista cambió
-                CreateCards(_softwareList);
-            }
-            else
-            {
-                // Incluso si la lista no cambió, actualizar el estado de los botones
-                CreateCards(_softwareList);
-            }
+            //// Comprobar si la lista ha cambiado
+            //bool softwareChanged = !AreListsEqual(_softwareList, newSoftwareList);
+
+            //if (softwareChanged)
+            //{
+            //    _softwareList = newSoftwareList;
+            //    // Actualizar las tarjetas si la lista cambió
+            //    CreateCards(_softwareList);
+            //}
+            //else
+            //{
+            //    // Incluso si la lista no cambió, actualizar el estado de los botones
+            //    CreateCards(_softwareList);
+            //}
         }
 
 
@@ -705,7 +713,7 @@ namespace PYALauncherApps
                 if (automaticInstall == "true")
                 {
                     Console.WriteLine("\n[NOTIFICACION] Software: " + software + " viene con actualizacion automatica.\n");
-                    DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false, software);
+                    DescargaAppAsync(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false, software);
 
                     /* ROAD MAP VALIDATION
                      * 
@@ -749,7 +757,7 @@ namespace PYALauncherApps
                 if (forceInstall == "true")
                 {
                     Console.WriteLine("\n[NOTIFICACION] Software: " + software + " viene con actualizacion forzada.\n");
-                    DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false, software);
+                    DescargaAppAsync(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, false, software);
                 }
             }
         }
@@ -788,7 +796,7 @@ namespace PYALauncherApps
             // Ejecutar la descarga e instalación de manera asíncrona
             await Task.Run(() =>
             {
-                DescargaApp(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, instalaManual, software);
+                DescargaAppAsync(urlMsi, version, pathFile, forceInstall, verificaApp, automaticInstall, pathInstall, instalaManual, software);
             });
 
             // Verificar y actualizar el estado del botón después de la instalación
@@ -833,7 +841,118 @@ namespace PYALauncherApps
             }
         }
 
-        private void DescargaApp(string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall, string pathInstall, bool instalaManual, string software)
+        private void DescargaAppAsync(string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall, string pathInstall, bool instalaManual, string software)
+        {
+            string directorio = @"C:\temp\repository";
+            //string directorio = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp\\repository");
+
+            string rutaDescarga = Path.Combine(directorio, pathFile);
+
+            if (File.Exists(rutaDescarga))
+            {
+                string[] versionLocalSucia = pathFile.Split('_');
+
+                if (versionLocalSucia.Length > 1 && versionLocalSucia[1].Length >= 7)
+                {
+                    string versionLocal = versionLocalSucia[1].Substring(0, 7);
+
+                    if (Version.TryParse(versionLocal, out Version v1) && Version.TryParse(version, out Version v2))
+                    {
+                        if (v1.CompareTo(v2) == 0)
+                        {
+                            SafeUpdateLogs("[DescargaApp] Archivo ya descargado... " + rutaDescarga);
+                            Debug.WriteLine("[DescargaApp] Archivo ya descargado... " + rutaDescarga);
+                            VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        SafeUpdateLogs("[DescargaApp] La versión local o la versión proporcionada no son válidas.");
+                        Debug.WriteLine("[DescargaApp] La versión local o la versión proporcionada no son válidas.");
+                    }
+                }
+                else
+                {
+                    SafeUpdateLogs("[DescargaApp] El formato del archivo o la versión local no es válido.");
+                    Debug.WriteLine("[DescargaApp] El formato del archivo o la versión local no es válido.");
+                }
+            }
+
+
+            #region
+            try
+            {
+                // Crear el directorio solo si no existe
+                if (!Directory.Exists(directorio))
+                {
+                    Directory.CreateDirectory(directorio);
+                    SafeUpdateLogs("[DescargaApp] Directorio creado: " + directorio);
+                }
+
+                //using (WebClient client = new WebClient())
+                //{
+                //    SafeUpdateLogs("Descarga iniciando...");
+                //    client.DownloadFile(urlMsi, rutaDescarga);  // Cambia directorio por rutaDescarga
+                //    SafeUpdateLogs("Descarga completada...");
+                //}
+
+                DescargarArchivoDesdeSupabase(urlMsi, directorio);
+
+                SafeUpdateLogs("[DescargaApp] Descarga ruta archivo: " + rutaDescarga);
+                VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                SafeUpdateLogs("[DescargaApp] Error de acceso denegado al crear el directorio: " + ex.Message);
+            }
+            catch (WebException ex)
+            {
+                SafeUpdateLogs("[DescargaApp] Error en la solicitud WebClient: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                SafeUpdateLogs("[DescargaApp] Error : " + ex.Message);
+            }
+            #endregion
+        }
+
+        private async Task DescargarArchivoDesdeSupabase(string url, string destino)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    SafeUpdateLogs("[DescargarArchivoDesdeSupabase] Descarga iniciando...");
+
+                    // Solicita el archivo desde la URL y guarda el contenido en el destino
+                    using (HttpResponseMessage response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead))
+                    {
+                        response.EnsureSuccessStatusCode(); // Asegura que la solicitud fue exitosa
+
+                        using (var fileStream = new FileStream(destino, FileMode.Create, FileAccess.Write, FileShare.None))
+                        {
+                            await response.Content.CopyToAsync(fileStream);  // Copia el contenido de la respuesta al archivo
+                        }
+
+                        SafeUpdateLogs("[DescargarArchivoDesdeSupabase] Descarga completada.");
+                    }
+                }
+
+                SafeUpdateLogs("[DescargarArchivoDesdeSupabase] Archivo descargado en: " + destino);
+            }
+            catch (HttpRequestException ex)
+            {
+                SafeUpdateLogs("[DescargarArchivoDesdeSupabase] Error en la solicitud HTTP: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                SafeUpdateLogs("[DescargarArchivoDesdeSupabase] Error: " + ex.Message);
+            }
+        }
+
+
+        private async Task DescargaAppAsync_OLD2(string urlMsi, string version, string pathFile, string forceInstall, string verificaApp, string automaticInstall, string pathInstall, bool instalaManual, string software)
         {
             string directorio = @"C:\temp\repository";
             string rutaDescarga = Path.Combine(directorio, pathFile);
@@ -851,6 +970,7 @@ namespace PYALauncherApps
                         if (v1.CompareTo(v2) == 0)
                         {
                             SafeUpdateLogs("[DescargaApp] Archivo ya descargado... " + rutaDescarga);
+                            Debug.WriteLine("[DescargaApp] Archivo ya descargado... " + rutaDescarga);
                             VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
                             return;
                         }
@@ -858,11 +978,13 @@ namespace PYALauncherApps
                     else
                     {
                         SafeUpdateLogs("[DescargaApp] La versión local o la versión proporcionada no son válidas.");
+                        Debug.WriteLine("[DescargaApp] La versión local o la versión proporcionada no son válidas.");
                     }
                 }
                 else
                 {
                     SafeUpdateLogs("[DescargaApp] El formato del archivo o la versión local no es válido.");
+                    Debug.WriteLine("[DescargaApp] El formato del archivo o la versión local no es válido.");
                 }
             }
 
@@ -870,21 +992,38 @@ namespace PYALauncherApps
             {
                 Directory.CreateDirectory(directorio);
 
-                using (WebClient client = new WebClient())
+                using (HttpClient client = new HttpClient())
                 {
-                    SafeUpdateLogs("Descarga iniciando...");
-                    client.DownloadFile(urlMsi, rutaDescarga);
-                    SafeUpdateLogs("Descarga completada...");
+                    client.Timeout = TimeSpan.FromMinutes(10);  // Ajusta el tiempo de espera según sea necesario
+
+                    SafeUpdateLogs("Descarga iniciando... url: " + urlMsi);
+                    Debug.WriteLine("[DescargaAppAsync] Descarga iniciando... url: " + urlMsi);
+
+                    using (HttpResponseMessage response = await client.GetAsync(urlMsi, HttpCompletionOption.ResponseHeadersRead))
+                    {
+                        response.EnsureSuccessStatusCode();
+
+                        using (var fileStream = new FileStream(rutaDescarga, FileMode.Create, FileAccess.Write, FileShare.None))
+                        {
+                            await response.Content.CopyToAsync(fileStream);
+                        }
+
+                        SafeUpdateLogs("Descarga completada...");
+                        Debug.WriteLine("Descarga completada...");
+                    }
                 }
 
                 SafeUpdateLogs("[DescargaApp] Descarga ruta archivo: " + rutaDescarga);
+                Debug.WriteLine("[DescargaApp] Descarga ruta archivo: " + rutaDescarga);
                 VerificaProcesoActivo(verificaApp, rutaDescarga, automaticInstall, forceInstall, pathInstall, instalaManual, version, software);
             }
             catch (Exception ex)
             {
-                SafeUpdateLogs("[DescargaApp] Error al crear el directorio: " + ex.Message);
+                SafeUpdateLogs("[DescargaApp] Error durante la descarga: " + ex.Message);
+                Debug.WriteLine("[DescargaApp] Error durante la descarga: " + ex.Message);
             }
         }
+
 
         private void SafeUpdateLogs(string message)
         {
@@ -894,12 +1033,16 @@ namespace PYALauncherApps
                 {
                     materialListBoxItem13.Text = message;
                     materialListBoxLogs.Items.Add(materialListBoxItem13);
+                    Debug.WriteLine($"{message}");
+                    _logger.Info($"{message}");
                 }));
             }
             else
             {
                 materialListBoxItem13.Text = message;
                 materialListBoxLogs.Items.Add(materialListBoxItem13);
+                Debug.WriteLine($"{message}");
+                _logger.Info($"{message}");
             }
         }
 
@@ -911,18 +1054,18 @@ namespace PYALauncherApps
 
             if (procesos.Length > 0)
             {
-                Console.WriteLine("El proceso " + verificaApp.ToUpper() + " está activo.");
+                Debug.WriteLine("El proceso " + verificaApp.ToUpper() + " está activo.");
 
                 if (automaticInstall == "true")
                 {
-                    Console.WriteLine("[AutomaticInstall] El proceso " + verificaApp.ToUpper() + " está activo. No fue posible la instalacion." + rutaDescarga);
+                    Debug.WriteLine("[AutomaticInstall] El proceso " + verificaApp.ToUpper() + " está activo. No fue posible la instalacion." + rutaDescarga);
                     MaterialSnackBar SnackBarMessage2 = new MaterialSnackBar("El proceso " + verificaApp.ToUpper() + " esta activo.  No fue posible la instalacion.", "OK", true);
                     SnackBarMessage2.Show(this);
                 }
 
                 if (forceInstall == "true")
                 {
-                    Console.WriteLine("[ForceInstall] Instalacion forzada, proceso esta activo...");
+                    Debug.WriteLine("[ForceInstall] Instalacion forzada, proceso esta activo...");
 
                     DetieneProceso(verificaApp);
 
@@ -945,7 +1088,7 @@ namespace PYALauncherApps
 
                         if (comparacion == -1)
                         {
-                            Console.WriteLine("Version nueva disponibles en la web: " + version);
+                            Debug.WriteLine("Version nueva disponibles en la web: " + version);
                             EjectutaDesinstalacion(rutaDescarga, software);
                             System.Threading.Thread.Sleep(3000);
                             EjecutaInstalacion(rutaDescarga, software);
@@ -953,7 +1096,7 @@ namespace PYALauncherApps
 
                         if (comparacion == 10)
                         {
-                            Console.WriteLine("Error al verificar version: " + version);
+                            Debug.WriteLine("Error al verificar version: " + version);
                             MaterialSnackBar SnackBarMessage2 = new MaterialSnackBar("Error al verificar instalacion de  " + software, 3000, "OK");
                             SnackBarMessage2.Show(this);
                         }
@@ -986,12 +1129,12 @@ namespace PYALauncherApps
 
                         if (comparacion == 0)
                         {
-                            Console.WriteLine("Version mas reciente instalada de : " + software);
+                            Debug.WriteLine("Version mas reciente instalada de : " + software);
                         }
 
                         if (comparacion == 1)
                         {
-                            Console.WriteLine("Version local mas actualizada: " + versionLocal);
+                            Debug.WriteLine("Version local mas actualizada: " + versionLocal);
                         }
 
                         if (comparacion == -1)
@@ -1031,7 +1174,7 @@ namespace PYALauncherApps
 
                 if (forceInstall == "true")
                 {
-                    Console.WriteLine("Instalacion forzada, proceso no esta activo...");
+                    Debug.WriteLine("Instalacion forzada, proceso no esta activo...");
 
 
                     if (VerificaInstalacion(pathInstall))
@@ -1090,6 +1233,8 @@ namespace PYALauncherApps
         {
             try
             {
+                Debug.WriteLine("[EjecutaInstalacion] rutaDescarga:" + rutaDescarga + ", software: " + software);
+
                 if (InvokeRequired)
                 {
                     this.Invoke(new Action(() => EjecutaInstalacion(rutaDescarga, software)));
@@ -1438,13 +1583,20 @@ namespace PYALauncherApps
         #endregion
         private async void ReloadApps()
         {
+            // Asegurarse de que la manipulación de la UI ocurre en el hilo principal
+            if (InvokeRequired)
+            {
+                Invoke(new Action(ReloadApps));
+                return;
+            }
+
             flowLayoutPanel2.Controls.Clear();
 
             MaterialLabel reload = new MaterialLabel();
             reload.AutoSize = true;
             reload.Depth = 0;
             reload.Font = new System.Drawing.Font("Roboto", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            reload.FontType = MaterialSkin.MaterialSkinManager.fontType.H3;
+            reload.FontType = MaterialSkin.MaterialSkinManager.fontType.H4;
             reload.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             reload.Location = new System.Drawing.Point(647, 228);
             reload.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -1458,9 +1610,19 @@ namespace PYALauncherApps
             // Obtener nuevamente la lista de software desde la base de datos
             _softwareList = await _mainController.LoadSoftware();
 
+            Debug.WriteLine("_softwareList : " + _softwareList.Count());
+
+            if (_softwareList.Count > 0)
+            {
+                CreateCards(_softwareList);
+            }
+            else
+            {
+                reload.Text = "No hay softwares para mostrar...";
+            }
 
             // Limpiar y recrear las tarjetas con el nuevo estado de los botones
-            CreateCards(_softwareList);
+            
         }
 
         private async void buttonAppsRefresh_Click(object sender, EventArgs e)
@@ -1581,5 +1743,58 @@ namespace PYALauncherApps
         {
             materialTabControl1.TabPages.Add(tabPageHidePermisos);
         }
+
+
+
+        public async Task DescargarEInstalar(string fileName)
+        {
+            //string file = "7z2408-x64.msi";
+           string FolderDownload = @"C:\temp\repository";
+
+            SupabaseService supabaseService = new SupabaseService();
+            InstaladorService instaladorService = new InstaladorService();
+
+            // Descarga el archivo
+            string rutaArchivoDescargado = await supabaseService.DescargarArchivoAsync(fileName, FolderDownload);
+
+            // Instala el archivo
+            int resuInstalacion = instaladorService.InstalarArchivoSilenciosamente(rutaArchivoDescargado);
+
+            switch (resuInstalacion)
+            {
+                case 0:
+                    ShowSnackMessage("Instalación completada exitosamente.", "OK");
+                    break;
+                case -1:
+                    ShowSnackMessage("Formato de instalador no soportado.", "OK");
+                    break;
+                case -2:
+                    ShowSnackMessage("Error al intentar instalar el archivo.", "OK");
+                    break;
+                case -3:
+                    ShowSnackMessage("El archivo no existe.", "OK");
+                    break;
+                default:
+                    break;
+            }
+
+            ReloadApps();
+        }
+
+        private void ShowSnackMessage(string message, string textActionDismiss)
+        {
+            if (InvokeRequired)
+            {
+                // Usar Invoke para ejecutar el método en el hilo principal de la UI
+                this.Invoke(new Action(() => ShowSnackMessage(message, textActionDismiss)));
+            }
+            else
+            {
+                // Mostrar el SnackBar en el hilo principal
+                SnackBarMessage = new MaterialSnackBar(message, textActionDismiss, true);
+                SnackBarMessage.Show(this);
+            }
+        }
+
     }
 }

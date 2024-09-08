@@ -27,6 +27,7 @@ namespace PYALauncherApps.Models
         public int Actions { get; set; }
         //public List<string> Machines { get; set; } // 'machines' (jsonb)
         public Dictionary<string, Machine> Machines { get; set; }
+        public string InstallerName { get; set; }
 
         public override bool Equals(object obj)
         {
@@ -49,7 +50,8 @@ namespace PYALauncherApps.Models
                    Guid == software.Guid &&
                    Hidden == software.Hidden &&
                    Actions == software.Actions &&
-                   Machines == software.Machines;
+                   Machines == software.Machines &&
+                   InstallerName == software.InstallerName;
         }
 
         public override int GetHashCode()

@@ -257,7 +257,8 @@ namespace PYALauncherApps.Views
                         Grupos = new string[] { "Grupo1", "Grupo2" },
                         Hidden = false,
                         Actions = cbxActions.SelectedIndex, // Según tus necesidades
-                        Machines = GetMachinesFromDataGridView()
+                        Machines = GetMachinesFromDataGridView(),
+                        InstallerName = softwareTemp.InstallerName
                     };
 
                     // Llamar al método UpdateSoftware a través de la instancia de SoftwareService
@@ -370,5 +371,62 @@ namespace PYALauncherApps.Views
         {
             this.Close();          
         }
+
+        public async Task SubirArchivoASupabase()
+        {
+            SupabaseService supabaseService = new SupabaseService();
+
+            string filePath = @"C:\ruta\del\archivo\mi-archivo.txt";
+            string destinationPath = "documentos/mi-archivo.txt";
+
+            await supabaseService.SubirArchivoAsync(filePath, destinationPath);
+        }
+
+        private void btnSelectPathInstaller_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (InvokeRequired)
+                {
+                    Invoke(new Action(() => btnSelectPathInstaller_Click(sender, e)));
+                    return;
+                }
+
+                // Crear una instancia de OpenFileDialog para seleccionar el archivo MSI
+                using (OpenFileDialog openFileDialog = new OpenFileDialog())
+                {
+                    // Filtrar para mostrar solo archivos .msi
+                    openFileDialog.Filter = "Archivos MSI (*.msi)|*.msi";
+                    openFileDialog.Title = "Seleccione el archivo MSI";
+
+                    // Mostrar el diálogo de selección de archivo
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        // Capturar la ruta del archivo seleccionado
+                        string rutaMsi = openFileDialog.FileName;
+                        softwareTemp.InstallerName = openFileDialog.SafeFileName; 
+
+                        // Actualizar el control de texto con la ruta del archivo seleccionado
+                        textSelectPathInstaller.Text = rutaMsi;
+
+                        Console.WriteLine($"Ruta del archivo MSI seleccionada: {rutaMsi}");
+                    }
+                    else
+                    {
+                        Console.WriteLine("No se seleccionó ningún archivo.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Capturar cualquier excepción inesperada y mostrarla
+                MessageBox.Show($"Ocurrió un error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
+
+
     }
 }

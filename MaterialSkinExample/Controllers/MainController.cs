@@ -22,13 +22,21 @@ namespace PYALauncherApps.Controllers
         public void SetMainForm(MainForm mainForm)
         {
             _mainForm = mainForm;
+            OpenForm();
         }
 
-        public async Task OpenForm()
+        public void OpenForm()
         {
-            Console.WriteLine("OpenForm()");
-            await _mainForm.InitializeAsync();
-            _mainForm.ShowDialog();
+            if (_mainForm.InvokeRequired)
+            {
+                _mainForm.Invoke(new Action(() => OpenForm()));
+            }
+            else
+            {
+                Console.WriteLine("OpenForm()");
+                _mainForm.InitializeAsync().GetAwaiter().GetResult();
+                //_mainForm.ShowDialog();
+            }
         }
 
         public async Task<List<Config>> LoadConfigs()

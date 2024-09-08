@@ -43,6 +43,8 @@
             this.multiLinePathDll = new MaterialSkin.Controls.MaterialMultiLineTextBox2();
             this.txtVersion = new MaterialSkin.Controls.MaterialTextBox();
             this.txtProcessVerificaApp = new MaterialSkin.Controls.MaterialTextBox();
+            this.textSelectPathInstaller = new MaterialSkin.Controls.MaterialMultiLineTextBox2();
+            this.btnSelectPathInstaller = new MaterialSkin.Controls.MaterialButton();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewMachines)).BeginInit();
             this.SuspendLayout();
             // 
@@ -251,7 +253,7 @@
             this.multiLineURLMSI.SelectionLength = 0;
             this.multiLineURLMSI.SelectionStart = 0;
             this.multiLineURLMSI.ShortcutsEnabled = true;
-            this.multiLineURLMSI.Size = new System.Drawing.Size(550, 100);
+            this.multiLineURLMSI.Size = new System.Drawing.Size(550, 40);
             this.multiLineURLMSI.TabIndex = 55;
             this.multiLineURLMSI.TabStop = false;
             this.multiLineURLMSI.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
@@ -309,7 +311,7 @@
             this.txtVersion.AnimateReadOnly = false;
             this.txtVersion.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtVersion.Depth = 0;
-            this.txtVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txtVersion.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txtVersion.Hint = "Versión";
             this.txtVersion.LeadingIcon = null;
             this.txtVersion.Location = new System.Drawing.Point(386, 326);
@@ -327,7 +329,7 @@
             this.txtProcessVerificaApp.AnimateReadOnly = false;
             this.txtProcessVerificaApp.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtProcessVerificaApp.Depth = 0;
-            this.txtProcessVerificaApp.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txtProcessVerificaApp.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txtProcessVerificaApp.Hint = "Proceso asociado(acad, revit)";
             this.txtProcessVerificaApp.LeadingIcon = null;
             this.txtProcessVerificaApp.Location = new System.Drawing.Point(28, 326);
@@ -340,11 +342,60 @@
             this.txtProcessVerificaApp.Text = "";
             this.txtProcessVerificaApp.TrailingIcon = null;
             // 
+            // textSelectPathInstaller
+            // 
+            this.textSelectPathInstaller.AnimateReadOnly = false;
+            this.textSelectPathInstaller.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.textSelectPathInstaller.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
+            this.textSelectPathInstaller.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.textSelectPathInstaller.Depth = 0;
+            this.textSelectPathInstaller.HideSelection = true;
+            this.textSelectPathInstaller.Hint = "Seleccione archivo...";
+            this.textSelectPathInstaller.Location = new System.Drawing.Point(28, 481);
+            this.textSelectPathInstaller.MaxLength = 32767;
+            this.textSelectPathInstaller.MouseState = MaterialSkin.MouseState.OUT;
+            this.textSelectPathInstaller.Name = "textSelectPathInstaller";
+            this.textSelectPathInstaller.PasswordChar = '\0';
+            this.textSelectPathInstaller.ReadOnly = false;
+            this.textSelectPathInstaller.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.textSelectPathInstaller.SelectedText = "";
+            this.textSelectPathInstaller.SelectionLength = 0;
+            this.textSelectPathInstaller.SelectionStart = 0;
+            this.textSelectPathInstaller.ShortcutsEnabled = true;
+            this.textSelectPathInstaller.Size = new System.Drawing.Size(490, 47);
+            this.textSelectPathInstaller.TabIndex = 60;
+            this.textSelectPathInstaller.TabStop = false;
+            this.textSelectPathInstaller.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textSelectPathInstaller.UseSystemPasswordChar = false;
+            // 
+            // btnSelectPathInstaller
+            // 
+            this.btnSelectPathInstaller.AutoSize = false;
+            this.btnSelectPathInstaller.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnSelectPathInstaller.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnSelectPathInstaller.Depth = 0;
+            this.btnSelectPathInstaller.HighEmphasis = true;
+            this.btnSelectPathInstaller.Icon = null;
+            this.btnSelectPathInstaller.Location = new System.Drawing.Point(525, 481);
+            this.btnSelectPathInstaller.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnSelectPathInstaller.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnSelectPathInstaller.Name = "btnSelectPathInstaller";
+            this.btnSelectPathInstaller.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnSelectPathInstaller.Size = new System.Drawing.Size(53, 47);
+            this.btnSelectPathInstaller.TabIndex = 61;
+            this.btnSelectPathInstaller.Text = "...";
+            this.btnSelectPathInstaller.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnSelectPathInstaller.UseAccentColor = false;
+            this.btnSelectPathInstaller.UseVisualStyleBackColor = true;
+            this.btnSelectPathInstaller.Click += new System.EventHandler(this.btnSelectPathInstaller_Click);
+            // 
             // AddEditForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(618, 861);
+            this.Controls.Add(this.btnSelectPathInstaller);
+            this.Controls.Add(this.textSelectPathInstaller);
             this.Controls.Add(this.txtProcessVerificaApp);
             this.Controls.Add(this.txtVersion);
             this.Controls.Add(this.multiLinePathDll);
@@ -389,5 +440,7 @@
         private MaterialSkin.Controls.MaterialMultiLineTextBox2 multiLinePathDll;
         private MaterialSkin.Controls.MaterialTextBox txtVersion;
         private MaterialSkin.Controls.MaterialTextBox txtProcessVerificaApp;
+        private MaterialSkin.Controls.MaterialMultiLineTextBox2 textSelectPathInstaller;
+        private MaterialSkin.Controls.MaterialButton btnSelectPathInstaller;
     }
 }

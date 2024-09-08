@@ -423,6 +423,7 @@ namespace PYALauncherApps
             this.listBoxSoftware.Name = "listBoxSoftware";
             this.listBoxSoftware.Size = new System.Drawing.Size(176, 186);
             this.listBoxSoftware.TabIndex = 75;
+            this.listBoxSoftware.Visible = false;
             // 
             // listBoxConfigs
             // 
@@ -432,6 +433,7 @@ namespace PYALauncherApps
             this.listBoxConfigs.Name = "listBoxConfigs";
             this.listBoxConfigs.Size = new System.Drawing.Size(137, 186);
             this.listBoxConfigs.TabIndex = 74;
+            this.listBoxConfigs.Visible = false;
             // 
             // materialListBoxSoftware
             // 
@@ -447,6 +449,7 @@ namespace PYALauncherApps
             this.materialListBoxSoftware.SelectedItem = null;
             this.materialListBoxSoftware.Size = new System.Drawing.Size(135, 187);
             this.materialListBoxSoftware.TabIndex = 73;
+            this.materialListBoxSoftware.Visible = false;
             // 
             // materialListBoxConfigs
             // 
@@ -462,6 +465,7 @@ namespace PYALauncherApps
             this.materialListBoxConfigs.SelectedItem = null;
             this.materialListBoxConfigs.Size = new System.Drawing.Size(107, 187);
             this.materialListBoxConfigs.TabIndex = 72;
+            this.materialListBoxConfigs.Visible = false;
             // 
             // materialCard1
             // 
