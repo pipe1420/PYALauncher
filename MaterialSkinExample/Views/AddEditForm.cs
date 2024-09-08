@@ -122,7 +122,7 @@ namespace PYALauncherApps.Views
             //var softwareFind = _softwareService.FindSoftware(software.SoftwareName);
             txtName.Text = software.SoftwareName;
             multiLineDescrip.Text = software.Descripcion;
-            multiLineURLMSI.Text = software.UrlMsi;
+            textSelectPathInstaller.Text = software.InstallerName;
             multiLinePathDll.Text = software.PathFile;
             txtVersion.Text = software.Version; 
             cbxActions.SelectedIndex = 0;
@@ -247,7 +247,7 @@ namespace PYALauncherApps.Views
                         PathInstall = multiLinePathDll.Text,
                         SoftwareName = txtName.Text,
                         Tag = "tag",
-                        UrlMsi = multiLineURLMSI.Text,
+                        UrlMsi = textSelectPathInstaller.Text,
                         VerificaApp = txtProcessVerificaApp.Text,
                         Version = txtVersion.Text,
                         PathFile = @multiLinePathDll.Text,

@@ -42,7 +42,7 @@ namespace MaterialSkinExample
             services.AddSingleton<UsersService>();
             services.AddSingleton<MainController>();
             services.AddSingleton<MainForm>();
-            services.AddScoped<AddEditForm>();
+            services.AddSingleton<AddEditForm>();
         }
     }
 }

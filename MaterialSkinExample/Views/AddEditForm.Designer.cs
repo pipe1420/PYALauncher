@@ -38,7 +38,6 @@
             this.dataGridViewMachines = new System.Windows.Forms.DataGridView();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.multiLineDescrip = new MaterialSkin.Controls.MaterialMultiLineTextBox2();
-            this.multiLineURLMSI = new MaterialSkin.Controls.MaterialMultiLineTextBox2();
             this.btnCancel = new MaterialSkin.Controls.MaterialButton();
             this.multiLinePathDll = new MaterialSkin.Controls.MaterialMultiLineTextBox2();
             this.txtVersion = new MaterialSkin.Controls.MaterialTextBox();
@@ -99,7 +98,7 @@
             this.btnSave.Depth = 0;
             this.btnSave.HighEmphasis = true;
             this.btnSave.Icon = null;
-            this.btnSave.Location = new System.Drawing.Point(306, 799);
+            this.btnSave.Location = new System.Drawing.Point(306, 746);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnSave.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnSave.Name = "btnSave";
@@ -152,7 +151,7 @@
             "Instalación",
             "Actualización",
             "Desinstalación"});
-            this.cbxActions.Location = new System.Drawing.Point(28, 541);
+            this.cbxActions.Location = new System.Drawing.Point(28, 488);
             this.cbxActions.MaxDropDownItems = 4;
             this.cbxActions.MouseState = MaterialSkin.MouseState.OUT;
             this.cbxActions.Name = "cbxActions";
@@ -179,7 +178,7 @@
             "Manual",
             "Automática",
             "Forzada"});
-            this.cbxModality.Location = new System.Drawing.Point(306, 541);
+            this.cbxModality.Location = new System.Drawing.Point(306, 488);
             this.cbxModality.MaxDropDownItems = 4;
             this.cbxModality.MouseState = MaterialSkin.MouseState.OUT;
             this.cbxModality.Name = "cbxModality";
@@ -190,7 +189,7 @@
             // dataGridViewMachines
             // 
             this.dataGridViewMachines.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewMachines.Location = new System.Drawing.Point(28, 644);
+            this.dataGridViewMachines.Location = new System.Drawing.Point(28, 591);
             this.dataGridViewMachines.Name = "dataGridViewMachines";
             this.dataGridViewMachines.Size = new System.Drawing.Size(550, 146);
             this.dataGridViewMachines.TabIndex = 52;
@@ -200,7 +199,7 @@
             this.materialLabel1.Depth = 0;
             this.materialLabel1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.materialLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel1.Location = new System.Drawing.Point(28, 613);
+            this.materialLabel1.Location = new System.Drawing.Point(28, 560);
             this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel1.Name = "materialLabel1";
             this.materialLabel1.Size = new System.Drawing.Size(550, 28);
@@ -233,32 +232,6 @@
             this.multiLineDescrip.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.multiLineDescrip.UseSystemPasswordChar = false;
             // 
-            // multiLineURLMSI
-            // 
-            this.multiLineURLMSI.AnimateReadOnly = false;
-            this.multiLineURLMSI.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.multiLineURLMSI.CharacterCasing = System.Windows.Forms.CharacterCasing.Normal;
-            this.multiLineURLMSI.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.multiLineURLMSI.Depth = 0;
-            this.multiLineURLMSI.HideSelection = true;
-            this.multiLineURLMSI.Hint = "URL MSI";
-            this.multiLineURLMSI.Location = new System.Drawing.Point(28, 435);
-            this.multiLineURLMSI.MaxLength = 32767;
-            this.multiLineURLMSI.MouseState = MaterialSkin.MouseState.OUT;
-            this.multiLineURLMSI.Name = "multiLineURLMSI";
-            this.multiLineURLMSI.PasswordChar = '\0';
-            this.multiLineURLMSI.ReadOnly = false;
-            this.multiLineURLMSI.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.multiLineURLMSI.SelectedText = "";
-            this.multiLineURLMSI.SelectionLength = 0;
-            this.multiLineURLMSI.SelectionStart = 0;
-            this.multiLineURLMSI.ShortcutsEnabled = true;
-            this.multiLineURLMSI.Size = new System.Drawing.Size(550, 40);
-            this.multiLineURLMSI.TabIndex = 55;
-            this.multiLineURLMSI.TabStop = false;
-            this.multiLineURLMSI.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
-            this.multiLineURLMSI.UseSystemPasswordChar = false;
-            // 
             // btnCancel
             // 
             this.btnCancel.AutoSize = false;
@@ -267,7 +240,7 @@
             this.btnCancel.Depth = 0;
             this.btnCancel.HighEmphasis = true;
             this.btnCancel.Icon = null;
-            this.btnCancel.Location = new System.Drawing.Point(142, 799);
+            this.btnCancel.Location = new System.Drawing.Point(142, 746);
             this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnCancel.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnCancel.Name = "btnCancel";
@@ -351,7 +324,7 @@
             this.textSelectPathInstaller.Depth = 0;
             this.textSelectPathInstaller.HideSelection = true;
             this.textSelectPathInstaller.Hint = "Seleccione archivo...";
-            this.textSelectPathInstaller.Location = new System.Drawing.Point(28, 481);
+            this.textSelectPathInstaller.Location = new System.Drawing.Point(28, 435);
             this.textSelectPathInstaller.MaxLength = 32767;
             this.textSelectPathInstaller.MouseState = MaterialSkin.MouseState.OUT;
             this.textSelectPathInstaller.Name = "textSelectPathInstaller";
@@ -376,7 +349,7 @@
             this.btnSelectPathInstaller.Depth = 0;
             this.btnSelectPathInstaller.HighEmphasis = true;
             this.btnSelectPathInstaller.Icon = null;
-            this.btnSelectPathInstaller.Location = new System.Drawing.Point(525, 481);
+            this.btnSelectPathInstaller.Location = new System.Drawing.Point(525, 435);
             this.btnSelectPathInstaller.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnSelectPathInstaller.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnSelectPathInstaller.Name = "btnSelectPathInstaller";
@@ -393,14 +366,13 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(618, 861);
+            this.ClientSize = new System.Drawing.Size(618, 810);
             this.Controls.Add(this.btnSelectPathInstaller);
             this.Controls.Add(this.textSelectPathInstaller);
             this.Controls.Add(this.txtProcessVerificaApp);
             this.Controls.Add(this.txtVersion);
             this.Controls.Add(this.multiLinePathDll);
             this.Controls.Add(this.btnCancel);
-            this.Controls.Add(this.multiLineURLMSI);
             this.Controls.Add(this.multiLineDescrip);
             this.Controls.Add(this.materialLabel1);
             this.Controls.Add(this.dataGridViewMachines);
@@ -435,7 +407,6 @@
         private System.Windows.Forms.DataGridView dataGridViewMachines;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialMultiLineTextBox2 multiLineDescrip;
-        private MaterialSkin.Controls.MaterialMultiLineTextBox2 multiLineURLMSI;
         private MaterialSkin.Controls.MaterialButton btnCancel;
         private MaterialSkin.Controls.MaterialMultiLineTextBox2 multiLinePathDll;
         private MaterialSkin.Controls.MaterialTextBox txtVersion;
