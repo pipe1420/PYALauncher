@@ -206,7 +206,6 @@
   <ItemGroup>
     <Compile Include="Controllers\AppController.cs" />
     <Compile Include="Controllers\MainController.cs" />
-    <Compile Include="Database\ConexionFirebase.cs" />
     <Compile Include="Models\Machine.cs" />
     <Compile Include="Models\SoftwareModel.cs" />
     <Compile Include="Models\UserPermissions.cs" />
@@ -231,7 +230,6 @@
     <Compile Include="Models\Software.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\FirebaseRepository.cs" />
     <Compile Include="Services\ConfigService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Services\NotificationService.cs" />
