@@ -1,7 +1,5 @@
 # Sistema Automatizado de Distribución y Actualización de Aplicaciones
 
-## Descripción del Proyecto
-
 Proyecto de Titulo - AINC422
 
 Este proyecto tiene como objetivo desarrollar un sistema automatizado para la distribución y actualización de aplicaciones, mejorando la eficiencia operativa y la productividad en un entorno empresarial. El sistema está diseñado para reducir la dependencia del equipo de soporte técnico y permitir que los usuarios finales gestionen instalaciones y actualizaciones de manera autónoma y segura.
