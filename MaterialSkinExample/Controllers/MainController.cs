@@ -54,35 +54,5 @@ namespace PYALauncherApps.Controllers
             return await _databaseService.InsertUpdateSoftware(software);
         }
 
-        public void InstallSoftware(List<Software> softwareList)
-        {
-            foreach (var software in softwareList)
-            {
-                Install(software);
-            }
-        }
-
-        private void Install(Software software)
-        {
-            if (!string.IsNullOrEmpty(software.PathInstall))
-            {
-                ProcessStartInfo startInfo = new ProcessStartInfo
-                {
-                    FileName = software.PathInstall,
-                    Arguments = "", // Agrega argumentos si son necesarios
-                    UseShellExecute = true
-                };
-
-                try
-                {
-                    Process.Start(startInfo);
-                    Console.WriteLine($"Instalando {software.SoftwareName}");
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error al instalar {software.SoftwareName}: {ex.Message}");
-                }
-            }
-        }
     }
 }

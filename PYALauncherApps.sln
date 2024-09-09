@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PYAAppsSetup", "PYAAppsSetup\PYAAppsSetup.vdproj", "{0BE2A6F2-ABC1-4111-94F1-0A959C1A0E1F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,12 +21,17 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{47409AA5-62AE-4189-8E83-C471502DF5E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{47409AA5-62AE-4189-8E83-C471502DF5E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47409AA5-62AE-4189-8E83-C471502DF5E9}.Debug|x64.ActiveCfg = Debug|x64
-		{47409AA5-62AE-4189-8E83-C471502DF5E9}.Debug|x64.Build.0 = Debug|x64
+		{47409AA5-62AE-4189-8E83-C471502DF5E9}.Debug|x64.ActiveCfg = Release|x64
+		{47409AA5-62AE-4189-8E83-C471502DF5E9}.Debug|x64.Build.0 = Release|x64
 		{47409AA5-62AE-4189-8E83-C471502DF5E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47409AA5-62AE-4189-8E83-C471502DF5E9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{47409AA5-62AE-4189-8E83-C471502DF5E9}.Release|x64.ActiveCfg = Release|x64
 		{47409AA5-62AE-4189-8E83-C471502DF5E9}.Release|x64.Build.0 = Release|x64
+		{0BE2A6F2-ABC1-4111-94F1-0A959C1A0E1F}.Debug|Any CPU.ActiveCfg = Debug
+		{0BE2A6F2-ABC1-4111-94F1-0A959C1A0E1F}.Debug|x64.ActiveCfg = Debug
+		{0BE2A6F2-ABC1-4111-94F1-0A959C1A0E1F}.Release|Any CPU.ActiveCfg = Release
+		{0BE2A6F2-ABC1-4111-94F1-0A959C1A0E1F}.Release|x64.ActiveCfg = Release
+		{0BE2A6F2-ABC1-4111-94F1-0A959C1A0E1F}.Release|x64.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

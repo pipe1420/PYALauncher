@@ -17,6 +17,7 @@ using OfficeOpenXml;
 using PYALauncherApps.Services;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Xml.Linq;
 
 
 namespace PYALauncherApps.Views
@@ -33,8 +34,9 @@ namespace PYALauncherApps.Views
         private string[] _nombresDeEquipos;
         private SoftwareService _softwareService;
         private Software softwareTemp = new Software();
+        private readonly MainForm _mainForm;
 
-        public AddEditForm(SoftwareService softwareService, MainController mainController/*,string btnAcessibleName, List<Software> softwareList, DatabaseService databaseService*/)
+        public AddEditForm(SoftwareService softwareService)
         {
             InitializeComponent();
 
@@ -64,7 +66,8 @@ namespace PYALauncherApps.Views
             }
 
             _softwareService = softwareService;
-            _mainController = mainController;
+            //_mainController = mainController;
+            //_mainForm = mainForm; // Asigna la instancia de MainForm
         }
 
         public async Task InitializeAsync()
@@ -87,24 +90,31 @@ namespace PYALauncherApps.Views
                 else
                 {
                     MessageBox.Show("Aplicación no encontrada!", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    this.Dispose();
+                    this.Close();
                 }
             }
             else
             {
-                // Si es una nueva aplicación, muestra el formulario sin datos pero con las columnas listas
-                dataGridViewMachines.DataSource = new BindingList<MachineDisplayItem>();
-                txtName.Text = null;
-                multiLineDescrip.Text = null;
-                multiLinePathDll.Text = null;
-                textSelectPathInstaller.Text = null;
-                cbxModality.SelectedIndex = -1;
-                cbxActions.SelectedIndex = -1;
-                softwareTemp.ClearFields();
-
-                this.ShowDialog();
+                InitializeAsyncEmpty();
             }
 
+        }
+
+        public async Task InitializeAsyncEmpty()
+        {
+            Debug.WriteLine("Limpiando formulario");
+            // Si es una nueva aplicación, muestra el formulario sin datos pero con las columnas listas
+            dataGridViewMachines.DataSource = new BindingList<MachineDisplayItem>();
+            txtName.Text = "";
+            txtVersion.Text = "";
+            multiLineDescrip.Text = "";
+            multiLinePathDll.Text = "";
+            textSelectPathInstaller.Text = "";
+            cbxModality.SelectedIndex = -1;
+            cbxActions.SelectedIndex = -1;
+            softwareTemp.ClearFields();
+
+            this.ShowDialog();
         }
 
         private void LoadData(Software software)
@@ -131,7 +141,7 @@ namespace PYALauncherApps.Views
             //var softwareFind = _softwareService.FindSoftware(software.SoftwareName);
             txtName.Text = software.SoftwareName;
             multiLineDescrip.Text = software.Descripcion;
-            //textSelectPathInstaller.Text = software.InstallerName;
+            textSelectPathInstaller.Text = "";
             multiLinePathDll.Text = software.PathFile;
             txtVersion.Text = software.Version; 
             cbxActions.SelectedIndex = 0;
@@ -240,7 +250,6 @@ namespace PYALauncherApps.Views
             }
         }
 
-
         private async void btnSave_Click(object sender, EventArgs e)
         {
             // Validar que el campo Nombre y la Ruta del Instalador no estén vacíos
@@ -250,11 +259,11 @@ namespace PYALauncherApps.Views
                 return; // Detener la ejecución si el campo está vacío
             }
 
-            if (string.IsNullOrWhiteSpace(textSelectPathInstaller.Text))
-            {
-                MessageBox.Show("La ruta del instalador es obligatoria.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return; // Detener la ejecución si el campo está vacío
-            }
+            //if (string.IsNullOrWhiteSpace(textSelectPathInstaller.Text))
+            //{
+            //    MessageBox.Show("La ruta del instalador es obligatoria.", "Error de Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    return; // Detener la ejecución si el campo está vacío
+            //}
 
             var resultPopUp = MessageBox.Show("¿Está seguro que desea guardar los cambios a la aplicación?", "Guardar Aplicación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (resultPopUp == DialogResult.Yes)
@@ -312,10 +321,7 @@ namespace PYALauncherApps.Views
                 }
             }
 
-            // Cargar nuevamente la lista de software
-            _softwareList = await _mainController.LoadSoftware();
         }
-
 
         public Software FindByName(string name)
         {
@@ -412,11 +418,14 @@ namespace PYALauncherApps.Views
             // Asegúrate de que la ruta del archivo no sea nula o vacía
             if (!File.Exists(filePath))
             {
-                MessageBox.Show("El archivo seleccionado no existe.", "Error de Archivo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Debug.WriteLine("El archivo seleccionado no existe.");
                 return;
             }
+            else
+            {
+                await supabaseService.SubirArchivoAsync(filePath);
+            }
 
-            await supabaseService.SubirArchivoAsync(filePath);
         }
 
         private void btnSelectPathInstaller_Click(object sender, EventArgs e)

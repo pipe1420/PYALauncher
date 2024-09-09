@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PYALauncherApps.Models;
 using Supabase.Postgrest;
+using System.Diagnostics;
 
 namespace PYALauncherApps.Services
 {
@@ -101,13 +102,24 @@ namespace PYALauncherApps.Services
                     // Construir la URL para la subida (incluir el nombre del archivo)
                     var uploadUrl = $"{_supabaseUrl}/storage/v1/object/apps/{fileName}";
 
-                    // Hacer la petición POST para subir el archivo
-                    var response = await client.PutAsync(uploadUrl, formContent); 
+                    // Comprobar si el archivo ya existe (opcional)
+                    var checkResponse = await client.GetAsync(uploadUrl);
+                    bool fileExists = checkResponse.IsSuccessStatusCode;
 
-                    // Verificar si la subida fue exitosa
+                    // Si el archivo ya existe, usar PUT para sobrescribirlo
+                    HttpResponseMessage response;
+                    if (fileExists)
+                    {
+                        response = await client.PutAsync(uploadUrl, formContent); // Usar PUT para sobrescribir
+                    }
+                    else
+                    {
+                        response = await client.PostAsync(uploadUrl, formContent); // Usar POST para subir por primera vez
+                    }
+
                     if (response.IsSuccessStatusCode)
                     {
-                        Console.WriteLine("Archivo subido exitosamente.");
+                        Debug.WriteLine("Archivo subido exitosamente.");
                     }
                     else
                     {
@@ -115,6 +127,8 @@ namespace PYALauncherApps.Services
                         var errorContent = await response.Content.ReadAsStringAsync();
                         throw new Exception($"Error al subir archivo: {response.StatusCode}, {errorContent}");
                     }
+
+
                 }
             }
             catch (Exception ex)
@@ -124,21 +138,6 @@ namespace PYALauncherApps.Services
                 throw;
             }
         }
-
-
-        /// <summary>
-        /// Método para insertar o actualizar software
-        /// </summary>
-        /// <param name="software"></param>
-        /// <returns></returns>
-        //public async Task<bool> InsertUpdateSoftware(Software software)
-        //{
-        //    var jsonContent = JsonConvert.SerializeObject(software);
-        //    var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
-
-        //    var response = await _httpClient.PostAsync("/rest/v1/software", content);
-        //    return response.IsSuccessStatusCode;
-        //}
 
         public async Task<bool> DeleteSoftware(int id)
         {

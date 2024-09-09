@@ -99,41 +99,59 @@ namespace PYALauncherApps.Services
         }
 
 
+        private async Task<bool> SoftwareExists(string softwareName)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+                using (var command = new NpgsqlCommand(
+                    "SELECT COUNT(*) FROM pya_apps.software WHERE software_name = @software_name;", connection))
+                {
+                    command.Parameters.AddWithValue("@software_name", softwareName);
+                    var result = (long)await command.ExecuteScalarAsync();
+
+                    Debug.WriteLine("SoftwareExists : " + result);
+                    return result > 0;
+                }
+            }
+        }
+
+
         public async Task<bool> InsertUpdateSoftware(Software software)
         {
             try
             {
+                bool exists = await SoftwareExists(software.SoftwareName);
+
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     await connection.OpenAsync();
-                    using (var command = new NpgsqlCommand(
-                        "INSERT INTO pya_apps.software " +
-                        "(id, descripcion, imagen, path_install, software_name, tag, url_msi, verifica_app, " +
-                        "version, path_file, force_install, automatic_install, guid, grupos, hidden, actions, machines" +
-                        (software.InstallerName != null ? ", installername" : "") + // Incluir solo si installername tiene valor
-                        ") VALUES " +
-                        "(@id, @descripcion, @imagen, @path_install, @software_name, @tag, @url_msi, @verifica_app, " +
-                        "@version, @path_file, @force_install, @automatic_install, @guid, @grupos, @hidden, @actions, @machines" +
-                        (software.InstallerName != null ? ", @installername" : "") + // Incluir solo si installername tiene valor
-                        ") ON CONFLICT (id) DO UPDATE SET " +
-                        "descripcion = EXCLUDED.descripcion, " +
-                        "imagen = EXCLUDED.imagen, " +
-                        "path_install = EXCLUDED.path_install, " +
-                        "software_name = EXCLUDED.software_name, " +
-                        "tag = EXCLUDED.tag, " +
-                        "url_msi = EXCLUDED.url_msi, " +
-                        "verifica_app = EXCLUDED.verifica_app, " +
-                        "version = EXCLUDED.version, " +
-                        "path_file = EXCLUDED.path_file, " +
-                        "force_install = EXCLUDED.force_install, " +
-                        "automatic_install = EXCLUDED.automatic_install, " +
-                        "guid = EXCLUDED.guid, " +
-                        "grupos = EXCLUDED.grupos, " +
-                        "hidden = EXCLUDED.hidden, " +
-                        "actions = EXCLUDED.actions, " +
-                        "machines = EXCLUDED.machines" +
-                        (software.InstallerName != null ? ", installername = EXCLUDED.installername" : "") + // Incluir solo si installername tiene valor
-                        ";", connection))
+                    string query;
+                    if (exists)
+                    {
+                        // Actualizar si ya existe
+                        query = "UPDATE pya_apps.software SET " +
+                                "descripcion = @descripcion, imagen = @imagen, path_install = @path_install, " +
+                                "tag = @tag, url_msi = @url_msi, verifica_app = @verifica_app, version = @version, " +
+                                "path_file = @path_file, force_install = @force_install, automatic_install = @automatic_install, " +
+                                "guid = @guid, grupos = @grupos, hidden = @hidden, actions = @actions, machines = @machines" +
+                                (software.InstallerName != null ? ", installername = @installername" : "") +
+                                " WHERE software_name = @software_name;";
+                    }
+                    else
+                    {
+                        // Insertar nuevo si no existe
+                        query = "INSERT INTO pya_apps.software " +
+                                "(descripcion, imagen, path_install, software_name, tag, url_msi, verifica_app, " +
+                                "version, path_file, force_install, automatic_install, guid, grupos, hidden, actions, machines" +
+                                (software.InstallerName != null ? ", installername" : "") +
+                                ") VALUES " +
+                                "(@descripcion, @imagen, @path_install, @software_name, @tag, @url_msi, @verifica_app, " +
+                                "@version, @path_file, @force_install, @automatic_install, @guid, @grupos, @hidden, @actions, @machines" +
+                                (software.InstallerName != null ? ", @installername" : "") + ");";
+                    }
+
+                    using (var command = new NpgsqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@id", software.Id);
                         command.Parameters.AddWithValue("@descripcion", software.Descripcion);
@@ -165,6 +183,8 @@ namespace PYALauncherApps.Services
                         {
                             command.Parameters.AddWithValue("@installername", software.InstallerName);
                         }
+                        Debug.WriteLine($"Comando: {command.CommandText}");
+                        Debug.WriteLine($"Comando: {command.Parameters}");
 
                         await command.ExecuteNonQueryAsync();
                     }
@@ -175,10 +195,11 @@ namespace PYALauncherApps.Services
             catch (Exception ex)
             {
                 // Loguear el error o manejarlo según sea necesario
-                Debug.WriteLine($"Error al insertar o actualizar el software: {ex.Message}");
+                Debug.WriteLine($"Error al insertar o actualizar el software: {ex}");
                 return false; // Hubo un fallo
             }
         }
+
 
 
         public async Task<Software> FindSoftware(string softwareName)

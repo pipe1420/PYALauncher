@@ -2,7 +2,6 @@ using MaterialSkin;
 using MaterialSkin.Controls;
 using System;
 using System.Windows.Forms;
-using MaterialSkinExample.Database;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using System.Linq;
@@ -81,6 +80,7 @@ namespace PYALauncherApps
             _usersService = usersService;
             
             LoadUserPermissions();
+
         }
 
 
@@ -356,16 +356,23 @@ namespace PYALauncherApps
             Button button = (Button)sender;
             string btnAcessibleName = button.AccessibleName;
 
-            _softwareService.SetSoftwareList(_softwareList);
-            _softwareService.SetSoftwareName(button.AccessibleName);
+            if(button.Text == "Editar")
+            {
+                _softwareService.SetSoftwareList(_softwareList);
+                _softwareService.SetSoftwareName(button.AccessibleName);
 
-            //AddEditForm _addEditForm = new AddEditForm(model);
-            //_addEditForm.ShowDialog();
+                Debug.WriteLine("AddEdit_Click Editar: " + button.Text); // Datos recibidos
+                _addEditForm.InitializeAsync();
+                
+            }
 
-            _addEditForm.InitializeAsync();
-            
+            if (button.Text == "Agregar")
+            {
+                Debug.WriteLine("AddEdit_Click Agregar: " + button.Text); // Datos recibidos
+                _addEditForm.InitializeAsyncEmpty();
+            }
 
-            Console.WriteLine("AddEdit_Click SoftwareName: " + button.AccessibleName); // Datos recibidos
+            Debug.WriteLine("AddEdit_Click SoftwareName: " + button.AccessibleName); // Datos recibidos
         }
 
         private async Task UpdateSoftwareListAsync()
@@ -525,10 +532,27 @@ namespace PYALauncherApps
             //return 10 para error
             return 10;
         }
-     
 
 
-        private async void ReloadApps()
+        public async Task UpdateSoftwareList()
+        {
+            // Cargar nuevamente la lista de software
+            _softwareList = await _mainController.LoadSoftware();
+
+            // Recargar las aplicaciones en el hilo de la UI de forma segura
+            if (this.InvokeRequired)
+            {
+                // Si no estamos en el hilo de la UI, usa Invoke para realizar la actualización de la UI
+                this.Invoke(new Action(ReloadApps));
+            }
+            else
+            {
+                // Si ya estamos en el hilo de la UI, simplemente llama a ReloadApps directamente
+                ReloadApps();
+            }
+        }
+
+        public async void ReloadApps()
         {
             // Asegurarse de que la manipulación de la UI ocurre en el hilo principal
             if (InvokeRequired)
@@ -577,7 +601,7 @@ namespace PYALauncherApps
 
         private void materialButtonAddSoftware_Click(object sender, EventArgs e)
         {
-            _addEditForm.InitializeAsync();
+            _addEditForm.InitializeAsyncEmpty();
         }
 
 

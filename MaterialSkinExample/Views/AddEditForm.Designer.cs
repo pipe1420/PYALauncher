@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddEditForm));
             this.labelTitle = new MaterialSkin.Controls.MaterialLabel();
             this.labelSubTitle = new MaterialSkin.Controls.MaterialLabel();
             this.txtName = new MaterialSkin.Controls.MaterialTextBox();
@@ -383,6 +384,7 @@
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.labelSubTitle);
             this.Controls.Add(this.labelTitle);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "AddEditForm";

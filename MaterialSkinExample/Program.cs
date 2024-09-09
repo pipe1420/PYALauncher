@@ -39,10 +39,10 @@ namespace MaterialSkinExample
             services.AddSingleton<DatabaseService>();
             services.AddSingleton<SupabaseService>();
             services.AddSingleton<SoftwareModel>();
+            services.AddSingleton<MainForm>();
             services.AddSingleton<SoftwareService>();
             services.AddSingleton<UsersService>();
             services.AddSingleton<MainController>();
-            services.AddSingleton<MainForm>();
             services.AddSingleton<AddEditForm>();
         }
     }

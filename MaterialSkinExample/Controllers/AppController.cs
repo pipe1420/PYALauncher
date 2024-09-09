@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MaterialSkinExample;
-using MaterialSkinExample.Database;
 using Microsoft.Win32;
 using Newtonsoft.Json.Linq;
 using PYALauncherApps.Models;
