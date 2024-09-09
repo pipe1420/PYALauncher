@@ -299,7 +299,7 @@ namespace PYALauncherApps
                         MouseState = MaterialSkin.MouseState.HOVER,
                         Size = new System.Drawing.Size(269, 17),
                         TabIndex = 82,
-                        Text = localVersion != null ? Text = $"Version: {localVersion}" : Text = ""
+                        //Text = localVersion != null ? Text = $"Versionn: {localVersion}" : Text = ""
                     };
 
                     // Verificar si el software ya está instalado y actualizar el texto del botón
