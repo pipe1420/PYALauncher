@@ -59,5 +59,5 @@ cd PYALauncher
 ### 3. Abre el proyecto en Visual Studio y compilar el proyecto en modo release.
 
 # Contacto
-- **Autor**: Felipe Armando Herrera Lagos
+- **Autor**: Felipe Herrera
 - **Correo**: f.herreralagos@uandresbello.edu
