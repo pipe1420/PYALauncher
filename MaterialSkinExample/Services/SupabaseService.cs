@@ -7,10 +7,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Supabase;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PYALauncherApps.Models;
-using Supabase.Postgrest;
 using System.Diagnostics;
 
 namespace PYALauncherApps.Services
@@ -22,7 +20,8 @@ namespace PYALauncherApps.Services
         private readonly string _supabaseApiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic3R5aWV3Z3JhbGl5eWVnaWx2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjU4MTIxMzIsImV4cCI6MjA0MTM4ODEzMn0.BWepdjZ0FJ7N-nFuka6iZzqEQB6spxv-elIKJS0CTkQ"; // Reemplaza con tu API Key de Supabase
         private readonly string bucket = "apps";
         private HttpClient _httpClient;
-        private readonly Client _client;
+        //private readonly Client _client;
+        private Supabase.Client _client;
 
         public SupabaseService()
         {
@@ -31,6 +30,10 @@ namespace PYALauncherApps.Services
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _supabaseApiKey);
             _httpClient.DefaultRequestHeaders.Add("apikey", _supabaseApiKey);
 
+
+            var url = "https://tu-supabase-url.supabase.co";
+            var apiKey = "tu-api-key";
+            _client = new Supabase.Client(url, apiKey);
         }
 
         public async Task<string> GetConfigs()
@@ -145,7 +148,22 @@ namespace PYALauncherApps.Services
             return response.IsSuccessStatusCode;
         }
 
-      
+        public async Task<List<Software>> GetSoftware()
+        {
+            // Asegurarse de inicializar el cliente
+            await _client.InitializeAsync();
+
+            // Obtener los registros desde la tabla "software" donde "hidden = false" y ordenarlos por "software_name"
+            var response = await _client.From<Software>()
+                .Where(s => s.Hidden == false)
+                .Order("software_name", Supabase.Client.Ordering.Ascending)
+                .Get();
+
+            var softwareList = response.Models;
+
+            return softwareList;
+        }
+
 
 
     }
