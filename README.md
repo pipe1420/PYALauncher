@@ -39,9 +39,10 @@ Este proyecto incluye un portal de autoservicio de escritorio para que los usuar
 ### 1. Instalar Requisitos
 
 - Requiere levantar base de datos Docker
-    - Comando para levantar ambiente aqui **[Aquí](https://github.com/pipe1420/PYALauncher/blob/master/Instalador/Comando%20Levanta%20Server%20Postgresql%20Docker.md)**
+    - Comando para levantar ambiente **[AQUÍ](https://github.com/pipe1420/PYALauncher/blob/master/Instalador/Comando%20Levanta%20Server%20Postgresql%20Docker.md)**
     
-    - ![Docker](https://raw.githubusercontent.com/pipe1420/PYALauncher/master/Instalador/Docker.png?token=GHSAT0AAAAAACVMIMKUXZPR5TKXK7XCUBXOZW6N2YQ)
+    - Docker Desktop
+    <img src="https://raw.githubusercontent.com/pipe1420/PYALauncher/master/Instalador/Docker.png?token=GHSAT0AAAAAACVMIMKUXZPR5TKXK7XCUBXOZW6N2YQ" width="600">
 
 
 ### 2. Clonar el repositorio:
@@ -58,6 +59,16 @@ cd PYALauncher
 
 ### 3. Abre el proyecto en Visual Studio y compilar el proyecto en modo release.
 
+# Documentación
+- Documento [Manual de Usuario.pdf](https://github.com/user-attachments/files/16956128/Manual.de.Usuario.pdf)
+
+    <img src="https://github.com/user-attachments/assets/da198fda-bdcd-426b-8249-a39354aaad3b" width="200">
+
+- Presentacion PPTX [ainc422_s11_FHerrera_Presentación.pptx](https://github.com/user-attachments/files/16957203/ainc422_s11_FHerrera_Presentacion.pptx)
+
+    <img src="https://github.com/user-attachments/assets/702e8618-0d5b-4026-bc35-0cb4a122c457" width="400">
+
+
 # Contacto
-- **Autor**: Felipe Herrera
+- **Autor**: Felipe Herrera 
 - **Correo**: f.herreralagos@uandresbello.edu
