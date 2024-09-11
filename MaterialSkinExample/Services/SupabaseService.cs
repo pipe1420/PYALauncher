@@ -10,6 +10,8 @@ using Supabase;
 using Newtonsoft.Json;
 using PYALauncherApps.Models;
 using System.Diagnostics;
+using static Supabase.Postgrest.Constants;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace PYALauncherApps.Services
 {
@@ -20,7 +22,6 @@ namespace PYALauncherApps.Services
         private readonly string _supabaseApiKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpic3R5aWV3Z3JhbGl5eWVnaWx2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjU4MTIxMzIsImV4cCI6MjA0MTM4ODEzMn0.BWepdjZ0FJ7N-nFuka6iZzqEQB6spxv-elIKJS0CTkQ"; // Reemplaza con tu API Key de Supabase
         private readonly string bucket = "apps";
         private HttpClient _httpClient;
-        //private readonly Client _client;
         private Supabase.Client _client;
 
         public SupabaseService()
@@ -31,9 +32,7 @@ namespace PYALauncherApps.Services
             _httpClient.DefaultRequestHeaders.Add("apikey", _supabaseApiKey);
 
 
-            var url = "https://tu-supabase-url.supabase.co";
-            var apiKey = "tu-api-key";
-            _client = new Supabase.Client(url, apiKey);
+            _client = new Supabase.Client(_supabaseUrl, _supabaseApiKey);
         }
 
         public async Task<string> GetConfigs()
@@ -150,19 +149,86 @@ namespace PYALauncherApps.Services
 
         public async Task<List<Software>> GetSoftware()
         {
-            // Asegurarse de inicializar el cliente
+            try
+            {
+                // Asegurarse de inicializar el cliente
+                await _client.InitializeAsync();
+
+                // Obtener los registros desde la tabla "software" donde "hidden = false"
+                var response = await _client.From<Software>()
+                    .Where(s => s.Hidden == false)
+                    .Order(x => x.SoftwareName, Ordering.Ascending)
+                    .Get();
+
+                // Verificar los datos recibidos (temporalmente para depuración)
+                var softwareList = response.Models;
+
+                if (softwareList == null || !softwareList.Any())
+                {
+                    throw new Exception("La lista de software está vacía o es nula.");
+                }
+
+                foreach (var software in softwareList)
+                {
+                    if (software.Grupos == null)
+                    {
+                        Debug.WriteLine($"Software '{software.SoftwareName}' no tiene grupos asignados.");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"Software '{software.SoftwareName}' tiene {software.Grupos.Length} grupos.");
+                    }
+                }
+
+                return softwareList;
+            }
+            catch (JsonSerializationException ex)
+            {
+                Debug.WriteLine($"Error de deserialización JSON: {ex.Message}");
+                throw; // O maneja el error según tu contexto
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+                throw;
+            }
+        }
+
+
+        public async Task<List<UserPermissionDisplayItem>> GetAllUserPermissionsAsync()
+        {
+            // Asegúrate de inicializar el cliente de Supabase
             await _client.InitializeAsync();
 
-            // Obtener los registros desde la tabla "software" donde "hidden = false" y ordenarlos por "software_name"
-            var response = await _client.From<Software>()
-                .Where(s => s.Hidden == false)
-                .Order("software_name", Supabase.Client.Ordering.Ascending)
+            // Realiza el query con InnerJoin
+            var result = await _client
+                .From<UserPermissions>()
+                .Select("*, users!inner(username)")  // Notación para hacer un Inner Join en Supabase
                 .Get();
 
-            var softwareList = response.Models;
+            var userPermissionsList = new List<UserPermissionDisplayItem>();
 
-            return softwareList;
+            foreach (var userPermission in result.Models)
+            {
+                // Accede directamente a las propiedades del modelo UserPermissions
+                userPermissionsList.Add(new UserPermissionDisplayItem
+                {
+                    UserName = userPermission.User.Username,  // Accede directamente a la propiedad User.Username
+                    CanEditApps = userPermission.CanEditApps,
+                    CanViewUserTab = userPermission.CanViewUserTab
+                });
+            }
+
+            return userPermissionsList;
         }
+
+
+
+        //Debug.WriteLine($"UserName : {userPermission.UserID}, " +
+        //                      $"CanEditApps : {userPermission.CanEditApps}, " +
+        //                      $"CanViewUserTab : {userPermission.CanViewUserTab}");
+
+
 
 
 

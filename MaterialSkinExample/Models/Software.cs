@@ -1,33 +1,92 @@
-﻿using System;
+﻿using Supabase.Postgrest.Models;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+using Supabase.Postgrest.Attributes;
+using System;
 
 namespace PYALauncherApps.Models
 {
-    public class Software
+    
+
+    [Table("software")]
+    public class Software : BaseModel
     {
+        private string _gruposRaw;
+
+
+        [Column("id")]
         public int Id { get; set; }
+
+        [Column("descripcion")]
         public string Descripcion { get; set; }
+
+        [Column("imagen")]
         public string Imagen { get; set; }
+
+        [Column("path_install")]
         public string PathInstall { get; set; }
-        public string SoftwareName { get; set; }
+
+        [Column("software_name")]
+        public string SoftwareName { get; set; } // Asegúrate de usar el nombre correcto de la columna
+
+        [Column("tag")]
         public string Tag { get; set; }
+
+        [Column("url_msi")]
         public string UrlMsi { get; set; }
+
+        [Column("verifica_app")]
         public string VerificaApp { get; set; }
+
+        [Column("version")]
         public string Version { get; set; }
+
+        [Column("path_file")]
         public string PathFile { get; set; }
+
+        [Column("force_install")]
         public bool ForceInstall { get; set; }
+
+        [Column("automatic_install")]
         public bool AutomaticInstall { get; set; }
+
+        [Column("guid")]
         public string Guid { get; set; }
-        public string[] Grupos { get; set; }
+
+        [Column("grupos")]
+        public string[] Grupos
+        {
+            get
+            {
+                // Si el valor es una cadena, dividirla en un arreglo
+                if (!string.IsNullOrEmpty(_gruposRaw))
+                {
+                    return _gruposRaw
+                        .Replace("{", string.Empty)
+                        .Replace("}", string.Empty)
+                        .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                }
+
+                return new string[0];
+            }
+            set
+            {
+                _gruposRaw = string.Join(",", value);
+            }
+        }
+
+        [Column("hidden")]
         public bool Hidden { get; set; }
+
+        [Column("actions")]
         public int Actions { get; set; }
-        //public List<string> Machines { get; set; } // 'machines' (jsonb)
+
+        [Column("machines")]
         public Dictionary<string, Machine> Machines { get; set; }
+
+        [Column("installername")]
         public string InstallerName { get; set; }
+
 
         public override bool Equals(object obj)
         {
@@ -59,7 +118,6 @@ namespace PYALauncherApps.Models
             return Id.GetHashCode();
         }
 
-        // Sobrescribir el método ToString
         public override string ToString()
         {
             return SoftwareName;
@@ -70,7 +128,6 @@ namespace PYALauncherApps.Models
             public static string SelectedApp { get; set; }
         }
 
-        // Método para limpiar los campos
         public void ClearFields()
         {
             Id = 0;
@@ -92,7 +149,35 @@ namespace PYALauncherApps.Models
             Machines = new Dictionary<string, Machine>();
             InstallerName = string.Empty;
         }
+    }
 
+    public class CustomJsonConverter : JsonConverter
+    {
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(string[]);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            // Convertir la cadena a un arreglo de string si es necesario
+            var value = reader.Value as string;
+            if (!string.IsNullOrEmpty(value))
+            {
+                return value.Split(',');
+            }
+
+            return new string[0];
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            var array = value as string[];
+            if (array != null)
+            {
+                writer.WriteValue(string.Join(",", array));
+            }
+        }
     }
 
 }

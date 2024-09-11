@@ -80,6 +80,7 @@ namespace PYALauncherApps
             _usersService = usersService;
             
             LoadUserPermissions();
+            ReloadApps();
 
         }
 
@@ -609,6 +610,14 @@ namespace PYALauncherApps
         {
             _userPermissionsList = await _usersService.GetAllUserPermissionsAsync();
 
+            Debug.WriteLine("LoadUserPermissions : " + LoadUserPermissions);
+
+            foreach (var item in _userPermissionsList)
+            {
+                Debug.WriteLine("_userPermissionsList item: " + item);
+            }
+            
+
             if (_userPermissionsList != null && _userPermissionsList.Any())
             {
                 var permissionDisplayList = _userPermissionsList.Select(up => new UserPermissionDisplayItem
@@ -627,8 +636,6 @@ namespace PYALauncherApps
                 {
                     HideTabPage();
                 }
-
-                
 
 
                 dataGridViewPermisos.DataSource = new BindingList<UserPermissionDisplayItem>(permissionDisplayList);

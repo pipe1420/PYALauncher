@@ -12,11 +12,13 @@ namespace PYALauncherApps.Controllers
     public class MainController
     {
         private readonly DatabaseService _databaseService;
+        private readonly SupabaseService _supabaseService;
         private MainForm _mainForm;
 
-        public MainController(DatabaseService databaseService)
+        public MainController(DatabaseService databaseService, SupabaseService supabaseService)
         {
             _databaseService = databaseService;
+            _supabaseService = supabaseService;
         }
 
         public void SetMainForm(MainForm mainForm)
@@ -46,7 +48,10 @@ namespace PYALauncherApps.Controllers
 
         public async Task<List<Software>> LoadSoftware()
         {
-            return await _databaseService.GetSoftware();
+            //var data = await _databaseService.GetSoftware();
+            var dataSupabase = await _supabaseService.GetSoftware();
+            
+            return dataSupabase;
         }
 
         public async Task<bool> PutSoftware(Software software)
