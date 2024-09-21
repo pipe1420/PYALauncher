@@ -48,10 +48,10 @@ namespace PYALauncherApps.Controllers
 
         public async Task<List<Software>> LoadSoftware()
         {
-            //var data = await _databaseService.GetSoftware();
-            var dataSupabase = await _supabaseService.GetSoftware();
-            
-            return dataSupabase;
+            var data = await _databaseService.GetSoftware();
+            //var data = await _supabaseService.GetSoftware();
+
+            return data;
         }
 
         public async Task<bool> PutSoftware(Software software)

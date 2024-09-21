@@ -20,7 +20,8 @@ namespace PYALauncherApps.Models
         [Column("canviewusertab")]
         public bool CanViewUserTab { get; set; }
 
-        public User User { get; set; }
+        [Column("users->username")] // Accede directamente al username en el JSON anidado
+        public string Username { get; set; }  // Ahora guardas directamente el username
     }
 
 
@@ -33,7 +34,7 @@ namespace PYALauncherApps.Models
     }
 
     [Table("users")]
-    public class User : BaseModel
+    public class Users : BaseModel
     {
         [Column("id")]
         public int Id { get; set; }

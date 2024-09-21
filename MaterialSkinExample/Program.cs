@@ -7,14 +7,14 @@ using PYALauncherApps.Models;
 using PYALauncherApps.Services;
 using PYALauncherApps.Views;
 
-namespace MaterialSkinExample
+namespace PYALauncherApps
 {
     internal static class Program
     {
         [STAThread]
         static void Main()
         {
-            // Iniciar la aplicación en el hilo principal de la UI antes de crear cualquier objeto de Windows Forms
+            // Iniciar la aplicación en el hilo principal de la UI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 

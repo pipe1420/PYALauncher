@@ -12,6 +12,8 @@ using PYALauncherApps.Models;
 using System.Diagnostics;
 using static Supabase.Postgrest.Constants;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Xml.Linq;
 
 namespace PYALauncherApps.Services
 {
@@ -199,38 +201,50 @@ namespace PYALauncherApps.Services
         {
             // Asegúrate de inicializar el cliente de Supabase
             await _client.InitializeAsync();
-
+            
             // Realiza el query con InnerJoin
             var result = await _client
                 .From<UserPermissions>()
-                .Select("*, users!inner(username)")  // Notación para hacer un Inner Join en Supabase
+                .Select("*, users:userid(username)")  // Notación para hacer un Inner Join en Supabase
                 .Get();
 
-            var userPermissionsList = new List<UserPermissionDisplayItem>();
+            var usuarios = await _client
+                .From<Users>()
+                .Select("id, username")  // Notación para hacer un Inner Join en Supabase
+                .Get();
 
+            var usersList = new List<Users>();
+            foreach (var user in usuarios.Models)
+            {
+                usersList.Add(new Users
+                {
+                    Id = user.Id,
+                    Username = user.Username
+                });
+            }
+
+            var userPermissionsList = new List<UserPermissionDisplayItem>();
             foreach (var userPermission in result.Models)
             {
+                var username = usersList.FirstOrDefault(u => u.Id == userPermission.UserID)?.Username;
                 // Accede directamente a las propiedades del modelo UserPermissions
                 userPermissionsList.Add(new UserPermissionDisplayItem
                 {
-                    UserName = userPermission.User.Username,  // Accede directamente a la propiedad User.Username
+                    UserName = username,
                     CanEditApps = userPermission.CanEditApps,
                     CanViewUserTab = userPermission.CanViewUserTab
                 });
             }
 
+            //foreach (var item in userPermissionsList)
+            //{
+            //    Debug.WriteLine(item.UserName);
+            //    Debug.WriteLine(item.CanEditApps);
+            //    Debug.WriteLine(item.CanViewUserTab);
+            //}
+
             return userPermissionsList;
         }
-
-
-
-        //Debug.WriteLine($"UserName : {userPermission.UserID}, " +
-        //                      $"CanEditApps : {userPermission.CanEditApps}, " +
-        //                      $"CanViewUserTab : {userPermission.CanViewUserTab}");
-
-
-
-
 
     }
 }

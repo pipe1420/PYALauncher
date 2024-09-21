@@ -37,9 +37,9 @@ namespace PYALauncherApps.Services
         public async Task<List<UserPermissionDisplayItem>> GetAllUserPermissionsAsync()
         {
             var userPermissions = await _databaseService.GetAllUserPermissionsAsync();
-            //var dataSupabase = await _supabaseService.GetAllUserPermissionsAsync();
+            //var userPermissions = await _supabaseService.GetAllUserPermissionsAsync();
 
-            //foreach (var item in dataSupabase)
+            //foreach (var item in userPermissionsSupabase)
             //{
             //    Debug.WriteLine("dataSupabase Item: " + item);
             //}

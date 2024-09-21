@@ -160,6 +160,12 @@ namespace PYALauncherApps
             return list1.SequenceEqual(list2);
         }
 
+        private async void CheckFileVersion()
+        {
+            VersionChecker versionChecker = new VersionChecker();
+            bool verifica = await versionChecker.CheckAndUpdateButtonAsync("ruta/del/archivo/local.exe", "https://ejemplo.com/version.txt");
+        }
+
 
         private async Task LoadDataAsync()
         {
@@ -194,6 +200,8 @@ namespace PYALauncherApps
         {
             try
             {
+
+
                 bool canEditApps = false;
 
                 var currentUserPermission = _userPermissionsList
@@ -287,6 +295,8 @@ namespace PYALauncherApps
                     };
 
                     string localVersion = LocalVersionApp(software.PathInstall, software.SoftwareName);
+
+                    
                     MaterialLabel labelVersion = new MaterialLabel
                     {
                         AutoSize = true,
@@ -303,11 +313,27 @@ namespace PYALauncherApps
                         //Text = localVersion != null ? Text = $"Versionn: {localVersion}" : Text = ""
                     };
 
+                    if (localVersion != null)
+                    {
+                        labelVersion.Text = $"Version: {localVersion}";
+                    }
+                    
+
                     // Verificar si el software ya está instalado y actualizar el texto del botón
                     if (VerificaInstalacion(software.PathInstall))
                     {
+
                         buttonInstall.Text = "Instalado";
                         buttonInstall.Enabled = false;
+
+                        if (new Version(localVersion).CompareTo(new Version(software.Version)) < 0)
+                        {
+                            // Si la versión local es menor, cambiar el texto del botón a "Actualizar"
+                            // Indica que la versión local es inferior y se necesita una actualización
+                            buttonInstall.Text = "Actualizar";
+                            buttonInstall.Enabled = true;
+                        }
+                       
                     }
 
                     // Configurar el evento Click del botón
@@ -466,12 +492,41 @@ namespace PYALauncherApps
 
         private void materialButton32_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://webmail.pyaing.cl/intranet/soporte/views/user.php");
+            try
+            {
+                var url = "https://webmail.pyaing.cl/intranet/soporte/views/user.php";
+                // Abrir URL con el navegador predeterminado
+                var psi = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                };
+                System.Diagnostics.Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al abrir la URL: {ex.Message}");
+            }
         }
+
 
         private void materialButton30_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.pya.cl");
+            try
+            {
+                var url = "https://www.pya.cl";
+                // Abrir URL con el navegador predeterminado
+                var psi = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = url,
+                    UseShellExecute = true
+                };
+                System.Diagnostics.Process.Start(psi);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al abrir la URL: {ex.Message}");
+            }
         }
 
         private void materialButton2_Click(object sender, EventArgs e)
@@ -609,14 +664,6 @@ namespace PYALauncherApps
         private async void LoadUserPermissions()
         {
             _userPermissionsList = await _usersService.GetAllUserPermissionsAsync();
-
-            Debug.WriteLine("LoadUserPermissions : " + LoadUserPermissions);
-
-            foreach (var item in _userPermissionsList)
-            {
-                Debug.WriteLine("_userPermissionsList item: " + item);
-            }
-            
 
             if (_userPermissionsList != null && _userPermissionsList.Any())
             {
@@ -856,5 +903,77 @@ namespace PYALauncherApps
                 return false;
             }
         }
+    }
+
+
+    public class VersionChecker
+    {
+        private Button updateButton;
+
+        public VersionChecker()
+        {
+            //updateButton = button;
+        }
+
+        // Método para obtener la versión local
+        private string GetLocalVersion(string filePath)
+        {
+            try
+            {
+                // Obtener la versión del archivo local (ejecutable o DLL)
+                var versionInfo = FileVersionInfo.GetVersionInfo(filePath);
+                return versionInfo.FileVersion;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error obteniendo la versión local: {ex.Message}");
+                return null;
+            }
+        }
+
+        // Método para obtener la versión en línea
+        private async Task<string> GetOnlineVersionAsync(string url)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    // Asumiendo que la URL contiene un archivo de texto que especifica la versión
+                    HttpResponseMessage response = await client.GetAsync(url);
+                    response.EnsureSuccessStatusCode();
+
+                    string onlineVersion = await response.Content.ReadAsStringAsync();
+                    return onlineVersion.Trim(); // Eliminar espacios innecesarios
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error obteniendo la versión en línea: {ex.Message}");
+                return null;
+            }
+        }
+
+        // Método para comparar versiones y actualizar el texto del botón si es necesario
+        public async Task<bool> CheckAndUpdateButtonAsync(string localFilePath, string versionUrl)
+        {
+            string localVersion = GetLocalVersion(localFilePath);
+            string onlineVersion = await GetOnlineVersionAsync(versionUrl);
+
+            if (localVersion == null || onlineVersion == null)
+            {
+                return false; // Error al obtener versiones, se considera que no necesita actualización
+            }
+
+            // Comparar las versiones
+            if (new Version(localVersion).CompareTo(new Version(onlineVersion)) < 0)
+            {
+                // Si la versión local es menor, cambiar el texto del botón a "Actualizar"
+                updateButton.Text = "Actualizar";
+                return true; // Indica que la versión local es inferior y se necesita una actualización
+            }
+
+            return false; // La versión local no es inferior
+        }
+
     }
 }

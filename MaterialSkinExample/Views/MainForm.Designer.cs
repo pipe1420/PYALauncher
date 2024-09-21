@@ -33,767 +33,778 @@ namespace PYALauncherApps
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.menuIconList = new System.Windows.Forms.ImageList(this.components);
-            this.materialCheckbox1 = new MaterialSkin.Controls.MaterialCheckbox();
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
-            this.tabPageConfig = new System.Windows.Forms.TabPage();
-            this.materialButton2 = new MaterialSkin.Controls.MaterialButton();
-            this.materialLabel24 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialButton7 = new MaterialSkin.Controls.MaterialButton();
-            this.materialLabel9 = new MaterialSkin.Controls.MaterialLabel();
-            this.tabPageLogs = new System.Windows.Forms.TabPage();
-            this.labelTitleHistory = new MaterialSkin.Controls.MaterialLabel();
-            this.labelSubTitleHistory = new MaterialSkin.Controls.MaterialLabel();
-            this.materialListBoxLogs = new MaterialSkin.Controls.MaterialListBox();
-            this.buttonRefreshHistory = new MaterialSkin.Controls.MaterialButton();
-            this.tabPageApps = new System.Windows.Forms.TabPage();
-            this.buttonAppsRefresh = new MaterialSkin.Controls.MaterialButton();
-            this.materialButtonAddSoftware = new MaterialSkin.Controls.MaterialButton();
-            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelTitleApps = new MaterialSkin.Controls.MaterialLabel();
-            this.labelSubTitleApps = new MaterialSkin.Controls.MaterialLabel();
-            this.tabPageInicio = new System.Windows.Forms.TabPage();
-            this.listBoxSoftware = new System.Windows.Forms.ListBox();
-            this.listBoxConfigs = new System.Windows.Forms.ListBox();
-            this.materialListBoxSoftware = new MaterialSkin.Controls.MaterialListBox();
-            this.materialListBoxConfigs = new MaterialSkin.Controls.MaterialListBox();
-            this.materialCard1 = new MaterialSkin.Controls.MaterialCard();
-            this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.materialCard7 = new MaterialSkin.Controls.MaterialCard();
-            this.materialButton32 = new MaterialSkin.Controls.MaterialButton();
-            this.materialLabel67 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialLabel68 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialCard5 = new MaterialSkin.Controls.MaterialCard();
-            this.materialButton30 = new MaterialSkin.Controls.MaterialButton();
-            this.materialLabel63 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialLabel64 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialLabel61 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialLabel62 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
-            this.tabPagePerm = new System.Windows.Forms.TabPage();
-            this.btnSavePerm = new MaterialSkin.Controls.MaterialButton();
-            this.materialLabel2 = new MaterialSkin.Controls.MaterialLabel();
-            this.dataGridViewPermisos = new System.Windows.Forms.DataGridView();
-            this.labelTitlePermisos = new MaterialSkin.Controls.MaterialLabel();
-            this.tabPageConfig.SuspendLayout();
-            this.tabPageLogs.SuspendLayout();
-            this.tabPageApps.SuspendLayout();
-            this.tabPageInicio.SuspendLayout();
-            this.materialCard1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.materialCard7.SuspendLayout();
-            this.materialCard5.SuspendLayout();
-            this.materialTabControl1.SuspendLayout();
-            this.tabPagePerm.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPermisos)).BeginInit();
-            this.SuspendLayout();
+            menuIconList = new ImageList(components);
+            materialCheckbox1 = new MaterialCheckbox();
+            notifyIcon1 = new NotifyIcon(components);
+            tabPageConfig = new TabPage();
+            materialButton2 = new MaterialButton();
+            materialLabel24 = new MaterialLabel();
+            materialButton7 = new MaterialButton();
+            materialLabel9 = new MaterialLabel();
+            tabPageLogs = new TabPage();
+            labelTitleHistory = new MaterialLabel();
+            labelSubTitleHistory = new MaterialLabel();
+            materialListBoxLogs = new MaterialListBox();
+            buttonRefreshHistory = new MaterialButton();
+            tabPageApps = new TabPage();
+            buttonAppsRefresh = new MaterialButton();
+            materialButtonAddSoftware = new MaterialButton();
+            flowLayoutPanel2 = new FlowLayoutPanel();
+            labelTitleApps = new MaterialLabel();
+            labelSubTitleApps = new MaterialLabel();
+            tabPageInicio = new TabPage();
+            listBoxSoftware = new ListBox();
+            listBoxConfigs = new ListBox();
+            materialListBoxSoftware = new MaterialListBox();
+            materialListBoxConfigs = new MaterialListBox();
+            materialCard1 = new MaterialCard();
+            materialLabel1 = new MaterialLabel();
+            pictureBox1 = new PictureBox();
+            materialCard7 = new MaterialCard();
+            materialButton32 = new MaterialButton();
+            materialLabel67 = new MaterialLabel();
+            materialLabel68 = new MaterialLabel();
+            materialCard5 = new MaterialCard();
+            materialButton30 = new MaterialButton();
+            materialLabel63 = new MaterialLabel();
+            materialLabel64 = new MaterialLabel();
+            materialLabel61 = new MaterialLabel();
+            materialLabel62 = new MaterialLabel();
+            materialTabControl1 = new MaterialTabControl();
+            tabPagePerm = new TabPage();
+            btnSavePerm = new MaterialButton();
+            materialLabel2 = new MaterialLabel();
+            dataGridViewPermisos = new DataGridView();
+            labelTitlePermisos = new MaterialLabel();
+            tabPageConfig.SuspendLayout();
+            tabPageLogs.SuspendLayout();
+            tabPageApps.SuspendLayout();
+            tabPageInicio.SuspendLayout();
+            materialCard1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            materialCard7.SuspendLayout();
+            materialCard5.SuspendLayout();
+            materialTabControl1.SuspendLayout();
+            tabPagePerm.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewPermisos).BeginInit();
+            SuspendLayout();
             // 
             // menuIconList
             // 
-            this.menuIconList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("menuIconList.ImageStream")));
-            this.menuIconList.TransparentColor = System.Drawing.Color.Transparent;
-            this.menuIconList.Images.SetKeyName(0, "round_assessment_white_24dp.png");
-            this.menuIconList.Images.SetKeyName(1, "round_backup_white_24dp.png");
-            this.menuIconList.Images.SetKeyName(2, "round_bluetooth_white_24dp.png");
-            this.menuIconList.Images.SetKeyName(3, "round_bookmark_white_24dp.png");
-            this.menuIconList.Images.SetKeyName(4, "round_build_white_24dp.png");
-            this.menuIconList.Images.SetKeyName(5, "round_gps_fixed_white_24dp.png");
-            this.menuIconList.Images.SetKeyName(6, "round_http_white_24dp.png");
-            this.menuIconList.Images.SetKeyName(7, "round_report_problem_white_24dp.png");
-            this.menuIconList.Images.SetKeyName(8, "round_swap_vert_white_24dp.png");
-            this.menuIconList.Images.SetKeyName(9, "round_phone_black_24dp.png");
-            this.menuIconList.Images.SetKeyName(10, "round_push_pin_black_24dp.png");
-            this.menuIconList.Images.SetKeyName(11, "round_mail_outline_black_24dp.png");
-            this.menuIconList.Images.SetKeyName(12, "round_person_black_24dp.png");
-            this.menuIconList.Images.SetKeyName(13, "round_add_a_photo_black_24dp.png");
-            this.menuIconList.Images.SetKeyName(14, "round_alternate_email_black_24dp.png");
-            this.menuIconList.Images.SetKeyName(15, "round_cancel_black_24dp.png");
-            this.menuIconList.Images.SetKeyName(16, "round_error_black_24dp.png");
-            this.menuIconList.Images.SetKeyName(17, "round_event_black_24dp.png");
-            this.menuIconList.Images.SetKeyName(18, "outline_apps_white_24dp.png");
+            menuIconList.ColorDepth = ColorDepth.Depth32Bit;
+            menuIconList.ImageStream = (ImageListStreamer)resources.GetObject("menuIconList.ImageStream");
+            menuIconList.TransparentColor = Color.Transparent;
+            menuIconList.Images.SetKeyName(0, "round_assessment_white_24dp.png");
+            menuIconList.Images.SetKeyName(1, "round_backup_white_24dp.png");
+            menuIconList.Images.SetKeyName(2, "round_bluetooth_white_24dp.png");
+            menuIconList.Images.SetKeyName(3, "round_bookmark_white_24dp.png");
+            menuIconList.Images.SetKeyName(4, "round_build_white_24dp.png");
+            menuIconList.Images.SetKeyName(5, "round_gps_fixed_white_24dp.png");
+            menuIconList.Images.SetKeyName(6, "round_http_white_24dp.png");
+            menuIconList.Images.SetKeyName(7, "round_report_problem_white_24dp.png");
+            menuIconList.Images.SetKeyName(8, "round_swap_vert_white_24dp.png");
+            menuIconList.Images.SetKeyName(9, "round_phone_black_24dp.png");
+            menuIconList.Images.SetKeyName(10, "round_push_pin_black_24dp.png");
+            menuIconList.Images.SetKeyName(11, "round_mail_outline_black_24dp.png");
+            menuIconList.Images.SetKeyName(12, "round_person_black_24dp.png");
+            menuIconList.Images.SetKeyName(13, "round_add_a_photo_black_24dp.png");
+            menuIconList.Images.SetKeyName(14, "round_alternate_email_black_24dp.png");
+            menuIconList.Images.SetKeyName(15, "round_cancel_black_24dp.png");
+            menuIconList.Images.SetKeyName(16, "round_error_black_24dp.png");
+            menuIconList.Images.SetKeyName(17, "round_event_black_24dp.png");
+            menuIconList.Images.SetKeyName(18, "outline_apps_white_24dp.png");
             // 
             // materialCheckbox1
             // 
-            this.materialCheckbox1.Depth = 0;
-            this.materialCheckbox1.Location = new System.Drawing.Point(0, 0);
-            this.materialCheckbox1.Margin = new System.Windows.Forms.Padding(0);
-            this.materialCheckbox1.MouseLocation = new System.Drawing.Point(-1, -1);
-            this.materialCheckbox1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCheckbox1.Name = "materialCheckbox1";
-            this.materialCheckbox1.ReadOnly = false;
-            this.materialCheckbox1.Ripple = true;
-            this.materialCheckbox1.Size = new System.Drawing.Size(104, 37);
-            this.materialCheckbox1.TabIndex = 0;
-            this.materialCheckbox1.Text = "materialCheckbox1";
-            this.materialCheckbox1.UseVisualStyleBackColor = true;
+            materialCheckbox1.Depth = 0;
+            materialCheckbox1.Location = new Point(0, 0);
+            materialCheckbox1.Margin = new Padding(0);
+            materialCheckbox1.MouseLocation = new Point(-1, -1);
+            materialCheckbox1.MouseState = MouseState.HOVER;
+            materialCheckbox1.Name = "materialCheckbox1";
+            materialCheckbox1.ReadOnly = false;
+            materialCheckbox1.Ripple = true;
+            materialCheckbox1.Size = new Size(104, 37);
+            materialCheckbox1.TabIndex = 0;
+            materialCheckbox1.Text = "materialCheckbox1";
+            materialCheckbox1.UseVisualStyleBackColor = true;
             // 
             // notifyIcon1
             // 
-            this.notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.notifyIcon1.BalloonTipText = "En segundo plano";
-            this.notifyIcon1.BalloonTipTitle = "PYA Launcher Apps";
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Text = "PYALauncherApps";
-            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            notifyIcon1.BalloonTipIcon = ToolTipIcon.Info;
+            notifyIcon1.BalloonTipText = "En segundo plano";
+            notifyIcon1.BalloonTipTitle = "PYA Launcher Apps";
+            notifyIcon1.Icon = (Icon)resources.GetObject("notifyIcon1.Icon");
+            notifyIcon1.Text = "PYALauncherApps";
+            notifyIcon1.MouseDoubleClick += notifyIcon1_MouseDoubleClick;
             // 
             // tabPageConfig
             // 
-            this.tabPageConfig.BackColor = System.Drawing.Color.White;
-            this.tabPageConfig.Controls.Add(this.materialButton2);
-            this.tabPageConfig.Controls.Add(this.materialLabel24);
-            this.tabPageConfig.Controls.Add(this.materialButton7);
-            this.tabPageConfig.Controls.Add(this.materialLabel9);
-            this.tabPageConfig.ImageKey = "round_build_white_24dp.png";
-            this.tabPageConfig.Location = new System.Drawing.Point(4, 31);
-            this.tabPageConfig.Name = "tabPageConfig";
-            this.tabPageConfig.Size = new System.Drawing.Size(938, 612);
-            this.tabPageConfig.TabIndex = 0;
-            this.tabPageConfig.Text = "Acerca de";
+            tabPageConfig.BackColor = Color.White;
+            tabPageConfig.Controls.Add(materialButton2);
+            tabPageConfig.Controls.Add(materialLabel24);
+            tabPageConfig.Controls.Add(materialButton7);
+            tabPageConfig.Controls.Add(materialLabel9);
+            tabPageConfig.ImageKey = "round_build_white_24dp.png";
+            tabPageConfig.Location = new Point(4, 31);
+            tabPageConfig.Margin = new Padding(4, 3, 4, 3);
+            tabPageConfig.Name = "tabPageConfig";
+            tabPageConfig.Size = new Size(1095, 712);
+            tabPageConfig.TabIndex = 0;
+            tabPageConfig.Text = "Acerca de";
             // 
             // materialButton2
             // 
-            this.materialButton2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton2.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton2.Depth = 0;
-            this.materialButton2.HighEmphasis = true;
-            this.materialButton2.Icon = null;
-            this.materialButton2.Location = new System.Drawing.Point(177, 158);
-            this.materialButton2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton2.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton2.Name = "materialButton2";
-            this.materialButton2.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton2.Size = new System.Drawing.Size(137, 36);
-            this.materialButton2.TabIndex = 40;
-            this.materialButton2.Text = "Cambiar Color";
-            this.materialButton2.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-            this.materialButton2.UseAccentColor = false;
-            this.materialButton2.UseVisualStyleBackColor = true;
-            this.materialButton2.Click += new System.EventHandler(this.materialButton2_Click);
+            materialButton2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            materialButton2.Density = MaterialButton.MaterialButtonDensity.Default;
+            materialButton2.Depth = 0;
+            materialButton2.HighEmphasis = true;
+            materialButton2.Icon = null;
+            materialButton2.Location = new Point(206, 182);
+            materialButton2.Margin = new Padding(5, 7, 5, 7);
+            materialButton2.MouseState = MouseState.HOVER;
+            materialButton2.Name = "materialButton2";
+            materialButton2.NoAccentTextColor = Color.Empty;
+            materialButton2.Size = new Size(137, 36);
+            materialButton2.TabIndex = 40;
+            materialButton2.Text = "Cambiar Color";
+            materialButton2.Type = MaterialButton.MaterialButtonType.Outlined;
+            materialButton2.UseAccentColor = false;
+            materialButton2.UseVisualStyleBackColor = true;
+            materialButton2.Click += materialButton2_Click;
             // 
             // materialLabel24
             // 
-            this.materialLabel24.AutoSize = true;
-            this.materialLabel24.Depth = 0;
-            this.materialLabel24.Font = new System.Drawing.Font("Roboto", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel24.FontType = MaterialSkin.MaterialSkinManager.fontType.H3;
-            this.materialLabel24.Location = new System.Drawing.Point(18, 22);
-            this.materialLabel24.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel24.Name = "materialLabel24";
-            this.materialLabel24.Size = new System.Drawing.Size(213, 58);
-            this.materialLabel24.TabIndex = 32;
-            this.materialLabel24.Text = "Acerca de";
+            materialLabel24.AutoSize = true;
+            materialLabel24.Depth = 0;
+            materialLabel24.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel24.FontType = MaterialSkinManager.fontType.H3;
+            materialLabel24.Location = new Point(21, 25);
+            materialLabel24.Margin = new Padding(4, 0, 4, 0);
+            materialLabel24.MouseState = MouseState.HOVER;
+            materialLabel24.Name = "materialLabel24";
+            materialLabel24.Size = new Size(213, 58);
+            materialLabel24.TabIndex = 32;
+            materialLabel24.Text = "Acerca de";
             // 
             // materialButton7
             // 
-            this.materialButton7.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton7.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton7.Depth = 0;
-            this.materialButton7.HighEmphasis = true;
-            this.materialButton7.Icon = null;
-            this.materialButton7.Location = new System.Drawing.Point(28, 158);
-            this.materialButton7.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton7.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton7.Name = "materialButton7";
-            this.materialButton7.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton7.Size = new System.Drawing.Size(125, 36);
-            this.materialButton7.TabIndex = 0;
-            this.materialButton7.Text = "Modo Oscuro";
-            this.materialButton7.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Outlined;
-            this.materialButton7.UseAccentColor = false;
-            this.materialButton7.UseVisualStyleBackColor = true;
-            this.materialButton7.Click += new System.EventHandler(this.materialButton1_Click);
+            materialButton7.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            materialButton7.Density = MaterialButton.MaterialButtonDensity.Default;
+            materialButton7.Depth = 0;
+            materialButton7.HighEmphasis = true;
+            materialButton7.Icon = null;
+            materialButton7.Location = new Point(33, 182);
+            materialButton7.Margin = new Padding(5, 7, 5, 7);
+            materialButton7.MouseState = MouseState.HOVER;
+            materialButton7.Name = "materialButton7";
+            materialButton7.NoAccentTextColor = Color.Empty;
+            materialButton7.Size = new Size(125, 36);
+            materialButton7.TabIndex = 0;
+            materialButton7.Text = "Modo Oscuro";
+            materialButton7.Type = MaterialButton.MaterialButtonType.Outlined;
+            materialButton7.UseAccentColor = false;
+            materialButton7.UseVisualStyleBackColor = true;
+            materialButton7.Click += materialButton1_Click;
             // 
             // materialLabel9
             // 
-            this.materialLabel9.Depth = 0;
-            this.materialLabel9.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel9.Location = new System.Drawing.Point(16, 99);
-            this.materialLabel9.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel9.Name = "materialLabel9";
-            this.materialLabel9.Size = new System.Drawing.Size(455, 60);
-            this.materialLabel9.TabIndex = 0;
-            this.materialLabel9.Text = "Ajustes de aplicación.\r\n";
+            materialLabel9.Depth = 0;
+            materialLabel9.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel9.ForeColor = Color.FromArgb(180, 0, 0, 0);
+            materialLabel9.Location = new Point(19, 114);
+            materialLabel9.Margin = new Padding(4, 0, 4, 0);
+            materialLabel9.MouseState = MouseState.HOVER;
+            materialLabel9.Name = "materialLabel9";
+            materialLabel9.Size = new Size(531, 69);
+            materialLabel9.TabIndex = 0;
+            materialLabel9.Text = "Ajustes de aplicación.\r\n";
             // 
             // tabPageLogs
             // 
-            this.tabPageLogs.BackColor = System.Drawing.Color.White;
-            this.tabPageLogs.Controls.Add(this.labelTitleHistory);
-            this.tabPageLogs.Controls.Add(this.labelSubTitleHistory);
-            this.tabPageLogs.Controls.Add(this.materialListBoxLogs);
-            this.tabPageLogs.Controls.Add(this.buttonRefreshHistory);
-            this.tabPageLogs.ImageKey = "round_bookmark_white_24dp.png";
-            this.tabPageLogs.Location = new System.Drawing.Point(4, 31);
-            this.tabPageLogs.Margin = new System.Windows.Forms.Padding(2);
-            this.tabPageLogs.Name = "tabPageLogs";
-            this.tabPageLogs.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPageLogs.Size = new System.Drawing.Size(938, 612);
-            this.tabPageLogs.TabIndex = 11;
-            this.tabPageLogs.Text = "Historial";
+            tabPageLogs.BackColor = Color.White;
+            tabPageLogs.Controls.Add(labelTitleHistory);
+            tabPageLogs.Controls.Add(labelSubTitleHistory);
+            tabPageLogs.Controls.Add(materialListBoxLogs);
+            tabPageLogs.Controls.Add(buttonRefreshHistory);
+            tabPageLogs.ImageKey = "round_bookmark_white_24dp.png";
+            tabPageLogs.Location = new Point(4, 31);
+            tabPageLogs.Margin = new Padding(2);
+            tabPageLogs.Name = "tabPageLogs";
+            tabPageLogs.Padding = new Padding(2);
+            tabPageLogs.Size = new Size(1095, 712);
+            tabPageLogs.TabIndex = 11;
+            tabPageLogs.Text = "Historial";
             // 
             // labelTitleHistory
             // 
-            this.labelTitleHistory.AutoSize = true;
-            this.labelTitleHistory.Depth = 0;
-            this.labelTitleHistory.Font = new System.Drawing.Font("Roboto", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.labelTitleHistory.FontType = MaterialSkin.MaterialSkinManager.fontType.H3;
-            this.labelTitleHistory.Location = new System.Drawing.Point(18, 22);
-            this.labelTitleHistory.MouseState = MaterialSkin.MouseState.HOVER;
-            this.labelTitleHistory.Name = "labelTitleHistory";
-            this.labelTitleHistory.Size = new System.Drawing.Size(181, 58);
-            this.labelTitleHistory.TabIndex = 89;
-            this.labelTitleHistory.Text = "Historial";
+            labelTitleHistory.AutoSize = true;
+            labelTitleHistory.Depth = 0;
+            labelTitleHistory.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            labelTitleHistory.FontType = MaterialSkinManager.fontType.H3;
+            labelTitleHistory.Location = new Point(21, 25);
+            labelTitleHistory.Margin = new Padding(4, 0, 4, 0);
+            labelTitleHistory.MouseState = MouseState.HOVER;
+            labelTitleHistory.Name = "labelTitleHistory";
+            labelTitleHistory.Size = new Size(181, 58);
+            labelTitleHistory.TabIndex = 89;
+            labelTitleHistory.Text = "Historial";
             // 
             // labelSubTitleHistory
             // 
-            this.labelSubTitleHistory.AutoSize = true;
-            this.labelSubTitleHistory.Depth = 0;
-            this.labelSubTitleHistory.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelSubTitleHistory.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.labelSubTitleHistory.Location = new System.Drawing.Point(16, 99);
-            this.labelSubTitleHistory.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelSubTitleHistory.MouseState = MaterialSkin.MouseState.HOVER;
-            this.labelSubTitleHistory.Name = "labelSubTitleHistory";
-            this.labelSubTitleHistory.Size = new System.Drawing.Size(557, 19);
-            this.labelSubTitleHistory.TabIndex = 88;
-            this.labelSubTitleHistory.Text = "Registros de movimientos de descargas, instalaciones, actualizaciones y otros.";
+            labelSubTitleHistory.AutoSize = true;
+            labelSubTitleHistory.Depth = 0;
+            labelSubTitleHistory.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            labelSubTitleHistory.ForeColor = Color.FromArgb(180, 0, 0, 0);
+            labelSubTitleHistory.Location = new Point(19, 114);
+            labelSubTitleHistory.Margin = new Padding(2, 0, 2, 0);
+            labelSubTitleHistory.MouseState = MouseState.HOVER;
+            labelSubTitleHistory.Name = "labelSubTitleHistory";
+            labelSubTitleHistory.Size = new Size(557, 19);
+            labelSubTitleHistory.TabIndex = 88;
+            labelSubTitleHistory.Text = "Registros de movimientos de descargas, instalaciones, actualizaciones y otros.";
             // 
             // materialListBoxLogs
             // 
-            this.materialListBoxLogs.BackColor = System.Drawing.Color.White;
-            this.materialListBoxLogs.BorderColor = System.Drawing.Color.LightGray;
-            this.materialListBoxLogs.Depth = 0;
-            this.materialListBoxLogs.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialListBoxLogs.Location = new System.Drawing.Point(19, 150);
-            this.materialListBoxLogs.Margin = new System.Windows.Forms.Padding(2);
-            this.materialListBoxLogs.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialListBoxLogs.Name = "materialListBoxLogs";
-            this.materialListBoxLogs.SelectedIndex = -1;
-            this.materialListBoxLogs.SelectedItem = null;
-            this.materialListBoxLogs.Size = new System.Drawing.Size(799, 450);
-            this.materialListBoxLogs.TabIndex = 0;
+            materialListBoxLogs.BackColor = Color.White;
+            materialListBoxLogs.BorderColor = Color.LightGray;
+            materialListBoxLogs.Depth = 0;
+            materialListBoxLogs.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialListBoxLogs.Location = new Point(22, 173);
+            materialListBoxLogs.Margin = new Padding(2);
+            materialListBoxLogs.MouseState = MouseState.HOVER;
+            materialListBoxLogs.Name = "materialListBoxLogs";
+            materialListBoxLogs.SelectedIndex = -1;
+            materialListBoxLogs.SelectedItem = null;
+            materialListBoxLogs.Size = new Size(932, 519);
+            materialListBoxLogs.TabIndex = 0;
             // 
             // buttonRefreshHistory
             // 
-            this.buttonRefreshHistory.AutoSize = false;
-            this.buttonRefreshHistory.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonRefreshHistory.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.buttonRefreshHistory.Depth = 0;
-            this.buttonRefreshHistory.HighEmphasis = true;
-            this.buttonRefreshHistory.Icon = global::PYALauncherApps.Properties.Resources.outline_sync_white_24dp;
-            this.buttonRefreshHistory.Location = new System.Drawing.Point(779, 80);
-            this.buttonRefreshHistory.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.buttonRefreshHistory.MouseState = MaterialSkin.MouseState.HOVER;
-            this.buttonRefreshHistory.Name = "buttonRefreshHistory";
-            this.buttonRefreshHistory.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonRefreshHistory.Size = new System.Drawing.Size(39, 39);
-            this.buttonRefreshHistory.TabIndex = 87;
-            this.buttonRefreshHistory.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.buttonRefreshHistory.UseAccentColor = false;
-            this.buttonRefreshHistory.UseVisualStyleBackColor = true;
-            this.buttonRefreshHistory.Click += new System.EventHandler(this.materialButton3_Click);
+            buttonRefreshHistory.AutoSize = false;
+            buttonRefreshHistory.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            buttonRefreshHistory.Density = MaterialButton.MaterialButtonDensity.Default;
+            buttonRefreshHistory.Depth = 0;
+            buttonRefreshHistory.HighEmphasis = true;
+            buttonRefreshHistory.Icon = Properties.Resources.outline_sync_white_24dp;
+            buttonRefreshHistory.Location = new Point(916, 92);
+            buttonRefreshHistory.Margin = new Padding(5, 7, 5, 7);
+            buttonRefreshHistory.MouseState = MouseState.HOVER;
+            buttonRefreshHistory.Name = "buttonRefreshHistory";
+            buttonRefreshHistory.NoAccentTextColor = Color.Empty;
+            buttonRefreshHistory.Size = new Size(39, 41);
+            buttonRefreshHistory.TabIndex = 87;
+            buttonRefreshHistory.Type = MaterialButton.MaterialButtonType.Contained;
+            buttonRefreshHistory.UseAccentColor = false;
+            buttonRefreshHistory.UseVisualStyleBackColor = true;
+            buttonRefreshHistory.Click += materialButton3_Click;
             // 
             // tabPageApps
             // 
-            this.tabPageApps.BackColor = System.Drawing.Color.White;
-            this.tabPageApps.Controls.Add(this.buttonAppsRefresh);
-            this.tabPageApps.Controls.Add(this.materialButtonAddSoftware);
-            this.tabPageApps.Controls.Add(this.flowLayoutPanel2);
-            this.tabPageApps.Controls.Add(this.labelTitleApps);
-            this.tabPageApps.Controls.Add(this.labelSubTitleApps);
-            this.tabPageApps.ImageKey = "outline_apps_white_24dp.png";
-            this.tabPageApps.Location = new System.Drawing.Point(4, 31);
-            this.tabPageApps.Margin = new System.Windows.Forms.Padding(2);
-            this.tabPageApps.Name = "tabPageApps";
-            this.tabPageApps.Size = new System.Drawing.Size(938, 612);
-            this.tabPageApps.TabIndex = 12;
-            this.tabPageApps.Text = "Aplicaciones";
+            tabPageApps.BackColor = Color.White;
+            tabPageApps.Controls.Add(buttonAppsRefresh);
+            tabPageApps.Controls.Add(materialButtonAddSoftware);
+            tabPageApps.Controls.Add(flowLayoutPanel2);
+            tabPageApps.Controls.Add(labelTitleApps);
+            tabPageApps.Controls.Add(labelSubTitleApps);
+            tabPageApps.ImageKey = "outline_apps_white_24dp.png";
+            tabPageApps.Location = new Point(4, 31);
+            tabPageApps.Margin = new Padding(2);
+            tabPageApps.Name = "tabPageApps";
+            tabPageApps.Size = new Size(1095, 712);
+            tabPageApps.TabIndex = 12;
+            tabPageApps.Text = "Aplicaciones";
             // 
             // buttonAppsRefresh
             // 
-            this.buttonAppsRefresh.AutoSize = false;
-            this.buttonAppsRefresh.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.buttonAppsRefresh.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.buttonAppsRefresh.Depth = 0;
-            this.buttonAppsRefresh.HighEmphasis = true;
-            this.buttonAppsRefresh.Icon = global::PYALauncherApps.Properties.Resources.outline_sync_white_24dp;
-            this.buttonAppsRefresh.Location = new System.Drawing.Point(770, 79);
-            this.buttonAppsRefresh.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.buttonAppsRefresh.MouseState = MaterialSkin.MouseState.HOVER;
-            this.buttonAppsRefresh.Name = "buttonAppsRefresh";
-            this.buttonAppsRefresh.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.buttonAppsRefresh.Size = new System.Drawing.Size(39, 39);
-            this.buttonAppsRefresh.TabIndex = 76;
-            this.buttonAppsRefresh.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.buttonAppsRefresh.UseAccentColor = false;
-            this.buttonAppsRefresh.UseVisualStyleBackColor = true;
-            this.buttonAppsRefresh.Click += new System.EventHandler(this.buttonAppsRefresh_Click);
+            buttonAppsRefresh.AutoSize = false;
+            buttonAppsRefresh.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            buttonAppsRefresh.Density = MaterialButton.MaterialButtonDensity.Default;
+            buttonAppsRefresh.Depth = 0;
+            buttonAppsRefresh.HighEmphasis = true;
+            buttonAppsRefresh.Icon = Properties.Resources.outline_sync_white_24dp;
+            buttonAppsRefresh.Location = new Point(903, 91);
+            buttonAppsRefresh.Margin = new Padding(5, 7, 5, 7);
+            buttonAppsRefresh.MouseState = MouseState.HOVER;
+            buttonAppsRefresh.Name = "buttonAppsRefresh";
+            buttonAppsRefresh.NoAccentTextColor = Color.Empty;
+            buttonAppsRefresh.Size = new Size(41, 42);
+            buttonAppsRefresh.TabIndex = 76;
+            buttonAppsRefresh.Type = MaterialButton.MaterialButtonType.Contained;
+            buttonAppsRefresh.UseAccentColor = false;
+            buttonAppsRefresh.UseVisualStyleBackColor = true;
+            buttonAppsRefresh.Click += buttonAppsRefresh_Click;
             // 
             // materialButtonAddSoftware
             // 
-            this.materialButtonAddSoftware.AutoSize = false;
-            this.materialButtonAddSoftware.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButtonAddSoftware.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButtonAddSoftware.Depth = 0;
-            this.materialButtonAddSoftware.HighEmphasis = true;
-            this.materialButtonAddSoftware.Icon = null;
-            this.materialButtonAddSoftware.Location = new System.Drawing.Point(709, 38);
-            this.materialButtonAddSoftware.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButtonAddSoftware.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButtonAddSoftware.Name = "materialButtonAddSoftware";
-            this.materialButtonAddSoftware.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButtonAddSoftware.Size = new System.Drawing.Size(100, 36);
-            this.materialButtonAddSoftware.TabIndex = 75;
-            this.materialButtonAddSoftware.Text = "Agregar";
-            this.materialButtonAddSoftware.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.materialButtonAddSoftware.UseAccentColor = false;
-            this.materialButtonAddSoftware.UseVisualStyleBackColor = true;
-            this.materialButtonAddSoftware.Click += new System.EventHandler(this.materialButtonAddSoftware_Click);
+            materialButtonAddSoftware.AutoSize = false;
+            materialButtonAddSoftware.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            materialButtonAddSoftware.Density = MaterialButton.MaterialButtonDensity.Default;
+            materialButtonAddSoftware.Depth = 0;
+            materialButtonAddSoftware.HighEmphasis = true;
+            materialButtonAddSoftware.Icon = null;
+            materialButtonAddSoftware.Location = new Point(827, 44);
+            materialButtonAddSoftware.Margin = new Padding(5, 7, 5, 7);
+            materialButtonAddSoftware.MouseState = MouseState.HOVER;
+            materialButtonAddSoftware.Name = "materialButtonAddSoftware";
+            materialButtonAddSoftware.NoAccentTextColor = Color.Empty;
+            materialButtonAddSoftware.Size = new Size(117, 42);
+            materialButtonAddSoftware.TabIndex = 75;
+            materialButtonAddSoftware.Text = "Agregar";
+            materialButtonAddSoftware.Type = MaterialButton.MaterialButtonType.Contained;
+            materialButtonAddSoftware.UseAccentColor = false;
+            materialButtonAddSoftware.UseVisualStyleBackColor = true;
+            materialButtonAddSoftware.Click += materialButtonAddSoftware_Click;
             // 
             // flowLayoutPanel2
             // 
-            this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.flowLayoutPanel2.AutoScroll = true;
-            this.flowLayoutPanel2.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel2.Location = new System.Drawing.Point(19, 150);
-            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(790, 428);
-            this.flowLayoutPanel2.TabIndex = 74;
-            this.flowLayoutPanel2.WrapContents = false;
+            flowLayoutPanel2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            flowLayoutPanel2.AutoScroll = true;
+            flowLayoutPanel2.FlowDirection = FlowDirection.TopDown;
+            flowLayoutPanel2.Location = new Point(22, 173);
+            flowLayoutPanel2.Margin = new Padding(4, 3, 4, 3);
+            flowLayoutPanel2.Name = "flowLayoutPanel2";
+            flowLayoutPanel2.Size = new Size(922, 494);
+            flowLayoutPanel2.TabIndex = 74;
+            flowLayoutPanel2.WrapContents = false;
             // 
             // labelTitleApps
             // 
-            this.labelTitleApps.AutoSize = true;
-            this.labelTitleApps.Depth = 0;
-            this.labelTitleApps.Font = new System.Drawing.Font("Roboto", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.labelTitleApps.FontType = MaterialSkin.MaterialSkinManager.fontType.H3;
-            this.labelTitleApps.Location = new System.Drawing.Point(12, 15);
-            this.labelTitleApps.MouseState = MaterialSkin.MouseState.HOVER;
-            this.labelTitleApps.Name = "labelTitleApps";
-            this.labelTitleApps.Size = new System.Drawing.Size(274, 58);
-            this.labelTitleApps.TabIndex = 73;
-            this.labelTitleApps.Text = "Aplicaciones";
+            labelTitleApps.AutoSize = true;
+            labelTitleApps.Depth = 0;
+            labelTitleApps.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            labelTitleApps.FontType = MaterialSkinManager.fontType.H3;
+            labelTitleApps.Location = new Point(14, 17);
+            labelTitleApps.Margin = new Padding(4, 0, 4, 0);
+            labelTitleApps.MouseState = MouseState.HOVER;
+            labelTitleApps.Name = "labelTitleApps";
+            labelTitleApps.Size = new Size(274, 58);
+            labelTitleApps.TabIndex = 73;
+            labelTitleApps.Text = "Aplicaciones";
             // 
             // labelSubTitleApps
             // 
-            this.labelSubTitleApps.AutoSize = true;
-            this.labelSubTitleApps.Depth = 0;
-            this.labelSubTitleApps.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.labelSubTitleApps.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.labelSubTitleApps.Location = new System.Drawing.Point(16, 99);
-            this.labelSubTitleApps.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelSubTitleApps.MouseState = MaterialSkin.MouseState.HOVER;
-            this.labelSubTitleApps.Name = "labelSubTitleApps";
-            this.labelSubTitleApps.Size = new System.Drawing.Size(672, 19);
-            this.labelSubTitleApps.TabIndex = 72;
-            this.labelSubTitleApps.Text = "Listado de aplicaciones diseñadas para potenciar el trabajo con herramientas de m" +
-    "odelado 3D.";
+            labelSubTitleApps.AutoSize = true;
+            labelSubTitleApps.Depth = 0;
+            labelSubTitleApps.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            labelSubTitleApps.ForeColor = Color.FromArgb(180, 0, 0, 0);
+            labelSubTitleApps.Location = new Point(19, 114);
+            labelSubTitleApps.Margin = new Padding(2, 0, 2, 0);
+            labelSubTitleApps.MouseState = MouseState.HOVER;
+            labelSubTitleApps.Name = "labelSubTitleApps";
+            labelSubTitleApps.Size = new Size(672, 19);
+            labelSubTitleApps.TabIndex = 72;
+            labelSubTitleApps.Text = "Listado de aplicaciones diseñadas para potenciar el trabajo con herramientas de modelado 3D.";
             // 
             // tabPageInicio
             // 
-            this.tabPageInicio.BackColor = System.Drawing.Color.White;
-            this.tabPageInicio.Controls.Add(this.listBoxSoftware);
-            this.tabPageInicio.Controls.Add(this.listBoxConfigs);
-            this.tabPageInicio.Controls.Add(this.materialListBoxSoftware);
-            this.tabPageInicio.Controls.Add(this.materialListBoxConfigs);
-            this.tabPageInicio.Controls.Add(this.materialCard1);
-            this.tabPageInicio.Controls.Add(this.pictureBox1);
-            this.tabPageInicio.Controls.Add(this.materialCard7);
-            this.tabPageInicio.Controls.Add(this.materialCard5);
-            this.tabPageInicio.Controls.Add(this.materialLabel61);
-            this.tabPageInicio.Controls.Add(this.materialLabel62);
-            this.tabPageInicio.ImageKey = "round_assessment_white_24dp.png";
-            this.tabPageInicio.Location = new System.Drawing.Point(4, 31);
-            this.tabPageInicio.Margin = new System.Windows.Forms.Padding(2);
-            this.tabPageInicio.Name = "tabPageInicio";
-            this.tabPageInicio.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPageInicio.Size = new System.Drawing.Size(938, 612);
-            this.tabPageInicio.TabIndex = 10;
-            this.tabPageInicio.Text = "Inicio";
+            tabPageInicio.BackColor = Color.White;
+            tabPageInicio.Controls.Add(listBoxSoftware);
+            tabPageInicio.Controls.Add(listBoxConfigs);
+            tabPageInicio.Controls.Add(materialListBoxSoftware);
+            tabPageInicio.Controls.Add(materialListBoxConfigs);
+            tabPageInicio.Controls.Add(materialCard1);
+            tabPageInicio.Controls.Add(pictureBox1);
+            tabPageInicio.Controls.Add(materialCard7);
+            tabPageInicio.Controls.Add(materialCard5);
+            tabPageInicio.Controls.Add(materialLabel61);
+            tabPageInicio.Controls.Add(materialLabel62);
+            tabPageInicio.ImageKey = "round_assessment_white_24dp.png";
+            tabPageInicio.Location = new Point(4, 31);
+            tabPageInicio.Margin = new Padding(2);
+            tabPageInicio.Name = "tabPageInicio";
+            tabPageInicio.Padding = new Padding(2);
+            tabPageInicio.Size = new Size(1095, 712);
+            tabPageInicio.TabIndex = 10;
+            tabPageInicio.Text = "Inicio";
             // 
             // listBoxSoftware
             // 
-            this.listBoxSoftware.FormattingEnabled = true;
-            this.listBoxSoftware.Location = new System.Drawing.Point(584, 197);
-            this.listBoxSoftware.Margin = new System.Windows.Forms.Padding(2);
-            this.listBoxSoftware.Name = "listBoxSoftware";
-            this.listBoxSoftware.Size = new System.Drawing.Size(176, 186);
-            this.listBoxSoftware.TabIndex = 75;
-            this.listBoxSoftware.Visible = false;
+            listBoxSoftware.FormattingEnabled = true;
+            listBoxSoftware.ItemHeight = 15;
+            listBoxSoftware.Location = new Point(681, 227);
+            listBoxSoftware.Margin = new Padding(2);
+            listBoxSoftware.Name = "listBoxSoftware";
+            listBoxSoftware.Size = new Size(205, 214);
+            listBoxSoftware.TabIndex = 75;
+            listBoxSoftware.Visible = false;
             // 
             // listBoxConfigs
             // 
-            this.listBoxConfigs.FormattingEnabled = true;
-            this.listBoxConfigs.Location = new System.Drawing.Point(443, 197);
-            this.listBoxConfigs.Margin = new System.Windows.Forms.Padding(2);
-            this.listBoxConfigs.Name = "listBoxConfigs";
-            this.listBoxConfigs.Size = new System.Drawing.Size(137, 186);
-            this.listBoxConfigs.TabIndex = 74;
-            this.listBoxConfigs.Visible = false;
+            listBoxConfigs.FormattingEnabled = true;
+            listBoxConfigs.ItemHeight = 15;
+            listBoxConfigs.Location = new Point(517, 227);
+            listBoxConfigs.Margin = new Padding(2);
+            listBoxConfigs.Name = "listBoxConfigs";
+            listBoxConfigs.Size = new Size(159, 214);
+            listBoxConfigs.TabIndex = 74;
+            listBoxConfigs.Visible = false;
             // 
             // materialListBoxSoftware
             // 
-            this.materialListBoxSoftware.BackColor = System.Drawing.Color.White;
-            this.materialListBoxSoftware.BorderColor = System.Drawing.Color.LightGray;
-            this.materialListBoxSoftware.Depth = 0;
-            this.materialListBoxSoftware.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialListBoxSoftware.Location = new System.Drawing.Point(278, 197);
-            this.materialListBoxSoftware.Margin = new System.Windows.Forms.Padding(2);
-            this.materialListBoxSoftware.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialListBoxSoftware.Name = "materialListBoxSoftware";
-            this.materialListBoxSoftware.SelectedIndex = -1;
-            this.materialListBoxSoftware.SelectedItem = null;
-            this.materialListBoxSoftware.Size = new System.Drawing.Size(135, 187);
-            this.materialListBoxSoftware.TabIndex = 73;
-            this.materialListBoxSoftware.Visible = false;
+            materialListBoxSoftware.BackColor = Color.White;
+            materialListBoxSoftware.BorderColor = Color.LightGray;
+            materialListBoxSoftware.Depth = 0;
+            materialListBoxSoftware.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialListBoxSoftware.Location = new Point(324, 227);
+            materialListBoxSoftware.Margin = new Padding(2);
+            materialListBoxSoftware.MouseState = MouseState.HOVER;
+            materialListBoxSoftware.Name = "materialListBoxSoftware";
+            materialListBoxSoftware.SelectedIndex = -1;
+            materialListBoxSoftware.SelectedItem = null;
+            materialListBoxSoftware.Size = new Size(158, 216);
+            materialListBoxSoftware.TabIndex = 73;
+            materialListBoxSoftware.Visible = false;
             // 
             // materialListBoxConfigs
             // 
-            this.materialListBoxConfigs.BackColor = System.Drawing.Color.White;
-            this.materialListBoxConfigs.BorderColor = System.Drawing.Color.LightGray;
-            this.materialListBoxConfigs.Depth = 0;
-            this.materialListBoxConfigs.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialListBoxConfigs.Location = new System.Drawing.Point(166, 197);
-            this.materialListBoxConfigs.Margin = new System.Windows.Forms.Padding(2);
-            this.materialListBoxConfigs.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialListBoxConfigs.Name = "materialListBoxConfigs";
-            this.materialListBoxConfigs.SelectedIndex = -1;
-            this.materialListBoxConfigs.SelectedItem = null;
-            this.materialListBoxConfigs.Size = new System.Drawing.Size(107, 187);
-            this.materialListBoxConfigs.TabIndex = 72;
-            this.materialListBoxConfigs.Visible = false;
+            materialListBoxConfigs.BackColor = Color.White;
+            materialListBoxConfigs.BorderColor = Color.LightGray;
+            materialListBoxConfigs.Depth = 0;
+            materialListBoxConfigs.Font = new Font("Microsoft Sans Serif", 16F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialListBoxConfigs.Location = new Point(194, 227);
+            materialListBoxConfigs.Margin = new Padding(2);
+            materialListBoxConfigs.MouseState = MouseState.HOVER;
+            materialListBoxConfigs.Name = "materialListBoxConfigs";
+            materialListBoxConfigs.SelectedIndex = -1;
+            materialListBoxConfigs.SelectedItem = null;
+            materialListBoxConfigs.Size = new Size(125, 216);
+            materialListBoxConfigs.TabIndex = 72;
+            materialListBoxConfigs.Visible = false;
             // 
             // materialCard1
             // 
-            this.materialCard1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard1.Controls.Add(this.materialLabel1);
-            this.materialCard1.Depth = 0;
-            this.materialCard1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard1.Location = new System.Drawing.Point(19, 197);
-            this.materialCard1.Margin = new System.Windows.Forms.Padding(7);
-            this.materialCard1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard1.Name = "materialCard1";
-            this.materialCard1.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard1.Size = new System.Drawing.Size(138, 187);
-            this.materialCard1.TabIndex = 71;
-            this.materialCard1.Visible = false;
+            materialCard1.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard1.Controls.Add(materialLabel1);
+            materialCard1.Depth = 0;
+            materialCard1.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialCard1.Location = new Point(22, 227);
+            materialCard1.Margin = new Padding(8);
+            materialCard1.MouseState = MouseState.HOVER;
+            materialCard1.Name = "materialCard1";
+            materialCard1.Padding = new Padding(16);
+            materialCard1.Size = new Size(161, 216);
+            materialCard1.TabIndex = 71;
+            materialCard1.Visible = false;
             // 
             // materialLabel1
             // 
-            this.materialLabel1.AutoSize = true;
-            this.materialLabel1.Depth = 0;
-            this.materialLabel1.Font = new System.Drawing.Font("Roboto Medium", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel1.FontType = MaterialSkin.MaterialSkinManager.fontType.H6;
-            this.materialLabel1.HighEmphasis = true;
-            this.materialLabel1.Location = new System.Drawing.Point(17, 14);
-            this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel1.Name = "materialLabel1";
-            this.materialLabel1.Size = new System.Drawing.Size(83, 24);
-            this.materialLabel1.TabIndex = 0;
-            this.materialLabel1.Text = "Feed List";
-            this.materialLabel1.UseMnemonic = false;
+            materialLabel1.AutoSize = true;
+            materialLabel1.Depth = 0;
+            materialLabel1.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel1.FontType = MaterialSkinManager.fontType.H6;
+            materialLabel1.HighEmphasis = true;
+            materialLabel1.Location = new Point(20, 16);
+            materialLabel1.Margin = new Padding(4, 0, 4, 0);
+            materialLabel1.MouseState = MouseState.HOVER;
+            materialLabel1.Name = "materialLabel1";
+            materialLabel1.Size = new Size(83, 24);
+            materialLabel1.TabIndex = 0;
+            materialLabel1.Text = "Feed List";
+            materialLabel1.UseMnemonic = false;
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Image = global::PYALauncherApps.Properties.Resources.Logo_horizontal_Definitivo_2__removebg_preview;
-            this.pictureBox1.InitialImage = null;
-            this.pictureBox1.Location = new System.Drawing.Point(443, 22);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(394, 104);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 71;
-            this.pictureBox1.TabStop = false;
+            pictureBox1.Image = Properties.Resources.Logo_horizontal_Definitivo_2__removebg_preview;
+            pictureBox1.InitialImage = null;
+            pictureBox1.Location = new Point(517, 25);
+            pictureBox1.Margin = new Padding(2);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(460, 120);
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.TabIndex = 71;
+            pictureBox1.TabStop = false;
             // 
             // materialCard7
             // 
-            this.materialCard7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard7.Controls.Add(this.materialButton32);
-            this.materialCard7.Controls.Add(this.materialLabel67);
-            this.materialCard7.Controls.Add(this.materialLabel68);
-            this.materialCard7.Depth = 0;
-            this.materialCard7.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard7.Location = new System.Drawing.Point(443, 412);
-            this.materialCard7.Margin = new System.Windows.Forms.Padding(7);
-            this.materialCard7.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard7.Name = "materialCard7";
-            this.materialCard7.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard7.Size = new System.Drawing.Size(394, 187);
-            this.materialCard7.TabIndex = 70;
+            materialCard7.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard7.Controls.Add(materialButton32);
+            materialCard7.Controls.Add(materialLabel67);
+            materialCard7.Controls.Add(materialLabel68);
+            materialCard7.Depth = 0;
+            materialCard7.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialCard7.Location = new Point(517, 475);
+            materialCard7.Margin = new Padding(8);
+            materialCard7.MouseState = MouseState.HOVER;
+            materialCard7.Name = "materialCard7";
+            materialCard7.Padding = new Padding(16);
+            materialCard7.Size = new Size(460, 216);
+            materialCard7.TabIndex = 70;
             // 
             // materialButton32
             // 
-            this.materialButton32.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.materialButton32.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton32.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton32.Depth = 0;
-            this.materialButton32.HighEmphasis = true;
-            this.materialButton32.Icon = null;
-            this.materialButton32.Location = new System.Drawing.Point(301, 129);
-            this.materialButton32.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton32.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton32.Name = "materialButton32";
-            this.materialButton32.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton32.Size = new System.Drawing.Size(76, 36);
-            this.materialButton32.TabIndex = 1;
-            this.materialButton32.Text = "Visitar";
-            this.materialButton32.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
-            this.materialButton32.UseAccentColor = false;
-            this.materialButton32.UseVisualStyleBackColor = true;
-            this.materialButton32.Click += new System.EventHandler(this.materialButton32_Click);
+            materialButton32.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            materialButton32.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            materialButton32.Density = MaterialButton.MaterialButtonDensity.Default;
+            materialButton32.Depth = 0;
+            materialButton32.HighEmphasis = true;
+            materialButton32.Icon = null;
+            materialButton32.Location = new Point(364, 155);
+            materialButton32.Margin = new Padding(5, 7, 5, 7);
+            materialButton32.MouseState = MouseState.HOVER;
+            materialButton32.Name = "materialButton32";
+            materialButton32.NoAccentTextColor = Color.Empty;
+            materialButton32.Size = new Size(76, 36);
+            materialButton32.TabIndex = 1;
+            materialButton32.Text = "Visitar";
+            materialButton32.Type = MaterialButton.MaterialButtonType.Text;
+            materialButton32.UseAccentColor = false;
+            materialButton32.UseVisualStyleBackColor = true;
+            materialButton32.Click += materialButton32_Click;
             // 
             // materialLabel67
             // 
-            this.materialLabel67.AutoSize = true;
-            this.materialLabel67.Depth = 0;
-            this.materialLabel67.Font = new System.Drawing.Font("Roboto Medium", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel67.FontType = MaterialSkin.MaterialSkinManager.fontType.H6;
-            this.materialLabel67.HighEmphasis = true;
-            this.materialLabel67.Location = new System.Drawing.Point(17, 14);
-            this.materialLabel67.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel67.Name = "materialLabel67";
-            this.materialLabel67.Size = new System.Drawing.Size(171, 24);
-            this.materialLabel67.TabIndex = 0;
-            this.materialLabel67.Text = "Sistema de Tickets";
+            materialLabel67.AutoSize = true;
+            materialLabel67.Depth = 0;
+            materialLabel67.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel67.FontType = MaterialSkinManager.fontType.H6;
+            materialLabel67.HighEmphasis = true;
+            materialLabel67.Location = new Point(20, 16);
+            materialLabel67.Margin = new Padding(4, 0, 4, 0);
+            materialLabel67.MouseState = MouseState.HOVER;
+            materialLabel67.Name = "materialLabel67";
+            materialLabel67.Size = new Size(171, 24);
+            materialLabel67.TabIndex = 0;
+            materialLabel67.Text = "Sistema de Tickets";
             // 
             // materialLabel68
             // 
-            this.materialLabel68.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.materialLabel68.Depth = 0;
-            this.materialLabel68.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel68.Location = new System.Drawing.Point(17, 52);
-            this.materialLabel68.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel68.Name = "materialLabel68";
-            this.materialLabel68.Size = new System.Drawing.Size(361, 73);
-            this.materialLabel68.TabIndex = 2;
-            this.materialLabel68.Text = "Tienes algun inconveniente con tu equipo?\r\nIngresa un ticket en nuestros sistemas" +
-    " para que podarmos apoyarte!";
+            materialLabel68.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            materialLabel68.Depth = 0;
+            materialLabel68.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel68.Location = new Point(20, 60);
+            materialLabel68.Margin = new Padding(4, 0, 4, 0);
+            materialLabel68.MouseState = MouseState.HOVER;
+            materialLabel68.Name = "materialLabel68";
+            materialLabel68.Size = new Size(421, 84);
+            materialLabel68.TabIndex = 2;
+            materialLabel68.Text = "Tienes algun inconveniente con tu equipo?\r\nIngresa un ticket en nuestros sistemas para que podarmos apoyarte!";
             // 
             // materialCard5
             // 
-            this.materialCard5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-            this.materialCard5.Controls.Add(this.materialButton30);
-            this.materialCard5.Controls.Add(this.materialLabel63);
-            this.materialCard5.Controls.Add(this.materialLabel64);
-            this.materialCard5.Depth = 0;
-            this.materialCard5.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialCard5.Location = new System.Drawing.Point(19, 412);
-            this.materialCard5.Margin = new System.Windows.Forms.Padding(7);
-            this.materialCard5.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialCard5.Name = "materialCard5";
-            this.materialCard5.Padding = new System.Windows.Forms.Padding(14);
-            this.materialCard5.Size = new System.Drawing.Size(394, 187);
-            this.materialCard5.TabIndex = 70;
+            materialCard5.BackColor = Color.FromArgb(255, 255, 255);
+            materialCard5.Controls.Add(materialButton30);
+            materialCard5.Controls.Add(materialLabel63);
+            materialCard5.Controls.Add(materialLabel64);
+            materialCard5.Depth = 0;
+            materialCard5.ForeColor = Color.FromArgb(222, 0, 0, 0);
+            materialCard5.Location = new Point(22, 475);
+            materialCard5.Margin = new Padding(8);
+            materialCard5.MouseState = MouseState.HOVER;
+            materialCard5.Name = "materialCard5";
+            materialCard5.Padding = new Padding(16);
+            materialCard5.Size = new Size(460, 216);
+            materialCard5.TabIndex = 70;
             // 
             // materialButton30
             // 
-            this.materialButton30.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.materialButton30.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialButton30.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.materialButton30.Depth = 0;
-            this.materialButton30.HighEmphasis = true;
-            this.materialButton30.Icon = null;
-            this.materialButton30.Location = new System.Drawing.Point(301, 129);
-            this.materialButton30.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialButton30.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialButton30.Name = "materialButton30";
-            this.materialButton30.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.materialButton30.Size = new System.Drawing.Size(76, 36);
-            this.materialButton30.TabIndex = 1;
-            this.materialButton30.Text = "Visitar";
-            this.materialButton30.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Text;
-            this.materialButton30.UseAccentColor = false;
-            this.materialButton30.UseVisualStyleBackColor = true;
-            this.materialButton30.Click += new System.EventHandler(this.materialButton30_Click);
+            materialButton30.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            materialButton30.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            materialButton30.Density = MaterialButton.MaterialButtonDensity.Default;
+            materialButton30.Depth = 0;
+            materialButton30.HighEmphasis = true;
+            materialButton30.Icon = null;
+            materialButton30.Location = new Point(364, 155);
+            materialButton30.Margin = new Padding(5, 7, 5, 7);
+            materialButton30.MouseState = MouseState.HOVER;
+            materialButton30.Name = "materialButton30";
+            materialButton30.NoAccentTextColor = Color.Empty;
+            materialButton30.Size = new Size(76, 36);
+            materialButton30.TabIndex = 1;
+            materialButton30.Text = "Visitar";
+            materialButton30.Type = MaterialButton.MaterialButtonType.Text;
+            materialButton30.UseAccentColor = false;
+            materialButton30.UseVisualStyleBackColor = true;
+            materialButton30.Click += materialButton30_Click;
             // 
             // materialLabel63
             // 
-            this.materialLabel63.AutoSize = true;
-            this.materialLabel63.Depth = 0;
-            this.materialLabel63.Font = new System.Drawing.Font("Roboto Medium", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel63.FontType = MaterialSkin.MaterialSkinManager.fontType.H6;
-            this.materialLabel63.HighEmphasis = true;
-            this.materialLabel63.Location = new System.Drawing.Point(17, 14);
-            this.materialLabel63.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel63.Name = "materialLabel63";
-            this.materialLabel63.Size = new System.Drawing.Size(140, 24);
-            this.materialLabel63.TabIndex = 0;
-            this.materialLabel63.Text = "Pares y Alvarez";
-            this.materialLabel63.UseMnemonic = false;
+            materialLabel63.AutoSize = true;
+            materialLabel63.Depth = 0;
+            materialLabel63.Font = new Font("Roboto Medium", 20F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel63.FontType = MaterialSkinManager.fontType.H6;
+            materialLabel63.HighEmphasis = true;
+            materialLabel63.Location = new Point(20, 16);
+            materialLabel63.Margin = new Padding(4, 0, 4, 0);
+            materialLabel63.MouseState = MouseState.HOVER;
+            materialLabel63.Name = "materialLabel63";
+            materialLabel63.Size = new Size(140, 24);
+            materialLabel63.TabIndex = 0;
+            materialLabel63.Text = "Pares y Alvarez";
+            materialLabel63.UseMnemonic = false;
             // 
             // materialLabel64
             // 
-            this.materialLabel64.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.materialLabel64.Depth = 0;
-            this.materialLabel64.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel64.Location = new System.Drawing.Point(17, 52);
-            this.materialLabel64.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel64.Name = "materialLabel64";
-            this.materialLabel64.Size = new System.Drawing.Size(361, 73);
-            this.materialLabel64.TabIndex = 2;
-            this.materialLabel64.Text = "Generamos soluciones industriales para la minería, energía, química, derivados de" +
-    " la madera, petróleo, gas, alimentos, manufactura e infraestructura, entregando " +
-    "soluciones y calidad a sus clientes.";
+            materialLabel64.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            materialLabel64.Depth = 0;
+            materialLabel64.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel64.Location = new Point(20, 60);
+            materialLabel64.Margin = new Padding(4, 0, 4, 0);
+            materialLabel64.MouseState = MouseState.HOVER;
+            materialLabel64.Name = "materialLabel64";
+            materialLabel64.Size = new Size(421, 84);
+            materialLabel64.TabIndex = 2;
+            materialLabel64.Text = "Generamos soluciones industriales para la minería, energía, química, derivados de la madera, petróleo, gas, alimentos, manufactura e infraestructura, entregando soluciones y calidad a sus clientes.";
             // 
             // materialLabel61
             // 
-            this.materialLabel61.AutoSize = true;
-            this.materialLabel61.Depth = 0;
-            this.materialLabel61.Font = new System.Drawing.Font("Roboto", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel61.FontType = MaterialSkin.MaterialSkinManager.fontType.H3;
-            this.materialLabel61.Location = new System.Drawing.Point(18, 22);
-            this.materialLabel61.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel61.Name = "materialLabel61";
-            this.materialLabel61.Size = new System.Drawing.Size(116, 58);
-            this.materialLabel61.TabIndex = 34;
-            this.materialLabel61.Text = "Inicio";
+            materialLabel61.AutoSize = true;
+            materialLabel61.Depth = 0;
+            materialLabel61.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            materialLabel61.FontType = MaterialSkinManager.fontType.H3;
+            materialLabel61.Location = new Point(21, 25);
+            materialLabel61.Margin = new Padding(4, 0, 4, 0);
+            materialLabel61.MouseState = MouseState.HOVER;
+            materialLabel61.Name = "materialLabel61";
+            materialLabel61.Size = new Size(116, 58);
+            materialLabel61.TabIndex = 34;
+            materialLabel61.Text = "Inicio";
             // 
             // materialLabel62
             // 
-            this.materialLabel62.Depth = 0;
-            this.materialLabel62.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel62.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel62.Location = new System.Drawing.Point(16, 99);
-            this.materialLabel62.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel62.Name = "materialLabel62";
-            this.materialLabel62.Size = new System.Drawing.Size(422, 90);
-            this.materialLabel62.TabIndex = 33;
-            this.materialLabel62.Text = "Bienvenido a la aplicacion PYA Launcher Apps.\r\n\r\nAplicación diseñada para mantene" +
-    "r actualizados todos los softwares y plugins diseñados para ti.\r\n";
+            materialLabel62.Depth = 0;
+            materialLabel62.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel62.ForeColor = Color.FromArgb(180, 0, 0, 0);
+            materialLabel62.Location = new Point(19, 114);
+            materialLabel62.Margin = new Padding(4, 0, 4, 0);
+            materialLabel62.MouseState = MouseState.HOVER;
+            materialLabel62.Name = "materialLabel62";
+            materialLabel62.Size = new Size(492, 104);
+            materialLabel62.TabIndex = 33;
+            materialLabel62.Text = "Bienvenido a la aplicacion PYA Launcher Apps.\r\n\r\nAplicación diseñada para mantener actualizados todos los softwares y plugins diseñados para ti.\r\n";
             // 
             // materialTabControl1
             // 
-            this.materialTabControl1.Controls.Add(this.tabPageInicio);
-            this.materialTabControl1.Controls.Add(this.tabPageApps);
-            this.materialTabControl1.Controls.Add(this.tabPagePerm);
-            this.materialTabControl1.Controls.Add(this.tabPageLogs);
-            this.materialTabControl1.Controls.Add(this.tabPageConfig);
-            this.materialTabControl1.Depth = 0;
-            this.materialTabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.materialTabControl1.ImageList = this.menuIconList;
-            this.materialTabControl1.Location = new System.Drawing.Point(3, 64);
-            this.materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialTabControl1.Multiline = true;
-            this.materialTabControl1.Name = "materialTabControl1";
-            this.materialTabControl1.SelectedIndex = 0;
-            this.materialTabControl1.Size = new System.Drawing.Size(946, 647);
-            this.materialTabControl1.TabIndex = 18;
+            materialTabControl1.Controls.Add(tabPageInicio);
+            materialTabControl1.Controls.Add(tabPageApps);
+            materialTabControl1.Controls.Add(tabPagePerm);
+            materialTabControl1.Controls.Add(tabPageLogs);
+            materialTabControl1.Controls.Add(tabPageConfig);
+            materialTabControl1.Depth = 0;
+            materialTabControl1.Dock = DockStyle.Fill;
+            materialTabControl1.ImageList = menuIconList;
+            materialTabControl1.Location = new Point(4, 74);
+            materialTabControl1.Margin = new Padding(4, 3, 4, 3);
+            materialTabControl1.MouseState = MouseState.HOVER;
+            materialTabControl1.Multiline = true;
+            materialTabControl1.Name = "materialTabControl1";
+            materialTabControl1.SelectedIndex = 0;
+            materialTabControl1.Size = new Size(1103, 747);
+            materialTabControl1.TabIndex = 18;
             // 
             // tabPagePerm
             // 
-            this.tabPagePerm.BackColor = System.Drawing.Color.White;
-            this.tabPagePerm.Controls.Add(this.btnSavePerm);
-            this.tabPagePerm.Controls.Add(this.materialLabel2);
-            this.tabPagePerm.Controls.Add(this.dataGridViewPermisos);
-            this.tabPagePerm.Controls.Add(this.labelTitlePermisos);
-            this.tabPagePerm.ImageKey = "round_bookmark_white_24dp.png";
-            this.tabPagePerm.Location = new System.Drawing.Point(4, 31);
-            this.tabPagePerm.Name = "tabPagePerm";
-            this.tabPagePerm.Size = new System.Drawing.Size(938, 612);
-            this.tabPagePerm.TabIndex = 13;
-            this.tabPagePerm.Text = "Permisos";
+            tabPagePerm.BackColor = Color.White;
+            tabPagePerm.Controls.Add(btnSavePerm);
+            tabPagePerm.Controls.Add(materialLabel2);
+            tabPagePerm.Controls.Add(dataGridViewPermisos);
+            tabPagePerm.Controls.Add(labelTitlePermisos);
+            tabPagePerm.ImageKey = "round_bookmark_white_24dp.png";
+            tabPagePerm.Location = new Point(4, 31);
+            tabPagePerm.Margin = new Padding(4, 3, 4, 3);
+            tabPagePerm.Name = "tabPagePerm";
+            tabPagePerm.Size = new Size(1095, 712);
+            tabPagePerm.TabIndex = 13;
+            tabPagePerm.Text = "Permisos";
             // 
             // btnSavePerm
             // 
-            this.btnSavePerm.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnSavePerm.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
-            this.btnSavePerm.Depth = 0;
-            this.btnSavePerm.HighEmphasis = true;
-            this.btnSavePerm.Icon = null;
-            this.btnSavePerm.Location = new System.Drawing.Point(340, 518);
-            this.btnSavePerm.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnSavePerm.MouseState = MaterialSkin.MouseState.HOVER;
-            this.btnSavePerm.Name = "btnSavePerm";
-            this.btnSavePerm.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnSavePerm.Size = new System.Drawing.Size(88, 36);
-            this.btnSavePerm.TabIndex = 77;
-            this.btnSavePerm.Text = "Guardar";
-            this.btnSavePerm.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
-            this.btnSavePerm.UseAccentColor = false;
-            this.btnSavePerm.UseVisualStyleBackColor = true;
-            this.btnSavePerm.Click += new System.EventHandler(this.btnSavePerm_Click);
+            btnSavePerm.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            btnSavePerm.Density = MaterialButton.MaterialButtonDensity.Default;
+            btnSavePerm.Depth = 0;
+            btnSavePerm.HighEmphasis = true;
+            btnSavePerm.Icon = null;
+            btnSavePerm.Location = new Point(397, 598);
+            btnSavePerm.Margin = new Padding(5, 7, 5, 7);
+            btnSavePerm.MouseState = MouseState.HOVER;
+            btnSavePerm.Name = "btnSavePerm";
+            btnSavePerm.NoAccentTextColor = Color.Empty;
+            btnSavePerm.Size = new Size(88, 36);
+            btnSavePerm.TabIndex = 77;
+            btnSavePerm.Text = "Guardar";
+            btnSavePerm.Type = MaterialButton.MaterialButtonType.Contained;
+            btnSavePerm.UseAccentColor = false;
+            btnSavePerm.UseVisualStyleBackColor = true;
+            btnSavePerm.Click += btnSavePerm_Click;
             // 
             // materialLabel2
             // 
-            this.materialLabel2.AutoSize = true;
-            this.materialLabel2.Depth = 0;
-            this.materialLabel2.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(180)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel2.Location = new System.Drawing.Point(19, 90);
-            this.materialLabel2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel2.Name = "materialLabel2";
-            this.materialLabel2.Size = new System.Drawing.Size(544, 19);
-            this.materialLabel2.TabIndex = 76;
-            this.materialLabel2.Text = "Listado de usuarios con permisos para gestionar las aplicaciones y usuarios.";
+            materialLabel2.AutoSize = true;
+            materialLabel2.Depth = 0;
+            materialLabel2.Font = new Font("Roboto", 14F, FontStyle.Regular, GraphicsUnit.Pixel);
+            materialLabel2.ForeColor = Color.FromArgb(180, 0, 0, 0);
+            materialLabel2.Location = new Point(22, 104);
+            materialLabel2.Margin = new Padding(2, 0, 2, 0);
+            materialLabel2.MouseState = MouseState.HOVER;
+            materialLabel2.Name = "materialLabel2";
+            materialLabel2.Size = new Size(544, 19);
+            materialLabel2.TabIndex = 76;
+            materialLabel2.Text = "Listado de usuarios con permisos para gestionar las aplicaciones y usuarios.";
             // 
             // dataGridViewPermisos
             // 
-            this.dataGridViewPermisos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewPermisos.Location = new System.Drawing.Point(22, 137);
-            this.dataGridViewPermisos.Name = "dataGridViewPermisos";
-            this.dataGridViewPermisos.Size = new System.Drawing.Size(710, 342);
-            this.dataGridViewPermisos.TabIndex = 75;
+            dataGridViewPermisos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewPermisos.Location = new Point(26, 158);
+            dataGridViewPermisos.Margin = new Padding(4, 3, 4, 3);
+            dataGridViewPermisos.Name = "dataGridViewPermisos";
+            dataGridViewPermisos.Size = new Size(828, 395);
+            dataGridViewPermisos.TabIndex = 75;
             // 
             // labelTitlePermisos
             // 
-            this.labelTitlePermisos.AutoSize = true;
-            this.labelTitlePermisos.Depth = 0;
-            this.labelTitlePermisos.Font = new System.Drawing.Font("Roboto", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
-            this.labelTitlePermisos.FontType = MaterialSkin.MaterialSkinManager.fontType.H3;
-            this.labelTitlePermisos.Location = new System.Drawing.Point(20, 15);
-            this.labelTitlePermisos.MouseState = MaterialSkin.MouseState.HOVER;
-            this.labelTitlePermisos.Name = "labelTitlePermisos";
-            this.labelTitlePermisos.Size = new System.Drawing.Size(203, 58);
-            this.labelTitlePermisos.TabIndex = 73;
-            this.labelTitlePermisos.Text = "Permisos";
+            labelTitlePermisos.AutoSize = true;
+            labelTitlePermisos.Depth = 0;
+            labelTitlePermisos.Font = new Font("Roboto", 48F, FontStyle.Bold, GraphicsUnit.Pixel);
+            labelTitlePermisos.FontType = MaterialSkinManager.fontType.H3;
+            labelTitlePermisos.Location = new Point(23, 17);
+            labelTitlePermisos.Margin = new Padding(4, 0, 4, 0);
+            labelTitlePermisos.MouseState = MouseState.HOVER;
+            labelTitlePermisos.Name = "labelTitlePermisos";
+            labelTitlePermisos.Size = new Size(203, 58);
+            labelTitlePermisos.TabIndex = 73;
+            labelTitlePermisos.Text = "Permisos";
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(952, 714);
-            this.Controls.Add(this.materialTabControl1);
-            this.DrawerShowIconsWhenHidden = true;
-            this.DrawerTabControl = this.materialTabControl1;
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(300, 200);
-            this.Name = "MainForm";
-            this.Sizable = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PYA Launcher Apps";
-            this.Resize += new System.EventHandler(this.MainForm_Resize);
-            this.tabPageConfig.ResumeLayout(false);
-            this.tabPageConfig.PerformLayout();
-            this.tabPageLogs.ResumeLayout(false);
-            this.tabPageLogs.PerformLayout();
-            this.tabPageApps.ResumeLayout(false);
-            this.tabPageApps.PerformLayout();
-            this.tabPageInicio.ResumeLayout(false);
-            this.tabPageInicio.PerformLayout();
-            this.materialCard1.ResumeLayout(false);
-            this.materialCard1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            this.materialCard7.ResumeLayout(false);
-            this.materialCard7.PerformLayout();
-            this.materialCard5.ResumeLayout(false);
-            this.materialCard5.PerformLayout();
-            this.materialTabControl1.ResumeLayout(false);
-            this.tabPagePerm.ResumeLayout(false);
-            this.tabPagePerm.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewPermisos)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
+            ClientSize = new Size(1111, 824);
+            Controls.Add(materialTabControl1);
+            DrawerShowIconsWhenHidden = true;
+            DrawerTabControl = materialTabControl1;
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            MinimumSize = new Size(350, 231);
+            Name = "MainForm";
+            Padding = new Padding(4, 74, 4, 3);
+            Sizable = false;
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "PYA Launcher Apps";
+            Resize += MainForm_Resize;
+            tabPageConfig.ResumeLayout(false);
+            tabPageConfig.PerformLayout();
+            tabPageLogs.ResumeLayout(false);
+            tabPageLogs.PerformLayout();
+            tabPageApps.ResumeLayout(false);
+            tabPageApps.PerformLayout();
+            tabPageInicio.ResumeLayout(false);
+            tabPageInicio.PerformLayout();
+            materialCard1.ResumeLayout(false);
+            materialCard1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            materialCard7.ResumeLayout(false);
+            materialCard7.PerformLayout();
+            materialCard5.ResumeLayout(false);
+            materialCard5.PerformLayout();
+            materialTabControl1.ResumeLayout(false);
+            tabPagePerm.ResumeLayout(false);
+            tabPagePerm.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewPermisos).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
